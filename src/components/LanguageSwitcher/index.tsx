@@ -14,24 +14,22 @@ const locales: { code: Locale; label: string }[] = [
   { code: 'ru', label: 'Русский' },
 ]
 
-export const LanguageSwitcher: React.FC = () => {
-  const router = useRouter()
-  const pathname = usePathname()
+interface LanguageSwitcherProps {
+  currentLocale?: string
+}
 
-  // Extract current locale from pathname
-  const currentLocale = pathname?.split('/')[1] as Locale
+export const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ currentLocale = 'hy' }) => {
+  const router = useRouter()
+  // const pathname = usePathname() // not used for locale logic anymore
 
   const handleMenuClick: MenuProps['onClick'] = (e) => {
     const newLocale = e.key as Locale
 
-    if (!pathname) return
+    // Set a cookie so the server knows the user's preferred language
+    document.cookie = `NEXT_LOCALE=${newLocale}; path=/; max-age=31536000`
 
-    const segments = pathname.split('/')
-    segments[1] = newLocale
-
-    const newPath = segments.join('/')
-
-    router.push(newPath)
+    // Refresh the router to trigger server components to re-render with the new locale
+    router.refresh()
   }
 
   const items: MenuProps['items'] = locales.map((locale) => ({

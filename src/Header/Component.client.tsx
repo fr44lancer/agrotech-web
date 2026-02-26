@@ -12,11 +12,10 @@ import { LanguageSwitcher } from '@/components/LanguageSwitcher'
 
 interface HeaderClientProps {
   data: Header
+  locale?: string
 }
 
-export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
-  console.log('header data')
-  console.log(data)
+export const HeaderClient: React.FC<HeaderClientProps> = ({ data, locale }) => {
   return (
     <header className="w-full relative z-20 ">
       <BaseWrapper className={'container m-auto'}>
@@ -30,7 +29,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
             <HeaderNav data={data} />
           </Col>
           <Col>
-            <LanguageSwitcher />
+            <LanguageSwitcher currentLocale={locale} />
           </Col>
         </Row>
       </BaseWrapper>
