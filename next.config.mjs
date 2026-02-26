@@ -12,6 +12,23 @@ const nextConfig = {
 
     return webpackConfig
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'example.com',
+        port: '',
+        pathname: '/account123/**',
+        search: '',
+      },
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '3000',
+        pathname: '/api/**',
+      },
+    ],
+  },
 }
 
 export default withPayload(nextConfig, { devBundleServerPackages: false })

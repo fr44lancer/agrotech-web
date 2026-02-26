@@ -7,6 +7,7 @@ import React, { cache } from 'react'
 
 import { RenderBlocks } from '@/blocks/RenderBlocks'
 import { generateMeta } from '@/utilities/generateMeta'
+import PageClient from './page.client'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 import { RenderHero } from '@/components/heros/RenderHero'
 import BaseWrapper from '@/components/ui/Containers/BaseContainer'
@@ -58,11 +59,15 @@ export default async function Page({ params: paramsPromise }: Args) {
   const { hero, layout } = page
 
   return (
-    <BaseWrapper className={'w-full  m-auto'}>
-      {draft && <LivePreviewListener />}
+    <BaseWrapper className={'w-full container m-auto'}>
+      <article className="pt-16 pb-24">
+        <PageClient />
 
-      <RenderHero {...hero} />
-      <RenderBlocks blocks={layout} />
+        {draft && <LivePreviewListener />}
+
+        <RenderHero {...hero} />
+        <RenderBlocks blocks={layout} />
+      </article>
     </BaseWrapper>
   )
 }
