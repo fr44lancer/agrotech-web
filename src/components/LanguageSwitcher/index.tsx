@@ -20,16 +20,19 @@ interface LanguageSwitcherProps {
 
 export const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ currentLocale = 'hy' }) => {
   const router = useRouter()
-  // const pathname = usePathname() // not used for locale logic anymore
+  const pathname = usePathname()
 
   const handleMenuClick: MenuProps['onClick'] = (e) => {
     const newLocale = e.key as Locale
+    if (!pathname) return
 
-    // Set a cookie so the server knows the user's preferred language
-    document.cookie = `NEXT_LOCALE=${newLocale}; path=/; max-age=31536000`
-
-    // Refresh the router to trigger server components to re-render with the new locale
-    router.refresh()
+    const segments = pathname.split('/')
+    if (locales.some((l) => l.code === segments[1])) {
+      segments[1] = newLocale
+      router.push(segments.join('/'))
+    } else {
+      router.push(`/${newLocale}${pathname === '/' ? '' : pathname}`)
+    }
   }
 
   const items: MenuProps['items'] = locales.map((locale) => ({

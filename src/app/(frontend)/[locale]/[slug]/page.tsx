@@ -7,6 +7,7 @@ import React, { cache } from 'react'
 
 import { RenderBlocks } from '@/blocks/RenderBlocks'
 import { generateMeta } from '@/utilities/generateMeta'
+import PageClient from './page.client'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 import { RenderHero } from '@/components/heros/RenderHero'
 import BaseWrapper from '@/components/ui/Containers/BaseContainer'
@@ -24,13 +25,16 @@ export async function generateStaticParams() {
     },
   })
 
-  const params = pages.docs
-    ?.filter((doc) => {
-      return doc.slug !== 'home'
-    })
-    .map(({ slug }) => {
-      return { slug }
-    })
+  const locales = ['hy', 'en', 'ru']
+  const params: { slug: string; locale: string }[] = []
+
+  pages.docs?.forEach((doc) => {
+    if (doc.slug !== 'home') {
+      locales.forEach((locale) => {
+        params.push({ slug: doc.slug as string, locale })
+      })
+    }
+  })
 
   return params
 }
@@ -38,12 +42,13 @@ export async function generateStaticParams() {
 type Args = {
   params: Promise<{
     slug?: string
+    locale?: string
   }>
 }
 
 export default async function Page({ params: paramsPromise }: Args) {
   const { isEnabled: draft } = await draftMode()
-  const { slug = 'home' } = await paramsPromise
+  const { slug = 'home', locale = 'hy' } = await paramsPromise
 
   const decodedSlug = decodeURIComponent(slug)
   const url = '/' + decodedSlug
@@ -51,34 +56,40 @@ export default async function Page({ params: paramsPromise }: Args) {
 
   page = await queryPageBySlug({
     slug: decodedSlug,
+    locale,
   })
 
-  console.log('content of page')
-  console.log(page)
+  if (!page) return null
+
   const { hero, layout } = page
 
   return (
-    <BaseWrapper className={'w-full  m-auto'}>
-      {draft && <LivePreviewListener />}
+    <BaseWrapper className={'w-full container m-auto'}>
+      <article className="pt-16 pb-24">
+        <PageClient />
 
-      <RenderHero {...hero} />
-      <RenderBlocks blocks={layout} />
+        {draft && <LivePreviewListener />}
+
+        <RenderHero {...hero} />
+        <RenderBlocks blocks={layout} />
+      </article>
     </BaseWrapper>
   )
 }
 
 export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
-  const { slug = 'home' } = await paramsPromise
+  const { slug = 'home', locale = 'hy' } = await paramsPromise
   // Decode to support slugs with special characters
   const decodedSlug = decodeURIComponent(slug)
   const page = await queryPageBySlug({
     slug: decodedSlug,
+    locale,
   })
 
   return generateMeta({ doc: page })
 }
 
-const queryPageBySlug = cache(async ({ slug }: { slug: string }) => {
+const queryPageBySlug = cache(async ({ slug, locale = 'hy' }: { slug: string; locale?: string }) => {
   const { isEnabled: draft } = await draftMode()
 
   const payload = await getPayload({ config: configPromise })
@@ -89,6 +100,7 @@ const queryPageBySlug = cache(async ({ slug }: { slug: string }) => {
     limit: 1,
     pagination: false,
     overrideAccess: draft,
+    locale: locale as any,
     where: {
       slug: {
         equals: slug,

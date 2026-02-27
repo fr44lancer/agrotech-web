@@ -12,12 +12,14 @@ import { linkGroup } from '@/fields/linkGroup'
 export const hero: Field = {
   name: 'hero',
   type: 'group',
+  localized: true,
   fields: [
     {
       name: 'type',
       type: 'select',
       defaultValue: 'lowImpact',
       label: 'Type',
+      localized: true,
       options: [
         {
           label: 'None',
@@ -41,6 +43,7 @@ export const hero: Field = {
     {
       name: 'richText',
       type: 'richText',
+      localized: true,
       editor: lexicalEditor({
         features: ({ rootFeatures }) => {
           return [
@@ -61,6 +64,7 @@ export const hero: Field = {
     {
       name: 'media',
       type: 'upload',
+      localized: true,
       admin: {
         condition: (_, { type } = {}) => ['highImpact', 'mediumImpact'].includes(type),
       },

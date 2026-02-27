@@ -52,6 +52,7 @@ export const Pages: CollectionConfig = {
       name: 'title',
       type: 'text',
       required: true,
+      localized: true,
     },
     {
       type: 'tabs',
@@ -67,6 +68,7 @@ export const Pages: CollectionConfig = {
               type: 'blocks',
               blocks: [Content],
               required: true,
+              localized: true,
               admin: {
                 initCollapsed: true,
               },
@@ -77,6 +79,7 @@ export const Pages: CollectionConfig = {
         {
           name: 'meta',
           label: 'SEO',
+          localized: true,
           fields: [
             OverviewField({
               titlePath: 'meta.title',

@@ -11,11 +11,18 @@ import { Header } from '@/Header/Component'
 import { Footer } from '@/Footer/Component'
 import StylesRegistry from '@/utilities/styleRegistry'
 
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({
+  children,
+  params,
+}: {
+  children: React.ReactNode
+  params: Promise<{ locale: string }>
+}) {
   const { isEnabled } = await draftMode()
+  const { locale } = await params
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang={locale} suppressHydrationWarning>
       <head>
         <link href="/favicon.ico" rel="icon" sizes="32x32" />
         <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
@@ -29,9 +36,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <AntdRegistry>
           <StylesRegistry>
             <AppLayout className={'flex flex-col min-h-screen justify-between'}>
-              <Header />
+              <Header locale={locale} />
               <Suspense>{children}</Suspense>
-              <Footer />
+              <Footer locale={locale} />
             </AppLayout>
           </StylesRegistry>
         </AntdRegistry>
