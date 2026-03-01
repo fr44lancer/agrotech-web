@@ -7,8 +7,6 @@ import React, { cache } from 'react'
 
 import { generateMeta } from '@/utilities/generateMeta'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
-import BaseWrapper from '@/components/ui/Containers/BaseContainer'
-import { RenderHero } from '@/components/heros/RenderHero'
 
 export function generateStaticParams() {
   return [{ locale: 'hy' }, { locale: 'en' }, { locale: 'ru' }]
@@ -102,9 +100,9 @@ export default async function Page({ params: paramsPromise }: Args) {
           backgroundPosition: 'center',
         }}
       >
-        <BaseWrapper className={'w-full  m-auto'}>
-          <RenderHero {...hero} />
-        </BaseWrapper>
+        {/*<BaseWrapper className={'w-full  m-auto'}>*/}
+        {/*  <RenderHero {...hero} />*/}
+        {/*</BaseWrapper>*/}
         <div className="absolute inset-0 bg-gradient-to-r from-teal-600/90 to-green-700/85"></div>
         <div className="container mx-auto px-6 py-24 md:py-32 relative z-10 w-full max-w-7xl">
           <div className="max-w-4xl">
