@@ -3,7 +3,6 @@ import Link from 'next/link'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import { draftMode } from 'next/headers'
-import BaseWrapper from '@/components/ui/Containers/BaseContainer'
 import React from 'react'
 import { Media } from '@/components/Media'
 
@@ -35,7 +34,7 @@ export default async function EventsPage({
   const pastEvents = events.docs.filter((event) => event.status === 'past')
 
   return (
-    <BaseWrapper className="w-full  m-auto ">
+    <div className="w-full">
       <section className="bg-gradient-to-r from-teal-600 to-green-700 text-white py-16">
         <div className="container mx-auto px-6">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">Events & Conferences</h1>
@@ -153,6 +152,6 @@ export default async function EventsPage({
           </div>
         </section>
       </div>
-    </BaseWrapper>
+    </div>
   )
 }

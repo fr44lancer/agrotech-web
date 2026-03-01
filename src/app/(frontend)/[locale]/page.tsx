@@ -108,7 +108,7 @@ export default async function Page({ params: paramsPromise }: Args) {
         <div className="absolute inset-0 bg-gradient-to-r from-teal-600/90 to-green-700/85"></div>
         <div className="container mx-auto px-6 py-24 md:py-32 relative z-10 w-full max-w-7xl">
           <div className="max-w-4xl">
-            <h1 className="text-3xl md:text-5xl font-bold mb-8">{t.heroTitle}</h1>
+            <h1 className="text-2xl md:text-4xl font-bold mb-8">{t.heroTitle}</h1>
             <p className="text-xl md:text-2xl mb-6 text-green-50">{t.heroSub}</p>
             <div className="space-y-4 mb-8">
               <div className="flex items-start">
@@ -178,7 +178,7 @@ export default async function Page({ params: paramsPromise }: Args) {
                     style={{ backgroundImage: `url(${category.image.url})` }}
                   />
                 ) : (
-                   <div className="h-48 bg-gradient-to-br from-green-400 to-teal-500 w-full" />
+                  <div className="h-48 bg-gradient-to-br from-green-400 to-teal-500 w-full" />
                 )}
                 <div className="p-6 flex-1 flex flex-col">
                   <h3 className="text-xl font-semibold text-gray-800 mb-2">{category.title}</h3>
@@ -213,9 +213,12 @@ export default async function Page({ params: paramsPromise }: Args) {
                 <h3 className="text-xl font-semibold mb-2">{service.title}</h3>
                 <div className="mb-3 flex flex-wrap justify-center gap-2">
                   {(service.categories || []).map((cat: any) => (
-                     <span key={cat.id} className="bg-teal-50 text-teal-700 text-xs font-semibold px-2 py-1 rounded inline-block">
-                       {cat.title}
-                     </span>
+                    <span
+                      key={cat.id}
+                      className="bg-teal-50 text-teal-700 text-xs font-semibold px-2 py-1 rounded inline-block"
+                    >
+                      {cat.title}
+                    </span>
                   ))}
                 </div>
                 <p className="text-gray-600">{service.description}</p>

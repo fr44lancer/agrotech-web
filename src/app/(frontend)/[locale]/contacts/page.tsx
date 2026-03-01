@@ -74,7 +74,7 @@ export default async function ContactsPage({ params: paramsPromise }: Args) {
   return (
     <div className="w-full ">
       {/* Page Header */}
-      <section className="bg-gradient-to-r from-teal-700 to-green-600 text-white py-20 px-6">
+      <section className="bg-gradient-to-r from-teal-700 to-green-600 text-white py-16 px-6">
         <div className="container mx-auto px-6">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">{t.title}</h1>
           <p className="text-xl text-green-50">{t.subtitle}</p>
