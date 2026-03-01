@@ -14,40 +14,28 @@ type Args = {
 
 const translations = {
   en: {
-    title: "Coming Soon",
-    subtitle: "Our Product Catalog is Under Development",
-    desc: "We're working hard to bring you a comprehensive digital catalog of our innovative agricultural solutions. Below is a preview of our product categories.",
+    title: "Our Products",
+    subtitle: "High-quality Agricultural Solutions",
+    desc: "Explore our comprehensive range of products categorized for your convenience. Select a category below to dive into our specific offerings.",
     contactBtn: "Contact Sales Team",
     backBtn: "Back to Home",
-    newsletterTitle: "Get Notified When We Launch",
-    newsletterDesc: "Be the first to know when our product catalog goes live. Subscribe to our newsletter for updates.",
-    notifyBtn: "Notify Me",
-    emailPlaceholder: "Enter your email address",
-    contactInfoText: "In the meantime, for product inquiries please contact:",
+    all: "All Categories",
   },
   ru: {
-    title: "Скоро",
-    subtitle: "Наш каталог продуктов находится в разработке",
-    desc: "Мы усердно работаем над созданием исчерпывающего цифрового каталога наших инновационных сельскохозяйственных решений. Ниже представлен предварительный просмотр.",
+    title: "Наша продукция",
+    subtitle: "Качественные сельскохозяйственные решения",
+    desc: "Ознакомьтесь с нашим полным ассортиментом продукции, разделенным по категориям для вашего удобства.",
     contactBtn: "Связаться с отделом продаж",
     backBtn: "На главную",
-    newsletterTitle: "Получить уведомление о запуске",
-    newsletterDesc: "Узнайте первыми, когда наш каталог продуктов заработает. Подпишитесь на нашу рассылку.",
-    notifyBtn: "Уведомить меня",
-    emailPlaceholder: "Ваш email",
-    contactInfoText: "Тем временем по вопросам продукции обращайтесь:",
+    all: "Все категории",
   },
   hy: {
-    title: "Շուտով",
-    subtitle: "Մեր ապրանքների կատալոգը մշակման փուլում է",
-    desc: "Մենք աշխատում ենք ապրանքների համապարփակ թվային կատալոգ ստեղծելու ուղղությամբ։ Ստորև ներկայացված է մեր ապրանքների տեսականու նախադիտումը։",
+    title: "Մեր Ապրանքները",
+    subtitle: "Բարձրորակ Գյուղատնտեսական Լուծումներ",
+    desc: "Ուսումնասիրեք մեր ապրանքների համապարփակ տեսականին, որոնք դասակարգված են ձեր հարմարավետության համար:",
     contactBtn: "Կապ վաճառքի բաժնի հետ",
-    backBtn: "Վերադառնալ գլխավոր էջ",
-    newsletterTitle: "Ստացեք ծանուցում գործարկման ժամանակ",
-    newsletterDesc: "Առաջինը տեղեկացեք, երբ մեր կատալոգը հասանելի կդառնա։ Բաժանորդագրվեք մեր նորություններին։",
-    notifyBtn: "Ծանուցել",
-    emailPlaceholder: "Մուտքագրեք Ձեր էլ. հասցեն",
-    contactInfoText: "Մինչ այդ, ապրանքների վերաբերյալ հարցերով խնդրում ենք կապվել՝",
+    backBtn: "Գլխավոր էջ",
+    all: "Բոլորը",
   }
 }
 
@@ -85,94 +73,69 @@ export default async function ProductsPage({ params: paramsPromise, searchParams
 
   return (
     <div className="w-full">
-      {/* Coming Soon Section */}
-      <section className="min-h-screen bg-gradient-to-br from-teal-700 via-green-600 to-green-700 flex items-center justify-center py-20">
+      <section className="min-h-[50vh] bg-gradient-to-br from-teal-700 via-green-600 to-green-700 pt-32 pb-20">
         <div className="container mx-auto px-6 w-full max-w-5xl">
             <div className="max-w-4xl mx-auto text-center text-white">
-                {/* Icon */}
-                <div className="mb-8">
-                    <svg className="w-32 h-32 mx-auto text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
-                    </svg>
-                </div>
-
-                {/* Main Heading */}
-                <h1 className="text-5xl md:text-7xl font-bold mb-6">{t.title}</h1>
-
-                {/* Subheading */}
-                <p className="text-2xl md:text-3xl text-green-50 mb-8">
+                <h1 className="text-4xl md:text-6xl font-bold mb-6">{t.title}</h1>
+                <p className="text-xl md:text-2xl text-green-50 mb-6">
                     {t.subtitle}
                 </p>
-
-                {/* Description */}
                 <p className="text-lg md:text-xl text-green-100 mb-8 max-w-2xl mx-auto">
                     {t.desc}
                 </p>
+            </div>
+        </div>
+      </section>
 
-                {/* Category Filters */}
-                <div className="flex flex-wrap justify-center gap-2 mb-10">
-                  <a href={`/${locale}/products`} className={`px-4 py-2 rounded-full text-sm font-semibold transition ${!categorySlug ? 'bg-white text-teal-700' : 'bg-white/20 text-white hover:bg-white/30'}`}>
-                    {locale === 'hy' ? 'Բոլորը' : locale === 'ru' ? 'Все' : 'All'}
-                  </a>
-                  {categoriesData.docs.map((cat: any) => (
-                    <a key={cat.id} href={`/${locale}/products?category=${cat.slug}`} className={`px-4 py-2 rounded-full text-sm font-semibold transition ${categorySlug === cat.slug ? 'bg-white text-teal-700' : 'bg-white/20 text-white hover:bg-white/30'}`}>
-                      {cat.title}
-                    </a>
-                  ))}
-                </div>
+      <section className="py-16 bg-gray-50 min-h-[50vh]">
+        <div className="container mx-auto px-6 w-full max-w-7xl">
+            <div className="flex flex-wrap justify-center gap-2 mb-12">
+                <a href={`/${locale}/products`} className={`px-5 py-2 rounded-full text-sm font-semibold transition shadow-sm ${!categorySlug ? 'bg-teal-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-100'}`}>
+                {t.all}
+                </a>
+                {categoriesData.docs.map((cat: any) => (
+                <a key={cat.id} href={`/${locale}/products/${cat.slug}`} className={`px-5 py-2 rounded-full text-sm font-semibold transition shadow-sm ${categorySlug === cat.slug ? 'bg-teal-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-100'}`}>
+                    {cat.title}
+                </a>
+                ))}
+            </div>
 
-                {/* Preview Cards - Mapped from Payload Products Collection */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12 text-left">
-                  {products.map((product: any) => (
-                    <div key={product.id} className="bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20 hover:bg-white/20 transition-all shadow-lg flex flex-col justify-between">
-                        <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mb-4">
-                            <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
-                        </div>
-                        <h3 className="text-xl font-semibold mb-2">{product.title}</h3>
-                        <p className="text-green-50">{product.description}</p>
-                    </div>
-                  ))}
-                </div>
-
-                {/* CTA Buttons */}
-                <div className="flex flex-wrap gap-4 justify-center mb-12">
-                    <a href={`/${locale}/contacts`} className="bg-white text-teal-700 px-8 py-4 rounded-md font-semibold hover:bg-green-50 transition text-lg">
-                        {t.contactBtn}
-                    </a>
-                    <a href={`/${locale}`} className="border-2 border-white text-white px-8 py-4 rounded-md font-semibold hover:bg-white hover:text-teal-700 transition text-lg">
-                        {t.backBtn}
-                    </a>
-                </div>
-
-                {/* Newsletter Signup */}
-                <div className="max-w-2xl mx-auto bg-white/10 backdrop-blur-sm rounded-lg p-8 border border-white/20">
-                    <h3 className="text-2xl font-semibold mb-4">{t.newsletterTitle}</h3>
-                    <p className="text-green-100 mb-6">
-                        {t.newsletterDesc}
-                    </p>
-                    <form className="flex flex-col sm:flex-row gap-4">
-                        <input
-                            type="email"
-                            placeholder={t.emailPlaceholder}
-                            className="flex-1 px-6 py-3 rounded-md text-gray-800 focus:outline-none focus:ring-2 focus:ring-white"
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {categoriesData.docs.filter((c: any) => !categorySlug || c.slug === categorySlug).map((category: any) => (
+                <a
+                  href={`/${locale}/products/${category.slug}`}
+                  key={category.id}
+                  className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col group"
+                >
+                  <div className="relative h-64 overflow-hidden bg-gray-100">
+                    {category.image && typeof category.image === 'object' && category.image.url ? (
+                        <div
+                        className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
+                        style={{ backgroundImage: `url(${category.image.url})` }}
                         />
-                        <button
-                            type="submit"
-                            className="bg-white text-teal-700 px-8 py-3 rounded-md font-semibold hover:bg-green-50 transition whitespace-nowrap"
-                        >
-                            {t.notifyBtn}
-                        </button>
-                    </form>
-                </div>
-
-                {/* Temporary Contact Info */}
-                <div className="mt-12 text-green-100">
-                    <p className="mb-2">{t.contactInfoText}</p>
-                    <p className="font-semibold text-white">Email: info@agrotech.am</p>
-                    <p className="font-semibold text-white">Phone: +374 10 123456</p>
-                </div>
+                    ) : (
+                        <div className="absolute inset-0 bg-gradient-to-br from-green-400 to-teal-500 transition-transform duration-500 group-hover:scale-105 flex items-center justify-center">
+                           <svg className="w-16 h-16 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        </div>
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-black/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  </div>
+                  
+                  <div className="p-6">
+                    <h3 className="text-2xl font-bold text-gray-800 mb-2 group-hover:text-teal-600 transition-colors">{category.title}</h3>
+                    <div className="flex items-center text-teal-600 font-medium opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 mt-4">
+                      <span>View Products</span>
+                      <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                    </div>
+                  </div>
+                </a>
+              ))}
+            </div>
+            
+            <div className="mt-16 text-center">
+                 <a href={`/${locale}/contacts`} className="inline-block bg-teal-600 text-white px-8 py-4 rounded-full font-semibold hover:bg-teal-700 transition shadow-md hover:shadow-lg">
+                    {t.contactBtn}
+                 </a>
             </div>
         </div>
       </section>

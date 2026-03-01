@@ -1,4 +1,5 @@
 import type { Block, Field } from 'payload'
+import { link } from '@/fields/link'
 
 import {
   FixedToolbarFeature,
@@ -50,6 +51,13 @@ const columnFields: Field[] = [
     name: 'enableLink',
     type: 'checkbox',
   },
+  link({
+    overrides: {
+      admin: {
+        condition: (_, { enableLink }) => Boolean(enableLink),
+      },
+    },
+  }),
 ]
 
 export const Content: Block = {

@@ -8,7 +8,7 @@ import { CMSLink } from '@/components/Link'
 
 import { usePathname } from 'next/navigation'
 
-export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
+export const HeaderNav: React.FC<{ data: HeaderType, isMobile?: boolean }> = ({ data, isMobile = false }) => {
   const navItems = data?.navItems || []
   const pathname = usePathname()
   const locale = pathname?.split('/')[1] || 'hy'
@@ -16,7 +16,7 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
   console.log('navItems')
   console.log(navItems)
   return (
-    <nav className="flex gap-3 items-center">
+    <nav className={`flex ${isMobile ? 'flex-col gap-6 items-start w-full' : 'gap-3 items-center'}`}>
       {navItems.map(({ link }, i) => {
         return (
           <CMSLink
@@ -24,7 +24,7 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
             {...link}
             appearance="inline"
             locale={locale}
-            className={'text-gray-900'}
+            className={`text-gray-900 font-medium ${isMobile ? 'text-lg w-full block border-b border-gray-100 pb-2' : 'hover:text-teal-600 transition-colors px-2 py-1'}`}
           />
         )
       })}

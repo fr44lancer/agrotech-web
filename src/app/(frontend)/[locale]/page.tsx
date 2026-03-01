@@ -75,9 +75,9 @@ export default async function Page({ params: paramsPromise }: Args) {
 
   const payload = await getPayload({ config: configPromise })
 
-  const [page, productsData, servicesData] = await Promise.all([
+  const [page, productCategoriesData, servicesData] = await Promise.all([
     queryPageBySlug({ slug: 'home', locale }),
-    payload.find({ collection: 'products', locale: locale as any, limit: 100 }),
+    payload.find({ collection: 'productCategories', locale: locale as any, limit: 100 }),
     payload.find({ collection: 'services', locale: locale as any, limit: 100 }),
   ])
 
@@ -87,7 +87,7 @@ export default async function Page({ params: paramsPromise }: Args) {
 
   const { hero, layout } = page
   const t = translations[locale as keyof typeof translations] || translations.hy
-  const products = productsData.docs
+  const productCategories = productCategoriesData.docs
   const services = servicesData.docs
 
   return (
@@ -167,24 +167,24 @@ export default async function Page({ params: paramsPromise }: Args) {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {products.map((product: any) => (
+            {productCategories.map((category: any) => (
               <div
-                key={product.id}
+                key={category.id}
                 className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition flex flex-col"
               >
-                <div className={`h-48 bg-gradient-to-br ${product.colorGradient} p-4 flex items-start justify-end`}>
-                  {(product.categories || []).map((cat: any) => (
-                    <span key={cat.id} className="bg-white/20 text-white text-xs font-semibold px-2 py-1 rounded inline-block ml-2 backdrop-blur-sm">
-                      {cat.title}
-                    </span>
-                  ))}
-                </div>
+                {category.image && typeof category.image === 'object' && category.image.url ? (
+                  <div
+                    className="h-48 w-full bg-cover bg-center"
+                    style={{ backgroundImage: `url(${category.image.url})` }}
+                  />
+                ) : (
+                   <div className="h-48 bg-gradient-to-br from-green-400 to-teal-500 w-full" />
+                )}
                 <div className="p-6 flex-1 flex flex-col">
-                  <h3 className="text-xl font-semibold text-gray-800 mb-2">{product.title}</h3>
-                  <p className="text-gray-600 mb-4 flex-1">{product.description}</p>
+                  <h3 className="text-xl font-semibold text-gray-800 mb-2">{category.title}</h3>
                   <a
-                    href={`/${locale}/products`}
-                    className="text-teal-600 font-semibold hover:underline inline-block mt-auto"
+                    href={`/${locale}/products/${category.slug}`}
+                    className="text-teal-600 font-semibold hover:underline inline-block mt-auto pt-6"
                   >
                     {t.learnMore}
                   </a>

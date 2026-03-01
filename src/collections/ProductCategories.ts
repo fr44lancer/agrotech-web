@@ -21,6 +21,12 @@ export const ProductCategories: CollectionConfig = {
       required: true,
       localized: true,
     },
+    {
+      name: 'image',
+      type: 'upload',
+      relationTo: 'media',
+      required: false,
+    },
     slugField({
       position: undefined,
     }),

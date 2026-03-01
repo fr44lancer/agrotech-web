@@ -1,11 +1,11 @@
-
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import { draftMode } from 'next/headers'
 import BaseWrapper from '@/components/ui/Containers/BaseContainer'
-import { CMSLink } from '@/components/Link'
+import React from 'react'
+import { Media } from '@/components/Media'
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -14,7 +14,11 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 }
 
-export default async function EventsPage({ params: paramsPromise }: { params: Promise<{ locale: string }> }) {
+export default async function EventsPage({
+  params: paramsPromise,
+}: {
+  params: Promise<{ locale: string }>
+}) {
   const { isEnabled: draft } = await draftMode()
   const { locale = 'hy' } = await paramsPromise
   const payload = await getPayload({ config: configPromise })
@@ -31,37 +35,66 @@ export default async function EventsPage({ params: paramsPromise }: { params: Pr
   const pastEvents = events.docs.filter((event) => event.status === 'past')
 
   return (
-    <BaseWrapper className="w-full container m-auto pt-16 pb-24">
-      <div className="max-w-4xl">
-        <h1 className="text-4xl md:text-5xl font-bold mb-6">Events & Conferences</h1>
-        <p className="text-xl text-muted-foreground mb-12">
-          Join us at upcoming agricultural events and exhibitions worldwide
-        </p>
-
+    <BaseWrapper className="w-full  m-auto ">
+      <section className="bg-gradient-to-r from-teal-600 to-green-700 text-white py-16">
+        <div className="container mx-auto px-6">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">Events & Conferences</h1>
+          <p className="text-xl text-green-50">
+            Join us at upcoming agricultural events and exhibitions worldwide
+          </p>
+        </div>
+      </section>
+      <div className="container mx-auto">
         <section className="py-16 bg-gray-50">
-          <div className="container mx-auto px-6 max-w-5xl">
+          <div className="container mx-auto px-6">
             <h2 className="text-3xl font-bold text-gray-800 mb-8">Upcoming Events</h2>
             {upcomingEvents.length > 0 ? (
               <div className="grid grid-cols-1 gap-8">
                 {upcomingEvents.map((event: any) => (
-                  <div key={event.id} className="bg-white rounded-lg shadow-md overflow-hidden relative border border-gray-200">
+                  <div
+                    key={event.id}
+                    className="bg-white rounded-lg shadow-md overflow-hidden relative border border-gray-200"
+                  >
                     <div className="md:flex">
-                      <div className="md:w-64 h-48 md:h-auto bg-gradient-to-br from-green-500 to-amber-500"></div>
+                      {event.image && (
+                        <div className="w-full aspect-video relative  overflow-hidden  max-w-80">
+                          <Media resource={event.image} fill imgClassName="object-cover" priority />
+                        </div>
+                      )}
                       <div className="p-6 flex-1">
                         <div className="flex items-center gap-4 mb-3">
-                          <span className="bg-teal-600 text-white px-3 py-1 rounded-full text-sm font-semibold">Event</span>
+                          <span className="bg-teal-600 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                            Event
+                          </span>
                           <span className="text-gray-500 text-sm">
-                            {new Date(event.date as string).toLocaleDateString(locale, { month: 'short', day: 'numeric', year: 'numeric' })}
+                            {new Date(event.date as string).toLocaleDateString(locale, {
+                              month: 'short',
+                              day: 'numeric',
+                              year: 'numeric',
+                            })}
                           </span>
                         </div>
                         <h3 className="text-2xl font-semibold text-gray-800 mb-2">{event.title}</h3>
-                        <p className="text-gray-600 mb-4 line-clamp-3">
-                          {event.description}
-                        </p>
+                        <p className="text-gray-600 mb-4 line-clamp-3">{event.description}</p>
                         <div className="flex items-center text-gray-600 mb-4">
-                          <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                          <svg
+                            className="w-5 h-5 mr-2"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                            ></path>
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                            ></path>
                           </svg>
                           {event.location}
                         </div>
@@ -88,13 +121,21 @@ export default async function EventsPage({ params: paramsPromise }: { params: Pr
             {pastEvents.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {pastEvents.map((event: any) => (
-                  <div key={event.id} className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition">
+                  <div
+                    key={event.id}
+                    className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition"
+                  >
                     <div className="h-48 bg-gradient-to-br from-gray-400 to-gray-600"></div>
                     <div className="p-6">
                       <span className="text-gray-500 text-sm">
-                        {new Date(event.date as string).toLocaleDateString(locale, { month: 'long', year: 'numeric' })}
+                        {new Date(event.date as string).toLocaleDateString(locale, {
+                          month: 'long',
+                          year: 'numeric',
+                        })}
                       </span>
-                      <h3 className="text-xl font-semibold text-gray-800 mb-2 mt-1">{event.title}</h3>
+                      <h3 className="text-xl font-semibold text-gray-800 mb-2 mt-1">
+                        {event.title}
+                      </h3>
                       <p className="text-gray-600 mb-4 line-clamp-2">{event.description}</p>
                       <Link
                         href={`/${locale}/events/${event.slug}`}
