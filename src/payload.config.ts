@@ -14,6 +14,18 @@ import { Posts } from '@/collections/Posts'
 import { Categories } from '@/collections/Categories'
 import { Header } from '@/Header/config'
 import { Footer } from '@/Footer/config'
+import { Events } from '@/collections/Events'
+import { EventRegistrations } from '@/collections/EventRegistrations'
+import { Products } from '@/collections/Products'
+import { Services } from '@/collections/Services'
+import { Careers } from '@/collections/Careers'
+import { Partners } from '@/collections/Partners'
+
+import { ProductCategories } from '@/collections/ProductCategories'
+import { EventCategories } from '@/collections/EventCategories'
+import { CareerCategories } from '@/collections/CareerCategories'
+import { PartnerCategories } from '@/collections/PartnerCategories'
+import { ServiceCategories } from '@/collections/ServiceCategories'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -29,7 +41,24 @@ export default buildConfig({
       collections: ['pages'],
     },
   },
-  collections: [Users, Media, Categories, Pages, Posts],
+  collections: [
+    Users, 
+    Media, 
+    Categories, 
+    ProductCategories,
+    EventCategories,
+    CareerCategories,
+    PartnerCategories,
+    ServiceCategories,
+    Pages, 
+    Posts, 
+    Events, 
+    EventRegistrations, 
+    Products, 
+    Services, 
+    Careers, 
+    Partners
+  ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

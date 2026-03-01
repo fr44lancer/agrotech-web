@@ -1,18 +1,18 @@
 import Link from 'next/link'
 import React from 'react'
 
-import type { Page, Post } from '@/payload-types'
+import type { Career, Page, Post, Product, ProductCategory } from '@/payload-types'
 import { Button, ButtonProps } from 'antd'
 
 type CMSLinkType = {
-  appearance?: 'inline' | ButtonProps['variant']
+  appearance?: 'inline' | 'default' | 'primary' | 'secondary' | 'outline' | null
   children?: React.ReactNode
   className?: string
   label?: string | null
   newTab?: boolean | null
   reference?: {
-    relationTo: 'pages' | 'posts'
-    value: Page | Post | string | number
+    relationTo: 'pages' | 'posts' | 'products' | 'productCategories' | 'careers'
+    value: Page | Post | Product | ProductCategory | Career | string | number
   } | null
   size?: ButtonProps['size'] | null
   type?: 'custom' | 'reference' | null
@@ -39,17 +39,18 @@ export const CMSLink: React.FC<CMSLinkType> = (props) => {
       ? `${locale ? `/${locale}` : ''}${reference?.relationTo !== 'pages' ? `/${reference?.relationTo}` : ''}/${
           reference.value.slug
         }`
-      : url ? `${locale && url.startsWith('/') ? `/${locale}${url}` : url}` : url
+      : url
+        ? `${locale && url.startsWith('/') ? `/${locale}${url}` : url}`
+        : url
 
   if (!href) return null
 
-  const size = appearance === 'link' ? undefined : (sizeFromProps || undefined)
+  const size = appearance === 'inline' ? undefined : sizeFromProps || undefined
   const newTabProps = newTab ? { rel: 'noopener noreferrer', target: '_blank' } : {}
 
-  /* Ensure we don't break any styles set by richText */
   if (appearance === 'inline') {
     return (
-      <Link href={href || url || ''} {...newTabProps}>
+      <Link href={href || url || ''} {...newTabProps} className={className}>
         {label && label}
         {children && children}
       </Link>
@@ -57,7 +58,7 @@ export const CMSLink: React.FC<CMSLinkType> = (props) => {
   }
 
   return (
-    <Button className={className} size={size} variant={appearance}>
+    <Button className={className} size={size}>
       <Link href={href || url || ''} {...newTabProps}>
         {label && label}
         {children && children}

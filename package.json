@@ -1,7 +1,7 @@
 {
-  "name": "with-vercel-mongodb",
+  "name": "agrotech-web",
   "version": "1.0.0",
-  "description": "A blank template to get started with Payload 3.0",
+  "description": "Agrotech Web and CMS",
   "license": "MIT",
   "type": "module",
   "scripts": {

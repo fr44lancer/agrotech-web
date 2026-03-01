@@ -9,9 +9,9 @@ import { usePathname, useRouter } from 'next/navigation'
 type Locale = 'en' | 'hy' | 'ru'
 
 const locales: { code: Locale; label: string }[] = [
-  { code: 'en', label: 'English' },
-  { code: 'hy', label: 'Հայերեն' },
-  { code: 'ru', label: 'Русский' },
+  { code: 'en', label: 'EN' },
+  { code: 'hy', label: 'AM' },
+  { code: 'ru', label: 'RU' },
 ]
 
 interface LanguageSwitcherProps {
@@ -46,7 +46,11 @@ export const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ currentLocal
 
   return (
     <Dropdown menu={{ items, onClick: handleMenuClick }} trigger={['click']}>
-      <Button type="text" icon={<GlobalOutlined />} className="flex items-center gap-2">
+      <Button
+        type="text"
+        icon={<GlobalOutlined />}
+        className="flex items-center gap-2 bg-green-800 ml-4 text-white border-none"
+      >
         {locales.find((l) => l.code === currentLocale)?.label || 'Language'}
       </Button>
     </Dropdown>

@@ -17,7 +17,7 @@ interface HeaderClientProps {
 
 export const HeaderClient: React.FC<HeaderClientProps> = ({ data, locale }) => {
   return (
-    <header className="w-full relative z-20 ">
+    <header className="w-full sticky top-0 z-50 bg-white shadow-md">
       <BaseWrapper className={'container m-auto'}>
         <Row align={'middle'} justify={'space-between'} className="py-4">
           <Col>
@@ -26,10 +26,14 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data, locale }) => {
             </Link>
           </Col>
           <Col>
-            <HeaderNav data={data} />
-          </Col>
-          <Col>
-            <LanguageSwitcher currentLocale={locale} />
+            <Row align={'middle'}>
+              <Col>
+                <HeaderNav data={data} />
+              </Col>
+              <Col>
+                <LanguageSwitcher currentLocale={locale} />
+              </Col>
+            </Row>
           </Col>
         </Row>
       </BaseWrapper>

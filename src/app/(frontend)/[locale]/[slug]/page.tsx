@@ -52,9 +52,7 @@ export default async function Page({ params: paramsPromise }: Args) {
 
   const decodedSlug = decodeURIComponent(slug)
   const url = '/' + decodedSlug
-  let page: RequiredDataFromCollectionSlug<'pages'> | null
-
-  page = await queryPageBySlug({
+  const page = await queryPageBySlug({
     slug: decodedSlug,
     locale,
   })

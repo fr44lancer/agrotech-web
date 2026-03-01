@@ -12,6 +12,9 @@ import { authenticated } from '@/access/authenticated'
 import { authenticatedOrPublished } from '@/access/authenticatedOrPublished'
 import { generatePreviewPath } from '@/utilities/generatePreviewPath'
 import { Content } from '@/blocks/Content/config'
+import { Banner } from '@/blocks/Banner/config'
+import { CallToAction } from '@/blocks/CallToAction/config'
+import { MediaBlock } from '@/blocks/MediaBlock/config'
 import { populatePublishedAt } from '@/hooks/populatePublishedAt'
 import { revalidateDelete, revalidatePage } from '@/hooks/revalidatePage'
 import { hero } from '@/components/heros/config'
@@ -66,7 +69,7 @@ export const Pages: CollectionConfig = {
             {
               name: 'layout',
               type: 'blocks',
-              blocks: [Content],
+              blocks: [Content, Banner, CallToAction, MediaBlock],
               required: true,
               localized: true,
               admin: {
