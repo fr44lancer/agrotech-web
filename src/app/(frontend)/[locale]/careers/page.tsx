@@ -9,6 +9,9 @@ type Args = {
   }>
 }
 
+export const dynamic = 'force-dynamic'
+export const revalidate = 60
+
 const translations = {
   en: {
     heroTitle: 'Join Our Team',
