@@ -28,8 +28,12 @@ export async function generateStaticParams() {
   const locales = ['hy', 'en', 'ru']
   const params: { slug: string; locale: string }[] = []
 
+  // Exclude slugs that have dedicated page routes to prevent pre-rendered
+  // static HTML from shadowing the dynamic route components in production.
+  const dedicatedRoutes = ['careers', 'events', 'products', 'partners', 'contacts']
+
   pages.docs?.forEach((doc) => {
-    if (doc.slug !== 'home') {
+    if (doc.slug !== 'home' && !dedicatedRoutes.includes(doc.slug as string)) {
       locales.forEach((locale) => {
         params.push({ slug: doc.slug as string, locale })
       })
