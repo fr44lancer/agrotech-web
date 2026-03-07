@@ -314,7 +314,22 @@ export interface Page {
   id: string;
   title: string;
   hero: {
-    type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact';
+    type: 'none' | 'homeHero' | 'highImpact' | 'mediumImpact' | 'lowImpact';
+    /**
+     * Full-width background image for the hero section.
+     */
+    backgroundImage?: (string | null) | Media;
+    title?: string | null;
+    slogan?: string | null;
+    /**
+     * Bullet-point features shown below the slogan.
+     */
+    features?:
+      | {
+          text: string;
+          id?: string | null;
+        }[]
+      | null;
     richText?: {
       root: {
         type: string;
@@ -1094,6 +1109,15 @@ export interface PagesSelect<T extends boolean = true> {
     | T
     | {
         type?: T;
+        backgroundImage?: T;
+        title?: T;
+        slogan?: T;
+        features?:
+          | T
+          | {
+              text?: T;
+              id?: T;
+            };
         richText?: T;
         links?:
           | T

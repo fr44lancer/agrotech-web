@@ -26,6 +26,10 @@ export const hero: Field = {
           value: 'none',
         },
         {
+          label: 'Home Hero',
+          value: 'homeHero',
+        },
+        {
           label: 'High Impact',
           value: 'highImpact',
         },
@@ -40,6 +44,56 @@ export const hero: Field = {
       ],
       required: true,
     },
+
+    // ── Home Hero fields ────────────────────────────────────────────
+    {
+      name: 'backgroundImage',
+      type: 'upload',
+      relationTo: 'media',
+      label: 'Background Image',
+      admin: {
+        condition: (_, { type } = {}) => type === 'homeHero',
+        description: 'Full-width background image for the hero section.',
+      },
+    },
+    {
+      name: 'title',
+      type: 'text',
+      label: 'Title',
+      localized: true,
+      admin: {
+        condition: (_, { type } = {}) => type === 'homeHero',
+      },
+    },
+    {
+      name: 'slogan',
+      type: 'text',
+      label: 'Slogan',
+      localized: true,
+      admin: {
+        condition: (_, { type } = {}) => type === 'homeHero',
+      },
+    },
+    {
+      name: 'features',
+      type: 'array',
+      label: 'Features',
+      localized: true,
+      admin: {
+        condition: (_, { type } = {}) => type === 'homeHero',
+        description: 'Bullet-point features shown below the slogan.',
+      },
+      fields: [
+        {
+          name: 'text',
+          type: 'text',
+          label: 'Feature text',
+          required: true,
+        },
+      ],
+    },
+
+    // ── Shared fields (other hero types) ───────────────────────────
     {
       name: 'richText',
       type: 'richText',
@@ -55,6 +109,9 @@ export const hero: Field = {
         },
       }),
       label: false,
+      admin: {
+        condition: (_, { type } = {}) => type !== 'homeHero',
+      },
     },
     linkGroup({
       overrides: {

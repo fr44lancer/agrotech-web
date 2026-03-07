@@ -2,11 +2,14 @@ import React from 'react'
 
 import type { Page } from '@/payload-types'
 import { HighImpactHero } from '@/components/heros/HighImpact'
+import { HomeHeroHero } from '@/components/heros/HomeHero'
 import { LowImpactHero } from '@/components/heros/LowImpact'
 import { MediumImpactHero } from '@/components/heros/MediumImpact'
 
-const heroes = {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const heroes: Record<string, React.FC<any>> = {
   highImpact: HighImpactHero,
+  homeHero: HomeHeroHero,
   lowImpact: LowImpactHero,
   mediumImpact: MediumImpactHero,
 }

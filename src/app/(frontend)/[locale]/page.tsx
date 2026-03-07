@@ -7,6 +7,9 @@ import React, { cache } from 'react'
 
 import { generateMeta } from '@/utilities/generateMeta'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
+import { RenderHero } from '@/components/heros/RenderHero'
+
+export const revalidate = 0
 
 export function generateStaticParams() {
   return [{ locale: 'hy' }, { locale: 'en' }, { locale: 'ru' }]
@@ -20,12 +23,6 @@ type Args = {
 
 const translations = {
   en: {
-    heroTitle: 'Ensure Stable Plant Health and Productivity',
-    heroSub: 'Through our offered products and consultation services',
-    heroFeature1: 'Make your production more efficient via our products and advisory services',
-    heroFeature2: 'Reduce risks and losses through our offerings',
-    exploreBtn: 'Explore Products',
-    contactBtn: 'Contact Us',
     productsTitle: 'Our Products',
     productsSub: 'High-quality agricultural solutions from European and global manufacturers',
     servicesTitle: 'Agronomic Consultation Services',
@@ -34,13 +31,6 @@ const translations = {
     learnMore: 'Learn More →',
   },
   ru: {
-    heroTitle: 'Обеспечение стабильного здоровья и продуктивности растений',
-    heroSub: 'Благодаря предлагаемым нами продуктам и консультационным услугам',
-    heroFeature1:
-      'Сделайте свое производство более эффективным с помощью наших продуктов и консультационных услуг',
-    heroFeature2: 'Снизьте риски и потери благодаря нашим предложениям',
-    exploreBtn: 'Изучить продукты',
-    contactBtn: 'Связаться с нами',
     productsTitle: 'Наши продукты',
     productsSub:
       'Высококачественные сельскохозяйственные решения от европейских и мировых производителей',
@@ -50,13 +40,6 @@ const translations = {
     learnMore: 'Узнать больше →',
   },
   hy: {
-    heroTitle: 'Ապահովեք բույսերի կայուն առողջությունը և արտադրողականությունը',
-    heroSub: 'Մեր առաջարկած ապրանքների և խորհրդատվական ծառայությունների միջոցով',
-    heroFeature1:
-      'Ավելի արդյունավետ դարձրեք ձեր արտադրությունը մեր ապրանքների և խորհրդատվական ծառայությունների միջոցով',
-    heroFeature2: 'Նվազեցրեք ռիսկերը և կորուստները մեր առաջարկների միջոցով',
-    exploreBtn: 'Ուսումնասիրել ապրանքները',
-    contactBtn: 'Կապ մեզ հետ',
     productsTitle: 'Մեր ապրանքները',
     productsSub:
       'Բարձրորակ գյուղատնտեսական լուծումներ եվրոպական և համաշխարհային արտադրողների կողմից',
@@ -79,6 +62,9 @@ export default async function Page({ params: paramsPromise }: Args) {
     payload.find({ collection: 'services', locale: locale as any, limit: 100 }),
   ])
 
+  console.log('servicesData')
+  console.log(servicesData)
+
   if (!page) {
     return null
   }
@@ -91,70 +77,7 @@ export default async function Page({ params: paramsPromise }: Args) {
   return (
     <div className="w-full">
       {draft && <LivePreviewListener />}
-
-      <section
-        className="relative  text-white"
-        style={{
-          backgroundImage: "url('/images/hero-bg.jpg')",
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-        }}
-      >
-        {/*<BaseWrapper className={'w-full  m-auto'}>*/}
-        {/*  <RenderHero {...hero} />*/}
-        {/*</BaseWrapper>*/}
-        <div className="absolute inset-0 bg-gradient-to-r from-teal-600/90 to-green-700/85"></div>
-        <div className="container mx-auto px-6 py-24 md:py-32 relative z-10 w-full max-w-7xl">
-          <div className="max-w-4xl">
-            <h1 className="text-2xl md:text-4xl font-bold mb-8">{t.heroTitle}</h1>
-            <p className="text-xl md:text-2xl mb-6 text-green-50">{t.heroSub}</p>
-            <div className="space-y-4 mb-8">
-              <div className="flex items-start">
-                <svg
-                  className="w-6 h-6 mr-3 flex-shrink-0 mt-1"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                    clipRule="evenodd"
-                  ></path>
-                </svg>
-                <span className="text-lg md:text-xl">{t.heroFeature1}</span>
-              </div>
-              <div className="flex items-start">
-                <svg
-                  className="w-6 h-6 mr-3 flex-shrink-0 mt-1"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                    clipRule="evenodd"
-                  ></path>
-                </svg>
-                <span className="text-lg md:text-xl">{t.heroFeature2}</span>
-              </div>
-            </div>
-            <div className="flex flex-wrap gap-4">
-              <a
-                href={`/${locale}/products`}
-                className="bg-white text-teal-700 px-8 py-3 rounded-md font-semibold hover:bg-green-50 transition"
-              >
-                {t.exploreBtn}
-              </a>
-              <a
-                href={`/${locale}/contacts`}
-                className="border-2 border-white text-white px-8 py-3 rounded-md font-semibold hover:bg-white hover:text-teal-700 transition"
-              >
-                {t.contactBtn}
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
+      <RenderHero {...hero} />
 
       {/* Product Categories Section */}
       <section className="py-16 bg-gray-50">

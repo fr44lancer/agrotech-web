@@ -12,15 +12,8 @@ export const HighImpactHero: React.FC<Page['hero']> = ({ links, media, richText 
   console.log('home media')
   console.log(media)
   return (
-    <BaseWrapper className="relative bg-gradient-to-r from-teal to-green-700 text-white">
-      <section
-        className="relative  text-white"
-        style={{
-          backgroundImage: "url('/images/hero-bg.jpg')",
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-        }}
-      >
+    <BaseWrapper className="relative  text-white">
+      <section className="relative  text-white">
         <div className="w-full  select-none">
           {media && typeof media === 'object' && (
             <Media fill imgClassName="object-cover" priority resource={media} />
