@@ -20,6 +20,9 @@ import { Products } from '@/collections/Products'
 import { Services } from '@/collections/Services'
 import { Careers } from '@/collections/Careers'
 import { Partners } from '@/collections/Partners'
+import { CompanyValues } from '@/collections/CompanyValues'
+import { PartnerBenefits } from '@/collections/PartnerBenefits'
+import { PartnerTestimonials } from '@/collections/PartnerTestimonials'
 
 import { ProductCategories } from '@/collections/ProductCategories'
 import { EventCategories } from '@/collections/EventCategories'
@@ -56,8 +59,11 @@ export default buildConfig({
     EventRegistrations, 
     Products, 
     Services, 
-    Careers, 
-    Partners
+    Careers,
+    Partners,
+    CompanyValues,
+    PartnerBenefits,
+    PartnerTestimonials,
   ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',

@@ -15,6 +15,11 @@ import { Content } from '@/blocks/Content/config'
 import { Banner } from '@/blocks/Banner/config'
 import { CallToAction } from '@/blocks/CallToAction/config'
 import { MediaBlock } from '@/blocks/MediaBlock/config'
+import { ValuesBlock } from '@/blocks/Values/config'
+import { CultureBlock } from '@/blocks/CultureItems/config'
+import { WhatWeOfferBlock } from '@/blocks/WhatWeOffer/config'
+import { FinancialReportingBlock } from '@/blocks/FinancialReporting/config'
+import { CorporateBondsBlock } from '@/blocks/CorporateBonds/config'
 import { populatePublishedAt } from '@/hooks/populatePublishedAt'
 import { revalidateDelete, revalidatePage } from '@/hooks/revalidatePage'
 import { hero } from '@/components/heros/config'
@@ -69,7 +74,17 @@ export const Pages: CollectionConfig = {
             {
               name: 'layout',
               type: 'blocks',
-              blocks: [Content, Banner, CallToAction, MediaBlock],
+              blocks: [
+                Content,
+                Banner,
+                CallToAction,
+                MediaBlock,
+                ValuesBlock,
+                CultureBlock,
+                WhatWeOfferBlock,
+                FinancialReportingBlock,
+                CorporateBondsBlock,
+              ],
               required: true,
               localized: true,
               admin: {

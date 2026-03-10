@@ -1,12 +1,12 @@
 import React from 'react'
+import Link from 'next/link'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import { Media } from '@/components/Media'
+import type { Partner, PartnerCategory } from '@/payload-types'
 
 type Args = {
-  params: Promise<{
-    locale?: string
-  }>
+  params: Promise<{ locale?: string }>
 }
 
 const translations = {
@@ -18,19 +18,41 @@ const translations = {
       'At AGROTECH, we believe in the power of collaboration. Our partnerships with leading organizations, research institutions, and distributors enable us to deliver innovative solutions and expand our global reach.',
     growingSub2:
       "Together, we're shaping the future of sustainable agriculture and making a positive impact on communities worldwide.",
-    noPartners: 'No partners listed yet.',
+    strategicTitle: 'Strategic Partners',
+    strategicSub: 'Our global network of trusted partners across key sectors',
+    otherPartners: 'Other Partners',
+    benefitsTitle: 'Partnership Benefits',
+    benefitsSub:
+      'Partnering with AGROTECH means access to innovative solutions and a global support network',
+    becomeTitle: 'Become a Partner',
+    becomeText:
+      'Join our growing network of partners and help shape the future of sustainable agriculture. Together we can make a greater impact.',
+    contactBtn: 'Contact Partnership Team',
+    testimonialsTitle: 'What Our Partners Say',
     visitWebsite: 'Visit Website',
+    noPartners: 'No partners listed yet.',
   },
   ru: {
     heroTitle: 'Наши партнеры',
     heroSub: 'Построение прочных отношений для устойчивого успеха в сельском хозяйстве',
     growingTitle: 'Растем вместе',
     growingSub1:
-      'В AGROTECH мы верим в силу сотрудничества. Наше партнерство с ведущими организациями, исследовательскими институтами и дистрибьюторами позволяет нам предлагать инновационные решения и расширять наше глобальное присутствие.',
+      'В AGROTECH мы верим в силу сотрудничества. Наше партнерство с ведущими организациями, исследовательскими институтами и дистрибьюторами позволяет нам предлагать инновационные решения.',
     growingSub2:
       'Вместе мы формируем будущее устойчивого сельского хозяйства и оказываем положительное влияние на сообщества по всему миру.',
-    noPartners: 'Партнеры пока не указаны.',
+    strategicTitle: 'Стратегические партнеры',
+    strategicSub: 'Наша глобальная сеть надёжных партнёров в ключевых отраслях',
+    otherPartners: 'Другие партнеры',
+    benefitsTitle: 'Преимущества партнерства',
+    benefitsSub:
+      'Партнерство с AGROTECH открывает доступ к инновационным решениям и глобальной сети поддержки',
+    becomeTitle: 'Станьте партнером',
+    becomeText:
+      'Присоединяйтесь к нашей растущей сети партнёров и помогайте формировать будущее устойчивого сельского хозяйства.',
+    contactBtn: 'Связаться с командой по партнерству',
+    testimonialsTitle: 'Что говорят наши партнеры',
     visitWebsite: 'Посетить сайт',
+    noPartners: 'Партнеры пока не указаны.',
   },
   hy: {
     heroTitle: 'Մեր Գործընկերները',
@@ -39,84 +61,251 @@ const translations = {
     growingSub1:
       'AGROTECH-ում մենք հավատում ենք համագործակցության ուժին: Առաջատար կազմակերպությունների, հետազոտական ինստիտուտների և դիստրիբյուտորների հետ մեր գործընկերությունը թույլ է տալիս մեզ տրամադրել նորարարական լուծումներ:',
     growingSub2: 'Միասին մենք կերտում ենք կայուն գյուղատնտեսության ապագան:',
-    noPartners: 'Դեռևս գործընկերներ չկան:',
+    strategicTitle: 'Ռազմավարական գործընկերներ',
+    strategicSub: 'Մեր գլոբալ ցանցը հիմնական ոլորտներում վստահելի գործընկերների',
+    otherPartners: 'Այլ գործընկերներ',
+    benefitsTitle: 'Գործընկերության առավելություններ',
+    benefitsSub:
+      'AGROTECH-ի հետ գործընկերությունը նշանակում է հասանելիություն նորարարական լուծումների և գլոբալ աջակցության ցանցի',
+    becomeTitle: 'Դարձեք գործընկեր',
+    becomeText:
+      'Միացեք մեր աճող գործընկերների ցանցին և օգնեք ձևավորել կայուն գյուղատնտեսության ապագան:',
+    contactBtn: 'Կապ գործընկերության թիմի հետ',
+    testimonialsTitle: 'Ինչ են ասում մեր գործընկերները',
     visitWebsite: 'Այցելել կայք',
+    noPartners: 'Դեռևս գործընկերներ չկան:',
   },
 }
+
+const accentColors = [
+  'border-teal-600',
+  'border-green-600',
+  'border-teal-500',
+  'border-green-500',
+  'border-teal-700',
+  'border-green-700',
+]
+
+export const dynamic = 'force-dynamic'
 
 export default async function Page({ params: paramsPromise }: Args) {
   const { locale = 'hy' } = await paramsPromise
   const payload = await getPayload({ config: configPromise })
-
-  const partnersReq = await payload.find({
-    collection: 'partners',
-    locale: locale as any,
-    limit: 100,
-  })
-
-  const partners = partnersReq.docs
   const t = translations[locale as keyof typeof translations] || translations.hy
+
+  const [partnersReq, categoriesReq, benefitsReq, testimonialsReq] = await Promise.all([
+    payload.find({ collection: 'partners', locale: locale as any, limit: 200, depth: 2 }),
+    payload.find({
+      collection: 'partnerCategories',
+      locale: locale as any,
+      limit: 100,
+      sort: 'title',
+    }),
+    payload.find({
+      collection: 'partnerBenefits',
+      locale: locale as any,
+      limit: 100,
+      sort: 'order',
+    }),
+    payload.find({
+      collection: 'partnerTestimonials',
+      locale: locale as any,
+      limit: 20,
+      sort: 'order',
+      depth: 1,
+    }),
+  ])
+
+  const allPartners = partnersReq.docs as Partner[]
+  const categories = categoriesReq.docs as PartnerCategory[]
+  const benefits = benefitsReq.docs
+  const testimonials = testimonialsReq.docs
+
+  // Group partners by category
+  const assignedIds = new Set<string>()
+  const categoryGroups = categories
+    .map((category) => {
+      const grouped = allPartners.filter(
+        (p) =>
+          Array.isArray(p.categories) &&
+          p.categories.some((c) => (typeof c === 'object' ? c.id : c) === category.id),
+      )
+      grouped.forEach((p) => assignedIds.add(p.id))
+      return { category, partners: grouped }
+    })
+    .filter((g) => g.partners.length > 0)
+
+  const uncategorized = allPartners.filter((p) => !assignedIds.has(p.id))
 
   return (
     <div className="w-full">
+      {/* Hero */}
       <section className="bg-gradient-to-r from-teal-600 to-green-700 text-white py-16">
-        <div className="container mx-auto px-6">
+        <div className="container mx-auto px-6 max-w-7xl">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">{t.heroTitle}</h1>
           <p className="text-xl text-green-50">{t.heroSub}</p>
         </div>
       </section>
 
-      {/* Partnership Introduction */}
+      {/* Growing Together */}
       <section className="py-16 bg-white">
-        <div className="container mx-auto px-6">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-6">{t.growingTitle}</h2>
-            <p className="text-gray-600 text-lg mb-4">{t.growingSub1}</p>
-            <p className="text-gray-600 text-lg">{t.growingSub2}</p>
-          </div>
+        <div className="container mx-auto px-6 max-w-4xl text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-6">{t.growingTitle}</h2>
+          <p className="text-gray-600 text-lg mb-4">{t.growingSub1}</p>
+          <p className="text-gray-600 text-lg">{t.growingSub2}</p>
         </div>
       </section>
 
-      {/* Partners Grid */}
+      {/* Strategic Partners — grouped by category */}
       <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {partners.length === 0 ? (
-              <p className="text-gray-600 col-span-3">{t.noPartners}</p>
-            ) : (
-              partners.map((partner) => (
-                <div
-                  key={partner.id}
-                  className="bg-white p-8 rounded-lg shadow-sm border border-gray-100 flex flex-col items-center text-center hover:shadow-md transition-shadow"
-                >
-                  <div className="h-32 w-full flex items-center justify-center mb-6">
-                    {partner.logo && typeof partner.logo === 'object' ? (
-                      <Media
-                        resource={partner.logo}
-                        className="max-h-full max-w-full object-contain"
-                      />
-                    ) : (
-                      <div className="text-gray-400 font-bold text-2xl">{partner.title}</div>
-                    )}
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-800 mb-2">{partner.title}</h3>
-                  <p className="text-gray-600 mb-6 flex-grow">{partner.description}</p>
-                  {partner.websiteUrl && (
-                    <a
-                      href={partner.websiteUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-teal-600 font-semibold hover:text-teal-700 w-full rounded border border-teal-600 py-2 transition hover:bg-teal-50"
-                    >
-                      {t.visitWebsite}
-                    </a>
-                  )}
-                </div>
-              ))
-            )}
+        <div className="container mx-auto px-6 max-w-7xl">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+              {t.strategicTitle}
+            </h2>
+            <p className="text-gray-600 text-lg">{t.strategicSub}</p>
           </div>
+
+          {allPartners.length === 0 ? (
+            <p className="text-gray-500 text-center">{t.noPartners}</p>
+          ) : (
+            <div className="space-y-14">
+              {categoryGroups.map(({ category, partners }) => (
+                <div key={category.id}>
+                  <h3 className="text-xl font-bold text-teal-700 mb-6 pb-2 border-b border-teal-100">
+                    {category.title}
+                  </h3>
+                  <PartnerGrid partners={partners} visitLabel={t.visitWebsite} />
+                </div>
+              ))}
+              {uncategorized.length > 0 && (
+                <div>
+                  {categoryGroups.length > 0 && (
+                    <h3 className="text-xl font-bold text-teal-700 mb-6 pb-2 border-b border-teal-100">
+                      {t.otherPartners}
+                    </h3>
+                  )}
+                  <PartnerGrid partners={uncategorized} visitLabel={t.visitWebsite} />
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </section>
+
+      {/* Partnership Benefits */}
+      {benefits.length > 0 && (
+        <section className="py-16 bg-white">
+          <div className="container mx-auto px-6 max-w-7xl">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+                {t.benefitsTitle}
+              </h2>
+              <p className="text-gray-600 text-lg max-w-2xl mx-auto">{t.benefitsSub}</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {benefits.map((benefit, i) => (
+                <div
+                  key={benefit.id}
+                  className={`bg-gray-50 rounded-lg p-6 border-l-4 ${accentColors[i % accentColors.length]}`}
+                >
+                  <h3 className="text-xl font-bold text-gray-800 mb-2">{benefit.title}</h3>
+                  {benefit.description && (
+                    <p className="text-gray-600 leading-relaxed">{benefit.description}</p>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Become a Partner CTA */}
+      <section className="py-16 bg-gradient-to-r from-teal-600 to-green-700 text-white">
+        <div className="container mx-auto px-6 max-w-3xl text-center">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">{t.becomeTitle}</h2>
+          <p className="text-green-50 text-lg mb-8">{t.becomeText}</p>
+          <Link
+            href={`/${locale}/contacts`}
+            className="bg-white text-teal-700 px-8 py-3 rounded-md font-semibold hover:bg-green-50 transition"
+          >
+            {t.contactBtn}
+          </Link>
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      {testimonials.length > 0 && (
+        <section className="py-16 bg-gray-50">
+          <div className="container mx-auto px-6 max-w-7xl">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+                {t.testimonialsTitle}
+              </h2>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {testimonials.map((testimonial) => (
+                <div
+                  key={testimonial.id}
+                  className="bg-white rounded-lg p-8 shadow-sm border border-gray-100 flex flex-col"
+                >
+                  <svg
+                    className="w-8 h-8 text-teal-200 mb-4 flex-shrink-0"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+                  </svg>
+                  <p className="text-gray-600 leading-relaxed mb-6 flex-grow italic">
+                    {testimonial.quote}
+                  </p>
+                  <div className="border-t border-gray-100 pt-4">
+                    <p className="font-bold text-gray-800">{testimonial.authorName}</p>
+                    {testimonial.authorTitle && (
+                      <p className="text-sm text-teal-600">{testimonial.authorTitle}</p>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+    </div>
+  )
+}
+
+function PartnerGrid({ partners, visitLabel }: { partners: Partner[]; visitLabel: string }) {
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {partners.map((partner) => (
+        <div
+          key={partner.id}
+          className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 flex flex-col items-center text-center hover:shadow-md transition-shadow"
+        >
+          <div className="h-28 w-full flex items-center justify-center mb-4">
+            {partner.logo && typeof partner.logo === 'object' ? (
+              <Media resource={partner.logo} className="max-h-full max-w-full object-contain" />
+            ) : (
+              <div className="text-gray-400 font-bold text-2xl">{partner.title}</div>
+            )}
+          </div>
+          <h3 className="text-lg font-bold text-gray-800 mb-2">{partner.title}</h3>
+          {partner.description && (
+            <p className="text-gray-600 text-sm mb-4 flex-grow">{partner.description}</p>
+          )}
+          {partner.websiteUrl && (
+            <a
+              href={partner.websiteUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-auto text-teal-600 font-semibold hover:text-teal-700 w-full rounded border border-teal-600 py-2 text-sm transition hover:bg-teal-50"
+            >
+              {visitLabel}
+            </a>
+          )}
+        </div>
+      ))}
     </div>
   )
 }

@@ -83,6 +83,9 @@ export interface Config {
     services: Service;
     careers: Career;
     partners: Partner;
+    companyValues: CompanyValue;
+    partnerBenefits: PartnerBenefit;
+    partnerTestimonials: PartnerTestimonial;
     'payload-kv': PayloadKv;
     'payload-jobs': PayloadJob;
     'payload-locked-documents': PayloadLockedDocument;
@@ -107,6 +110,9 @@ export interface Config {
     services: ServicesSelect<false> | ServicesSelect<true>;
     careers: CareersSelect<false> | CareersSelect<true>;
     partners: PartnersSelect<false> | PartnersSelect<true>;
+    companyValues: CompanyValuesSelect<false> | CompanyValuesSelect<true>;
+    partnerBenefits: PartnerBenefitsSelect<false> | PartnerBenefitsSelect<true>;
+    partnerTestimonials: PartnerTestimonialsSelect<false> | PartnerTestimonialsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -383,7 +389,17 @@ export interface Page {
       | null;
     media?: (string | null) | Media;
   };
-  layout: (ContentBlock | BannerBlock | CallToActionBlock | MediaBlock)[];
+  layout: (
+    | ContentBlock
+    | BannerBlock
+    | CallToActionBlock
+    | MediaBlock
+    | ValuesBlock
+    | CultureBlock
+    | WhatWeOfferBlock
+    | FinancialReportingBlock
+    | CorporateBondsBlock
+  )[];
   meta?: {
     title?: string | null;
     /**
@@ -671,6 +687,117 @@ export interface MediaBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ValuesBlock".
+ */
+export interface ValuesBlock {
+  heading?: string | null;
+  subheading?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'valuesBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CultureBlock".
+ */
+export interface CultureBlock {
+  heading?: string | null;
+  subheading?: string | null;
+  items?:
+    | {
+        title: string;
+        description?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'cultureBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "WhatWeOfferBlock".
+ */
+export interface WhatWeOfferBlock {
+  heading?: string | null;
+  subheading?: string | null;
+  categories?:
+    | {
+        title: string;
+        items?:
+          | {
+              text: string;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'whatWeOfferBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FinancialReportingBlock".
+ */
+export interface FinancialReportingBlock {
+  heading?: string | null;
+  subheading?: string | null;
+  annualReports?:
+    | {
+        year: string;
+        file: string | Media;
+        id?: string | null;
+      }[]
+    | null;
+  quarterlyResults?:
+    | {
+        quarter: string;
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  investorRelations?: {
+    text?: string | null;
+    url?: string | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'financialReportingBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CorporateBondsBlock".
+ */
+export interface CorporateBondsBlock {
+  heading?: string | null;
+  subheading?: string | null;
+  productName?: string | null;
+  /**
+   * e.g. "Annual Interest Rate" / "4.5%"
+   */
+  stats?:
+    | {
+        label: string;
+        value: string;
+        id?: string | null;
+      }[]
+    | null;
+  benefits?:
+    | {
+        text: string;
+        id?: string | null;
+      }[]
+    | null;
+  ctaLabel?: string | null;
+  ctaUrl?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'corporateBondsBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "events".
  */
 export interface Event {
@@ -766,6 +893,62 @@ export interface Partner {
    */
   generateSlug?: boolean | null;
   slug: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Core values displayed on the About Us page.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "companyValues".
+ */
+export interface CompanyValue {
+  id: string;
+  title: string;
+  description?: string | null;
+  /**
+   * Lower numbers appear first.
+   */
+  order?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Benefit cards displayed on the Partners page.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "partnerBenefits".
+ */
+export interface PartnerBenefit {
+  id: string;
+  title: string;
+  description?: string | null;
+  /**
+   * Lower numbers appear first.
+   */
+  order?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Testimonial quotes displayed on the Partners page.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "partnerTestimonials".
+ */
+export interface PartnerTestimonial {
+  id: string;
+  quote: string;
+  authorName: string;
+  /**
+   * e.g. "CEO, Asia Pacific Agri"
+   */
+  authorTitle?: string | null;
+  partner?: (string | null) | Partner;
+  /**
+   * Lower numbers appear first.
+   */
+  order?: number | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -948,6 +1131,18 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'partners';
         value: string | Partner;
+      } | null)
+    | ({
+        relationTo: 'companyValues';
+        value: string | CompanyValue;
+      } | null)
+    | ({
+        relationTo: 'partnerBenefits';
+        value: string | PartnerBenefit;
+      } | null)
+    | ({
+        relationTo: 'partnerTestimonials';
+        value: string | PartnerTestimonial;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -1143,6 +1338,11 @@ export interface PagesSelect<T extends boolean = true> {
         banner?: T | BannerBlockSelect<T>;
         cta?: T | CallToActionBlockSelect<T>;
         mediaBlock?: T | MediaBlockSelect<T>;
+        valuesBlock?: T | ValuesBlockSelect<T>;
+        cultureBlock?: T | CultureBlockSelect<T>;
+        whatWeOfferBlock?: T | WhatWeOfferBlockSelect<T>;
+        financialReportingBlock?: T | FinancialReportingBlockSelect<T>;
+        corporateBondsBlock?: T | CorporateBondsBlockSelect<T>;
       };
   meta?:
     | T
@@ -1224,6 +1424,111 @@ export interface CallToActionBlockSelect<T extends boolean = true> {
  */
 export interface MediaBlockSelect<T extends boolean = true> {
   media?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ValuesBlock_select".
+ */
+export interface ValuesBlockSelect<T extends boolean = true> {
+  heading?: T;
+  subheading?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CultureBlock_select".
+ */
+export interface CultureBlockSelect<T extends boolean = true> {
+  heading?: T;
+  subheading?: T;
+  items?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "WhatWeOfferBlock_select".
+ */
+export interface WhatWeOfferBlockSelect<T extends boolean = true> {
+  heading?: T;
+  subheading?: T;
+  categories?:
+    | T
+    | {
+        title?: T;
+        items?:
+          | T
+          | {
+              text?: T;
+              id?: T;
+            };
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FinancialReportingBlock_select".
+ */
+export interface FinancialReportingBlockSelect<T extends boolean = true> {
+  heading?: T;
+  subheading?: T;
+  annualReports?:
+    | T
+    | {
+        year?: T;
+        file?: T;
+        id?: T;
+      };
+  quarterlyResults?:
+    | T
+    | {
+        quarter?: T;
+        url?: T;
+        id?: T;
+      };
+  investorRelations?:
+    | T
+    | {
+        text?: T;
+        url?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CorporateBondsBlock_select".
+ */
+export interface CorporateBondsBlockSelect<T extends boolean = true> {
+  heading?: T;
+  subheading?: T;
+  productName?: T;
+  stats?:
+    | T
+    | {
+        label?: T;
+        value?: T;
+        id?: T;
+      };
+  benefits?:
+    | T
+    | {
+        text?: T;
+        id?: T;
+      };
+  ctaLabel?: T;
+  ctaUrl?: T;
   id?: T;
   blockName?: T;
 }
@@ -1352,6 +1657,41 @@ export interface PartnersSelect<T extends boolean = true> {
   categories?: T;
   generateSlug?: T;
   slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "companyValues_select".
+ */
+export interface CompanyValuesSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  order?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "partnerBenefits_select".
+ */
+export interface PartnerBenefitsSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  order?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "partnerTestimonials_select".
+ */
+export interface PartnerTestimonialsSelect<T extends boolean = true> {
+  quote?: T;
+  authorName?: T;
+  authorTitle?: T;
+  partner?: T;
+  order?: T;
   updatedAt?: T;
   createdAt?: T;
 }

@@ -35,7 +35,7 @@ export default async function EventsPage({
 
   return (
     <div className="w-full">
-      <section className="bg-gradient-to-r from-teal-600 to-green-700 text-white py-16">
+      <section className="bg-gradient-to-r from-teal-900 to-white-700 text-white py-16">
         <div className="container mx-auto px-6">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">Events & Conferences</h1>
           <p className="text-xl text-green-50">
@@ -115,7 +115,7 @@ export default async function EventsPage({
         </section>
 
         <section className="py-16 bg-white">
-          <div className="container mx-auto px-6 max-w-5xl">
+          <div className="container mx-auto px-6">
             <h2 className="text-3xl font-bold text-gray-800 mb-8">Past Events</h2>
             {pastEvents.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
