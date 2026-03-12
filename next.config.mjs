@@ -26,10 +26,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'example.com',
-        port: '',
-        pathname: '/account123/**',
-        search: '',
+        hostname: 'agrotech.elvs.dev',
       },
       {
         protocol: 'http',
