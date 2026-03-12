@@ -8,6 +8,7 @@ export const PartnerBenefits: CollectionConfig = {
     plural: 'Partnership Benefits',
   },
   admin: {
+    group: 'Partners',
     useAsTitle: 'title',
     defaultColumns: ['title', 'order', 'updatedAt'],
     description: 'Benefit cards displayed on the Partners page.',

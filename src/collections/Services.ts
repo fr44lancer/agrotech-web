@@ -11,6 +11,7 @@ export const Services: CollectionConfig = {
     update: authenticated,
   },
   admin: {
+    group: 'Catalog',
     useAsTitle: 'title',
     defaultColumns: ['title', 'updatedAt'],
   },

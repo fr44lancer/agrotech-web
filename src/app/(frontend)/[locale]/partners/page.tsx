@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { cache } from 'react'
 import Link from 'next/link'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
+import { draftMode } from 'next/headers'
 import { Media } from '@/components/Media'
 import type { Partner, PartnerCategory } from '@/payload-types'
-import { PageHeroBlockComponent } from '@/blocks/PageHero/Component'
+import { RenderBlocks } from '@/blocks/RenderBlocks'
 
 type Args = {
   params: Promise<{ locale?: string }>
@@ -94,7 +95,7 @@ export default async function Page({ params: paramsPromise }: Args) {
   const payload = await getPayload({ config: configPromise })
   const t = translations[locale as keyof typeof translations] || translations.hy
 
-  const [partnersReq, categoriesReq, benefitsReq, testimonialsReq, heroReq] = await Promise.all([
+  const [partnersReq, categoriesReq, benefitsReq, testimonialsReq, page] = await Promise.all([
     payload.find({ collection: 'partners', locale: locale as any, limit: 200, depth: 2 }),
     payload.find({
       collection: 'partnerCategories',
@@ -115,19 +116,14 @@ export default async function Page({ params: paramsPromise }: Args) {
       sort: 'order',
       depth: 1,
     }),
-    payload.find({
-      collection: 'pageHeroes',
-      where: { pageKey: { equals: 'partners' } },
-      locale: locale as any,
-      limit: 1,
-    }),
+    queryPageBySlug({ slug: 'partners', locale }),
   ])
 
   const allPartners = partnersReq.docs as Partner[]
   const categories = categoriesReq.docs as PartnerCategory[]
   const benefits = benefitsReq.docs
   const testimonials = testimonialsReq.docs
-  const hero = heroReq.docs[0]
+  const heroBlocks = (page?.layout ?? []).filter((b) => b.blockType === 'pageHeroBlock')
 
   // Group partners by category
   const assignedIds = new Set<string>()
@@ -148,11 +144,7 @@ export default async function Page({ params: paramsPromise }: Args) {
   return (
     <div className="w-full">
       {/* Hero */}
-      <PageHeroBlockComponent
-        title={hero?.title ?? t.heroTitle}
-        subtitle={hero?.subtitle ?? t.heroSub}
-        description={hero?.description}
-      />
+      <RenderBlocks blocks={heroBlocks} locale={locale} />
 
       {/* Growing Together */}
       <section className="py-16 bg-white">
@@ -316,3 +308,20 @@ function PartnerGrid({ partners, visitLabel }: { partners: Partner[]; visitLabel
     </div>
   )
 }
+
+const queryPageBySlug = cache(
+  async ({ slug, locale = 'hy' }: { slug: string; locale?: string }) => {
+    const { isEnabled: draft } = await draftMode()
+    const payload = await getPayload({ config: configPromise })
+    const result = await payload.find({
+      collection: 'pages',
+      draft,
+      limit: 1,
+      pagination: false,
+      overrideAccess: draft,
+      locale: locale as any,
+      where: { slug: { equals: slug } },
+    })
+    return result.docs?.[0] || null
+  },
+)

@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { cache } from 'react'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import Link from 'next/link'
-import { PageHeroBlockComponent } from '@/blocks/PageHero/Component'
+import { RenderBlocks } from '@/blocks/RenderBlocks'
+import { draftMode } from 'next/headers'
 
 type Args = {
   params: Promise<{
@@ -46,36 +47,26 @@ const translations = {
 }
 
 export default async function Page({ params: paramsPromise }: Args) {
+  const { isEnabled: draft } = await draftMode()
   const { locale = 'hy' } = await paramsPromise
   const payload = await getPayload({ config: configPromise })
 
-  const [careersReq, heroReq] = await Promise.all([
+  const [careersReq, page] = await Promise.all([
     payload.find({
       collection: 'careers',
       locale: locale as any,
       limit: 100,
     }),
-    payload.find({
-      collection: 'pageHeroes',
-      where: { pageKey: { equals: 'careers' } },
-      locale: locale as any,
-      limit: 1,
-    }),
+    queryPageBySlug({ slug: 'careers', locale }),
   ])
-  const hero = heroReq.docs[0]
 
-  // We fetch categories globally just in case they're needed to display chips/filters,
-  // but to keep server component simple, we'll list them all for now or build client-side filtering later.
   const careers = careersReq.docs
   const t = translations[locale as keyof typeof translations] || translations.hy
+  const heroBlocks = (page?.layout ?? []).filter((b) => b.blockType === 'pageHeroBlock')
 
   return (
     <div className="w-full">
-      <PageHeroBlockComponent
-        title={hero?.title ?? t.heroTitle}
-        subtitle={hero?.subtitle ?? t.heroSub}
-        description={hero?.description}
-      />
+      <RenderBlocks blocks={heroBlocks} locale={locale} />
 
       {/* Why Work With Us */}
       <section className="py-16 bg-white">
@@ -221,3 +212,20 @@ export default async function Page({ params: paramsPromise }: Args) {
     </div>
   )
 }
+
+const queryPageBySlug = cache(
+  async ({ slug, locale = 'hy' }: { slug: string; locale?: string }) => {
+    const { isEnabled: draft } = await draftMode()
+    const payload = await getPayload({ config: configPromise })
+    const result = await payload.find({
+      collection: 'pages',
+      draft,
+      limit: 1,
+      pagination: false,
+      overrideAccess: draft,
+      locale: locale as any,
+      where: { slug: { equals: slug } },
+    })
+    return result.docs?.[0] || null
+  },
+)

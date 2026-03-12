@@ -3,9 +3,9 @@ import Link from 'next/link'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import { draftMode } from 'next/headers'
-import React from 'react'
+import React, { cache } from 'react'
 import { Media } from '@/components/Media'
-import { PageHeroBlockComponent } from '@/blocks/PageHero/Component'
+import { RenderBlocks } from '@/blocks/RenderBlocks'
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -14,16 +14,19 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 }
 
-export default async function EventsPage({
-  params: paramsPromise,
-}: {
-  params: Promise<{ locale: string }>
-}) {
+type Args = {
+  params: Promise<{
+    slug?: string
+    locale?: string
+  }>
+}
+
+export default async function EventsPage({ params: paramsPromise }: Args) {
   const { isEnabled: draft } = await draftMode()
-  const { locale = 'hy' } = await paramsPromise
+  const { slug = 'events', locale = 'hy' } = await paramsPromise
   const payload = await getPayload({ config: configPromise })
 
-  const [eventsReq, heroReq] = await Promise.all([
+  const [eventsReq] = await Promise.all([
     payload.find({
       collection: 'events',
       draft,
@@ -31,26 +34,20 @@ export default async function EventsPage({
       locale: locale as any,
       sort: '-date',
     }),
-    payload.find({
-      collection: 'pageHeroes',
-      where: { pageKey: { equals: 'events' } },
-      locale: locale as any,
-      limit: 1,
-    }),
   ])
-
+  const decodedSlug = decodeURIComponent(slug)
+  const page = await queryPageBySlug({
+    slug: decodedSlug,
+    locale,
+  })
+  const { layout } = page
   const events = eventsReq
-  const hero = heroReq.docs[0]
   const upcomingEvents = events.docs.filter((event) => event.status === 'upcoming')
   const pastEvents = events.docs.filter((event) => event.status === 'past')
-
+  const heroBlocks = (layout ?? []).filter((b) => b.blockType === 'pageHeroBlock')
   return (
     <div className="w-full">
-      <PageHeroBlockComponent
-        title={hero?.title ?? 'Events & Conferences'}
-        subtitle={hero?.subtitle ?? 'Join us at upcoming agricultural events and exhibitions worldwide'}
-        description={hero?.description}
-      />
+      <RenderBlocks blocks={heroBlocks} locale={locale} />
       <div className="container mx-auto">
         <section className="py-16 bg-gray-50">
           <div className="container mx-auto px-6">
@@ -163,3 +160,27 @@ export default async function EventsPage({
     </div>
   )
 }
+
+const queryPageBySlug = cache(
+  async ({ slug, locale = 'hy' }: { slug: string; locale?: string }) => {
+    const { isEnabled: draft } = await draftMode()
+
+    const payload = await getPayload({ config: configPromise })
+
+    const result = await payload.find({
+      collection: 'pages',
+      draft,
+      limit: 1,
+      pagination: false,
+      overrideAccess: draft,
+      locale: locale as any,
+      where: {
+        slug: {
+          equals: slug,
+        },
+      },
+    })
+
+    return result.docs?.[0] || null
+  },
+)

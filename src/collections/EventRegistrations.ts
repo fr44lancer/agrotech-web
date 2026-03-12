@@ -12,6 +12,7 @@ export const EventRegistrations: CollectionConfig = {
     delete: authenticated,
   },
   admin: {
+    group: 'Events',
     useAsTitle: 'email',
     defaultColumns: ['firstName', 'lastName', 'email', 'event', 'createdAt'],
   },

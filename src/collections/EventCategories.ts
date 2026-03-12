@@ -12,6 +12,7 @@ export const EventCategories: CollectionConfig = {
     update: authenticated,
   },
   admin: {
+    group: 'Events',
     useAsTitle: 'title',
   },
   fields: [

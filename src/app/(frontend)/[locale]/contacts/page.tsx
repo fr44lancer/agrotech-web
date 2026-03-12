@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { cache } from 'react'
 import type { Metadata } from 'next'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
+import { draftMode } from 'next/headers'
 import type { ContactLocation } from '@/payload-types'
-import { PageHeroBlockComponent } from '@/blocks/PageHero/Component'
+import { RenderBlocks } from '@/blocks/RenderBlocks'
 
 type Args = {
   params: Promise<{ locale?: string }>
@@ -128,21 +129,17 @@ export default async function ContactsPage({ params: paramsPromise }: Args) {
 
   const payload = await getPayload({ config: configPromise })
 
-  const [locationsReq, heroReq] = await Promise.all([
+  const [locationsReq, page] = await Promise.all([
     payload.find({
       collection: 'contactLocations',
       locale: locale as any,
       limit: 100,
       sort: 'order',
     }),
-    payload.find({
-      collection: 'pageHeroes',
-      where: { pageKey: { equals: 'contacts' } },
-      locale: locale as any,
-      limit: 1,
-    }),
+    queryPageBySlug({ slug: 'contacts', locale }),
   ])
-  const hero = heroReq.docs[0]
+
+  const heroBlocks = (page?.layout ?? []).filter((b) => b.blockType === 'pageHeroBlock')
 
   const offices = locationsReq.docs.filter(
     (l: ContactLocation) => l.type === 'office',
@@ -155,11 +152,7 @@ export default async function ContactsPage({ params: paramsPromise }: Args) {
   return (
     <div className="w-full">
       {/* Hero */}
-      <PageHeroBlockComponent
-        title={hero?.title ?? t.title}
-        subtitle={hero?.subtitle ?? t.subtitle}
-        description={hero?.description}
-      />
+      <RenderBlocks blocks={heroBlocks} locale={locale} />
 
       {/* Contact Info + Form */}
       <section className="container mx-auto px-6 max-w-7xl py-16">
@@ -414,3 +407,20 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
     description: 'Get in touch with Agrotech for agricultural solutions and partnerships.',
   }
 }
+
+const queryPageBySlug = cache(
+  async ({ slug, locale = 'hy' }: { slug: string; locale?: string }) => {
+    const { isEnabled: draft } = await draftMode()
+    const payload = await getPayload({ config: configPromise })
+    const result = await payload.find({
+      collection: 'pages',
+      draft,
+      limit: 1,
+      pagination: false,
+      overrideAccess: draft,
+      locale: locale as any,
+      where: { slug: { equals: slug } },
+    })
+    return result.docs?.[0] || null
+  },
+)

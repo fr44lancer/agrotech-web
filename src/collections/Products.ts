@@ -12,6 +12,7 @@ export const Products: CollectionConfig = {
     update: authenticated,
   },
   admin: {
+    group: 'Catalog',
     useAsTitle: 'title',
     defaultColumns: ['title', 'slug', 'updatedAt'],
   },

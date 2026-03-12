@@ -8,6 +8,7 @@ export const PageHeroes: CollectionConfig = {
     plural: 'Page Heroes',
   },
   admin: {
+    group: 'Company',
     useAsTitle: 'pageKey',
     defaultColumns: ['pageKey', 'title', 'updatedAt'],
     description:

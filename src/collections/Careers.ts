@@ -12,6 +12,7 @@ export const Careers: CollectionConfig = {
     update: authenticated,
   },
   admin: {
+    group: 'Careers',
     useAsTitle: 'title',
     defaultColumns: ['title', 'slug', 'updatedAt'],
   },

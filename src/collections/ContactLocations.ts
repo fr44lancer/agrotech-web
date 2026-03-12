@@ -8,6 +8,7 @@ export const ContactLocations: CollectionConfig = {
     plural: 'Contact Locations',
   },
   admin: {
+    group: 'Company',
     useAsTitle: 'name',
     defaultColumns: ['name', 'type', 'order', 'updatedAt'],
     description: 'Office and department contact cards displayed on the Contacts page.',

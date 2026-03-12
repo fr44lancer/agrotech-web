@@ -12,6 +12,7 @@ export const PartnerCategories: CollectionConfig = {
     update: authenticated,
   },
   admin: {
+    group: 'Partners',
     useAsTitle: 'title',
   },
   fields: [

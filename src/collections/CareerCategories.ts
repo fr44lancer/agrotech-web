@@ -12,6 +12,7 @@ export const CareerCategories: CollectionConfig = {
     update: authenticated,
   },
   admin: {
+    group: 'Careers',
     useAsTitle: 'title',
   },
   fields: [

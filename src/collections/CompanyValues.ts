@@ -8,6 +8,7 @@ export const CompanyValues: CollectionConfig = {
     plural: 'Company Values',
   },
   admin: {
+    group: 'Company',
     useAsTitle: 'title',
     defaultColumns: ['title', 'order', 'updatedAt'],
     description: 'Core values displayed on the About Us page.',

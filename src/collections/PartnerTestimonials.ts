@@ -8,6 +8,7 @@ export const PartnerTestimonials: CollectionConfig = {
     plural: 'Partner Testimonials',
   },
   admin: {
+    group: 'Partners',
     useAsTitle: 'authorName',
     defaultColumns: ['authorName', 'authorTitle', 'order', 'updatedAt'],
     description: 'Testimonial quotes displayed on the Partners page.',

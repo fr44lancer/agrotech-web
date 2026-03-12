@@ -12,6 +12,7 @@ export const Partners: CollectionConfig = {
     update: authenticated,
   },
   admin: {
+    group: 'Partners',
     useAsTitle: 'title',
     defaultColumns: ['title', 'websiteUrl', 'updatedAt'],
   },

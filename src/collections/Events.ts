@@ -26,6 +26,7 @@ export const Events: CollectionConfig = {
     update: authenticated,
   },
   admin: {
+    group: 'Events',
     useAsTitle: 'title',
     defaultColumns: ['title', 'date', 'status', 'updatedAt'],
   },

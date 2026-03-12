@@ -12,6 +12,7 @@ export const ProductCategories: CollectionConfig = {
     update: authenticated,
   },
   admin: {
+    group: 'Catalog',
     useAsTitle: 'title',
   },
   fields: [
