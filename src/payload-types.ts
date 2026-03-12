@@ -132,10 +132,12 @@ export interface Config {
   globals: {
     header: Header;
     footer: Footer;
+    siteTranslations: SiteTranslation;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
+    siteTranslations: SiteTranslationsSelect<false> | SiteTranslationsSelect<true>;
   };
   locale: 'hy' | 'en' | 'ru';
   user: User;
@@ -249,6 +251,10 @@ export interface Category {
 export interface ProductCategory {
   id: string;
   title: string;
+  /**
+   * Short description shown on category cards.
+   */
+  description?: string | null;
   image?: (string | null) | Media;
   /**
    * When enabled, the slug will auto-generate from the title field on save and autosave.
@@ -410,11 +416,11 @@ export interface Page {
   )[];
   meta?: {
     title?: string | null;
+    description?: string | null;
     /**
      * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
      */
     image?: (string | null) | Media;
-    description?: string | null;
   };
   publishedAt?: string | null;
   /**
@@ -908,7 +914,6 @@ export interface Event {
   title: string;
   date: string;
   location: string;
-  status: 'upcoming' | 'past';
   image?: (string | null) | Media;
   /**
    * A short description shown on the events list page.
@@ -1431,6 +1436,7 @@ export interface CategoriesSelect<T extends boolean = true> {
  */
 export interface ProductCategoriesSelect<T extends boolean = true> {
   title?: T;
+  description?: T;
   image?: T;
   generateSlug?: T;
   slug?: T;
@@ -1537,8 +1543,8 @@ export interface PagesSelect<T extends boolean = true> {
     | T
     | {
         title?: T;
-        image?: T;
         description?: T;
+        image?: T;
       };
   publishedAt?: T;
   generateSlug?: T;
@@ -1789,7 +1795,6 @@ export interface EventsSelect<T extends boolean = true> {
   title?: T;
   date?: T;
   location?: T;
-  status?: T;
   image?: T;
   description?: T;
   content?: T;
@@ -2140,6 +2145,122 @@ export interface Footer {
   createdAt?: string | null;
 }
 /**
+ * Editable UI strings for all pages (buttons, labels, messages).
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "siteTranslations".
+ */
+export interface SiteTranslation {
+  id: string;
+  events?: {
+    upcomingTitle?: string | null;
+    pastTitle?: string | null;
+    noUpcoming?: string | null;
+    noPast?: string | null;
+    registerNow?: string | null;
+    viewHighlights?: string | null;
+    eventLabel?: string | null;
+    allEvents?: string | null;
+    upcoming?: string | null;
+    past?: string | null;
+    allCategories?: string | null;
+    registrationClosed?: string | null;
+    registrationClosedMsg?: string | null;
+    registerTitle?: string | null;
+    firstName?: string | null;
+    lastName?: string | null;
+    emailLabel?: string | null;
+    phoneLabel?: string | null;
+    registering?: string | null;
+    registerSuccess?: string | null;
+    registerError?: string | null;
+    backToEvents?: string | null;
+    noResults?: string | null;
+  };
+  careers?: {
+    openPositions?: string | null;
+    allCategories?: string | null;
+    viewPosition?: string | null;
+    noPositions?: string | null;
+    back?: string | null;
+    applyTitle?: string | null;
+    applyName?: string | null;
+    applyEmail?: string | null;
+    applyPhone?: string | null;
+    applyMessage?: string | null;
+    applySubmit?: string | null;
+    applySending?: string | null;
+    applySuccess?: string | null;
+    applyError?: string | null;
+  };
+  contacts?: {
+    infoTitle?: string | null;
+    desc?: string | null;
+    addressTitle?: string | null;
+    callUs?: string | null;
+    emailUs?: string | null;
+    viewMap?: string | null;
+    formTitle?: string | null;
+    firstName?: string | null;
+    lastName?: string | null;
+    emailLabel?: string | null;
+    phoneLabel?: string | null;
+    company?: string | null;
+    subject?: string | null;
+    message?: string | null;
+    send?: string | null;
+    officesTitle?: string | null;
+    departmentsTitle?: string | null;
+    viewOnMap?: string | null;
+    /**
+     * Value is used for form processing — keep it lowercase, no spaces. Label is what users see.
+     */
+    subjectOptions?:
+      | {
+          /**
+           * e.g. "general", "partnership"
+           */
+          value: string;
+          label: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  partners?: {
+    growingTitle?: string | null;
+    growingSub1?: string | null;
+    growingSub2?: string | null;
+    strategicTitle?: string | null;
+    strategicSub?: string | null;
+    otherPartners?: string | null;
+    benefitsTitle?: string | null;
+    benefitsSub?: string | null;
+    becomeTitle?: string | null;
+    becomeText?: string | null;
+    contactBtn?: string | null;
+    testimonialsTitle?: string | null;
+    visitWebsite?: string | null;
+    noPartners?: string | null;
+  };
+  products?: {
+    allCategories?: string | null;
+    viewProducts?: string | null;
+    contactBtn?: string | null;
+    noProducts?: string | null;
+    viewDetails?: string | null;
+    featured?: string | null;
+    comingSoon?: string | null;
+    discontinued?: string | null;
+    featuresHeading?: string | null;
+    specsHeading?: string | null;
+    documentsHeading?: string | null;
+    download?: string | null;
+    inquire?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header_select".
  */
@@ -2180,6 +2301,124 @@ export interface FooterSelect<T extends boolean = true> {
               label?: T;
             };
         id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "siteTranslations_select".
+ */
+export interface SiteTranslationsSelect<T extends boolean = true> {
+  events?:
+    | T
+    | {
+        upcomingTitle?: T;
+        pastTitle?: T;
+        noUpcoming?: T;
+        noPast?: T;
+        registerNow?: T;
+        viewHighlights?: T;
+        eventLabel?: T;
+        allEvents?: T;
+        upcoming?: T;
+        past?: T;
+        allCategories?: T;
+        registrationClosed?: T;
+        registrationClosedMsg?: T;
+        registerTitle?: T;
+        firstName?: T;
+        lastName?: T;
+        emailLabel?: T;
+        phoneLabel?: T;
+        registering?: T;
+        registerSuccess?: T;
+        registerError?: T;
+        backToEvents?: T;
+        noResults?: T;
+      };
+  careers?:
+    | T
+    | {
+        openPositions?: T;
+        allCategories?: T;
+        viewPosition?: T;
+        noPositions?: T;
+        back?: T;
+        applyTitle?: T;
+        applyName?: T;
+        applyEmail?: T;
+        applyPhone?: T;
+        applyMessage?: T;
+        applySubmit?: T;
+        applySending?: T;
+        applySuccess?: T;
+        applyError?: T;
+      };
+  contacts?:
+    | T
+    | {
+        infoTitle?: T;
+        desc?: T;
+        addressTitle?: T;
+        callUs?: T;
+        emailUs?: T;
+        viewMap?: T;
+        formTitle?: T;
+        firstName?: T;
+        lastName?: T;
+        emailLabel?: T;
+        phoneLabel?: T;
+        company?: T;
+        subject?: T;
+        message?: T;
+        send?: T;
+        officesTitle?: T;
+        departmentsTitle?: T;
+        viewOnMap?: T;
+        subjectOptions?:
+          | T
+          | {
+              value?: T;
+              label?: T;
+              id?: T;
+            };
+      };
+  partners?:
+    | T
+    | {
+        growingTitle?: T;
+        growingSub1?: T;
+        growingSub2?: T;
+        strategicTitle?: T;
+        strategicSub?: T;
+        otherPartners?: T;
+        benefitsTitle?: T;
+        benefitsSub?: T;
+        becomeTitle?: T;
+        becomeText?: T;
+        contactBtn?: T;
+        testimonialsTitle?: T;
+        visitWebsite?: T;
+        noPartners?: T;
+      };
+  products?:
+    | T
+    | {
+        allCategories?: T;
+        viewProducts?: T;
+        contactBtn?: T;
+        noProducts?: T;
+        viewDetails?: T;
+        featured?: T;
+        comingSoon?: T;
+        discontinued?: T;
+        featuresHeading?: T;
+        specsHeading?: T;
+        documentsHeading?: T;
+        download?: T;
+        inquire?: T;
       };
   updatedAt?: T;
   createdAt?: T;

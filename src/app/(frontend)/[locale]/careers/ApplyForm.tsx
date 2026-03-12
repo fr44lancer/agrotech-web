@@ -2,49 +2,28 @@
 
 import React, { useState } from 'react'
 
-const labels = {
-  en: {
-    name: 'Full Name',
-    email: 'Email Address',
-    phone: 'Phone Number',
-    message: 'Cover Letter / Message',
-    submit: 'Submit Application',
-    sending: 'Sending…',
-    success: 'Your application has been submitted! We will be in touch.',
-    error: 'Something went wrong. Please try again.',
-    required: 'Name and email are required.',
-  },
-  ru: {
-    name: 'Полное имя',
-    email: 'Электронная почта',
-    phone: 'Номер телефона',
-    message: 'Сопроводительное письмо / Сообщение',
-    submit: 'Отправить заявку',
-    sending: 'Отправка…',
-    success: 'Ваша заявка отправлена! Мы свяжемся с вами.',
-    error: 'Что-то пошло не так. Пожалуйста, попробуйте снова.',
-    required: 'Имя и электронная почта обязательны.',
-  },
-  hy: {
-    name: 'Անուն Ազգանուն',
-    email: 'Էլ. հասցե',
-    phone: 'Հեռախոսահամար',
-    message: 'Ուղեկցող նամակ / Հաղորդագրություն',
-    submit: 'Ուղարկել դիմումը',
-    sending: 'Ուղարկվում է…',
-    success: 'Ձեր դիմումն ուղարկվել է: Մենք կապ կհաստատենք:',
-    error: 'Ինչ-որ բան սխալ է: Խնդրում ենք նորից փորձել:',
-    required: 'Անունը և էլ. հասցեն պարտադիր են:',
-  },
+type Labels = {
+  name?: string; email?: string; phone?: string; message?: string
+  submit?: string; sending?: string; success?: string; error?: string
 }
 
 type Props = {
   careerId: string
   locale?: string
+  labels?: Labels
 }
 
-export default function ApplyForm({ careerId, locale = 'hy' }: Props) {
-  const t = labels[locale as keyof typeof labels] ?? labels.hy
+export default function ApplyForm({ careerId, locale = 'hy', labels }: Props) {
+  const t = {
+    name: labels?.name ?? 'Full Name',
+    email: labels?.email ?? 'Email Address',
+    phone: labels?.phone ?? 'Phone Number',
+    message: labels?.message ?? 'Cover Letter / Message',
+    submit: labels?.submit ?? 'Submit Application',
+    sending: labels?.sending ?? 'Sending…',
+    success: labels?.success ?? 'Your application has been submitted! We will be in touch.',
+    error: labels?.error ?? 'Something went wrong. Please try again.',
+  }
 
   const [form, setForm] = useState({ name: '', email: '', phone: '', message: '' })
   const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle')

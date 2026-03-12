@@ -103,9 +103,14 @@ export default async function Page({ params: paramsPromise }: Args) {
                 )}
                 <div className="p-6 flex-1 flex flex-col">
                   <h3 className="text-xl font-semibold text-gray-800 mb-2">{category.title}</h3>
+                  {category.description && (
+                    <p className="text-gray-500 text-sm line-clamp-3 flex-1">
+                      {category.description}
+                    </p>
+                  )}
                   <a
                     href={`/${locale}/products/${category.slug}`}
-                    className="text-teal-600 font-semibold hover:underline inline-block mt-auto pt-6"
+                    className="text-teal-950 font-semibold hover:underline inline-block mt-auto pt-6"
                   >
                     {t.learnMore}
                   </a>

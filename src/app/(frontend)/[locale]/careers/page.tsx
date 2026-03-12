@@ -4,6 +4,7 @@ import configPromise from '@payload-config'
 import { RenderBlocks } from '@/blocks/RenderBlocks'
 import { draftMode } from 'next/headers'
 import CareersSection from './CareersSection'
+import { getSiteTranslations } from '@/utilities/getSiteTranslations'
 
 type Args = {
   params: Promise<{
@@ -13,33 +14,12 @@ type Args = {
 
 export const dynamic = 'force-dynamic'
 
-const translations = {
-  en: {
-    openPositions: 'Open Positions',
-    allCategories: 'All',
-    applyNow: 'View Position',
-    noPositions: 'No open positions right now.',
-  },
-  ru: {
-    openPositions: 'Открытые вакансии',
-    allCategories: 'Все',
-    applyNow: 'Смотреть вакансию',
-    noPositions: 'На данный момент нет открытых вакансий.',
-  },
-  hy: {
-    openPositions: 'Բաց հաստիքներ',
-    allCategories: 'Բոլորը',
-    applyNow: 'Տեսնել հաստիք',
-    noPositions: 'Այս պահին բաց հաստիքներ չկան:',
-  },
-}
-
 export default async function Page({ params: paramsPromise }: Args) {
   const { isEnabled: draft } = await draftMode()
   const { locale = 'hy' } = await paramsPromise
   const payload = await getPayload({ config: configPromise })
 
-  const [careersReq, categoriesReq, page] = await Promise.all([
+  const [careersReq, categoriesReq, page, tr] = await Promise.all([
     payload.find({
       collection: 'careers',
       locale: locale as any,
@@ -53,9 +33,15 @@ export default async function Page({ params: paramsPromise }: Args) {
       sort: 'title',
     }),
     queryPageBySlug({ slug: 'careers', locale }),
+    getSiteTranslations(locale),
   ])
 
-  const t = translations[locale as keyof typeof translations] ?? translations.hy
+  const t = {
+    openPositions: tr.careers?.openPositions ?? 'Open Positions',
+    allCategories: tr.careers?.allCategories ?? 'All',
+    applyNow: tr.careers?.viewPosition ?? 'View Position',
+    noPositions: tr.careers?.noPositions ?? 'No open positions right now.',
+  }
   const heroBlocks = (page?.layout ?? []).filter((b) => b.blockType === 'pageHeroBlock')
   const whyWorkBlocks = (page?.layout ?? []).filter((b) => b.blockType === 'whyWorkBlock')
 

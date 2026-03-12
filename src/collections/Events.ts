@@ -28,7 +28,7 @@ export const Events: CollectionConfig = {
   admin: {
     group: 'Events',
     useAsTitle: 'title',
-    defaultColumns: ['title', 'date', 'status', 'updatedAt'],
+    defaultColumns: ['title', 'date', 'location', 'updatedAt'],
   },
   fields: [
     {
@@ -52,16 +52,6 @@ export const Events: CollectionConfig = {
       type: 'text',
       required: true,
       localized: true,
-    },
-    {
-      name: 'status',
-      type: 'select',
-      defaultValue: 'upcoming',
-      options: [
-        { label: 'Upcoming', value: 'upcoming' },
-        { label: 'Past', value: 'past' },
-      ],
-      required: true,
     },
     {
       type: 'tabs',

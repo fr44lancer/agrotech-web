@@ -47,7 +47,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data, locale }) => {
 
           {/* Mobile Menu Hamburger Toggle */}
           <button
-            className="md:hidden z-50 relative p-2 text-gray-800 hover:text-teal-600 focus:outline-none"
+            className="md:hidden z-50 relative p-2 text-gray-800 hover:text-teal-950 focus:outline-none"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label="Toggle Menu"
           >

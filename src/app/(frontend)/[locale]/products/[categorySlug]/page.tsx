@@ -4,6 +4,7 @@ import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import { getSiteTranslations } from '@/utilities/getSiteTranslations'
 
 type Args = {
   params: Promise<{
@@ -12,19 +13,13 @@ type Args = {
   }>
 }
 
-const translations = {
-  en: { all: 'All Categories', noProducts: 'No products in this category yet.', viewDetails: 'View Details', featured: 'Featured' },
-  ru: { all: 'Все категории', noProducts: 'В этой категории пока нет товаров.', viewDetails: 'Подробнее', featured: 'Рекомендуемый' },
-  hy: { all: 'Բոլոր կատեգորիաները', noProducts: 'Այս կատեգորիայում ապրանքներ չկան:', viewDetails: 'Մանրամասն', featured: 'Առաջարկվող' },
-}
-
 export default async function CategoryProductsPage({ params: paramsPromise }: Args) {
   const { locale = 'hy', categorySlug } = await paramsPromise
   if (!categorySlug) return notFound()
 
   const payload = await getPayload({ config: configPromise })
 
-  const [categoryReq, allCategoriesReq] = await Promise.all([
+  const [categoryReq, allCategoriesReq, tr] = await Promise.all([
     payload.find({
       collection: 'productCategories',
       locale: locale as any,
@@ -36,6 +31,7 @@ export default async function CategoryProductsPage({ params: paramsPromise }: Ar
       locale: locale as any,
       limit: 100,
     }),
+    getSiteTranslations(locale),
   ])
 
   const category = categoryReq.docs[0]
@@ -49,7 +45,14 @@ export default async function CategoryProductsPage({ params: paramsPromise }: Ar
     limit: 100,
   })
 
-  const t = translations[locale as keyof typeof translations] ?? translations.hy
+  const t = {
+    all: tr.products?.allCategories ?? 'All Categories',
+    noProducts: tr.products?.noProducts ?? 'No products in this category yet.',
+    viewDetails: tr.products?.viewDetails ?? 'View Details',
+    featured: tr.products?.featured ?? 'Featured',
+    comingSoon: tr.products?.comingSoon ?? 'Coming Soon',
+    discontinued: tr.products?.discontinued ?? 'Discontinued',
+  }
   const products = productsReq.docs
 
   return (
@@ -66,7 +69,6 @@ export default async function CategoryProductsPage({ params: paramsPromise }: Ar
 
       <section className="py-12 bg-gray-50 min-h-[50vh]">
         <div className="container mx-auto px-6 max-w-7xl">
-
           {/* Category filter pills */}
           <div className="flex flex-wrap gap-2 mb-10">
             <Link
@@ -114,8 +116,18 @@ export default async function CategoryProductsPage({ params: paramsPromise }: Ar
                         />
                       ) : (
                         <div className="absolute inset-0 bg-gradient-to-br from-green-300 to-teal-400 flex items-center justify-center group-hover:scale-105 transition-transform duration-500">
-                          <svg className="w-16 h-16 text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                          <svg
+                            className="w-16 h-16 text-white/40"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="1.5"
+                              d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
+                            />
                           </svg>
                         </div>
                       )}
@@ -126,28 +138,40 @@ export default async function CategoryProductsPage({ params: paramsPromise }: Ar
                       )}
                       {product.status === 'coming-soon' && (
                         <span className="absolute top-3 right-3 bg-amber-100 text-amber-700 text-xs font-bold px-2 py-1 rounded-full">
-                          Coming Soon
+                          {t.comingSoon}
                         </span>
                       )}
                       {product.status === 'discontinued' && (
                         <span className="absolute top-3 right-3 bg-gray-200 text-gray-600 text-xs font-bold px-2 py-1 rounded-full">
-                          Discontinued
+                          {t.discontinued}
                         </span>
                       )}
                     </div>
 
                     {/* Content */}
                     <div className="p-5 flex flex-col flex-grow">
-                      <h3 className="text-lg font-bold text-gray-800 mb-2 group-hover:text-teal-600 transition-colors leading-snug">
+                      <h3 className="text-lg font-bold text-gray-800 mb-2 group-hover:text-teal-950 transition-colors leading-snug">
                         {product.title}
                       </h3>
                       {product.shortDescription && (
-                        <p className="text-sm text-gray-500 line-clamp-2 flex-grow">{product.shortDescription}</p>
+                        <p className="text-sm text-gray-500 line-clamp-2 flex-grow">
+                          {product.shortDescription}
+                        </p>
                       )}
-                      <div className="flex items-center gap-1 text-teal-600 text-sm font-semibold mt-4">
+                      <div className="flex items-center gap-1 text-teal-950 text-sm font-semibold mt-4">
                         {t.viewDetails}
-                        <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                        <svg
+                          className="w-4 h-4 group-hover:translate-x-1 transition-transform"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M17 8l4 4m0 0l-4 4m4-4H3"
+                          />
                         </svg>
                       </div>
                     </div>

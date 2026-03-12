@@ -30,7 +30,7 @@ export const WhatWeOfferBlockComponent: React.FC<WhatWeOfferBlockProps> = ({
                     {cat.items.map((item, j) => (
                       <li key={item.id ?? j} className="flex items-start gap-2">
                         <svg
-                          className="w-5 h-5 text-teal-600 flex-shrink-0 mt-0.5"
+                          className="w-5 h-5 text-teal-950 flex-shrink-0 mt-0.5"
                           fill="currentColor"
                           viewBox="0 0 20 20"
                         >

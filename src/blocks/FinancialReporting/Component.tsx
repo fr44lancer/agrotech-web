@@ -40,8 +40,18 @@ export const FinancialReportingBlockComponent: React.FC<FinancialReportingBlockP
                           rel="noopener noreferrer"
                           download
                         >
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                          <svg
+                            className="w-4 h-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                            />
                           </svg>
                           Download
                         </a>
@@ -63,11 +73,21 @@ export const FinancialReportingBlockComponent: React.FC<FinancialReportingBlockP
                     <span className="text-gray-700 font-medium">{result.quarter}</span>
                     <Link
                       href={result.url}
-                      className="inline-flex items-center gap-2 border border-teal-600 text-teal-600 px-4 py-2 rounded text-sm font-semibold hover:bg-teal-50 transition"
+                      className="inline-flex items-center gap-2 border border-teal-600 text-teal-950 px-4 py-2 rounded text-sm font-semibold hover:bg-teal-50 transition"
                     >
                       View
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M9 5l7 7-7 7"
+                        />
                       </svg>
                     </Link>
                   </div>
@@ -82,11 +102,16 @@ export const FinancialReportingBlockComponent: React.FC<FinancialReportingBlockP
           <div className="mt-8 text-center">
             <Link
               href={investorRelations.url}
-              className="inline-flex items-center gap-2 text-teal-600 font-semibold hover:underline"
+              className="inline-flex items-center gap-2 text-teal-950 font-semibold hover:underline"
             >
               {investorRelations.text || 'Investor Relations'}
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M17 8l4 4m0 0l-4 4m4-4H3"
+                />
               </svg>
             </Link>
           </div>

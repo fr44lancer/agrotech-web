@@ -14,6 +14,7 @@ import { Posts } from '@/collections/Posts'
 import { Categories } from '@/collections/Categories'
 import { Header } from '@/Header/config'
 import { Footer } from '@/Footer/config'
+import { SiteTranslations } from '@/globals/SiteTranslations'
 import { Events } from '@/collections/Events'
 import { EventRegistrations } from '@/collections/EventRegistrations'
 import { Products } from '@/collections/Products'
@@ -32,6 +33,7 @@ import { EventCategories } from '@/collections/EventCategories'
 import { CareerCategories } from '@/collections/CareerCategories'
 import { PartnerCategories } from '@/collections/PartnerCategories'
 import { ServiceCategories } from '@/collections/ServiceCategories'
+import { seoPlugin } from '@payloadcms/plugin-seo'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -89,13 +91,19 @@ export default buildConfig({
   db: mongooseAdapter({
     url: process.env.MONGODB_URL || '',
   }),
-  globals: [Header, Footer],
+  globals: [Header, Footer, SiteTranslations],
   plugins: [
     vercelBlobStorage({
       collections: {
         media: true,
       },
       token: process.env.BLOB_READ_WRITE_TOKEN || '',
+    }),
+    seoPlugin({
+      collections: ['pages'],
+      uploadsCollection: 'media',
+      generateTitle: ({ doc }) => `Website.com — ${doc.title}`,
+      generateDescription: ({ doc }) => doc.excerpt,
     }),
   ],
 })
