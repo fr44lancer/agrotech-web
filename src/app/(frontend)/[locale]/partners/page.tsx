@@ -4,6 +4,7 @@ import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import { Media } from '@/components/Media'
 import type { Partner, PartnerCategory } from '@/payload-types'
+import { PageHeroBlockComponent } from '@/blocks/PageHero/Component'
 
 type Args = {
   params: Promise<{ locale?: string }>
@@ -93,7 +94,7 @@ export default async function Page({ params: paramsPromise }: Args) {
   const payload = await getPayload({ config: configPromise })
   const t = translations[locale as keyof typeof translations] || translations.hy
 
-  const [partnersReq, categoriesReq, benefitsReq, testimonialsReq] = await Promise.all([
+  const [partnersReq, categoriesReq, benefitsReq, testimonialsReq, heroReq] = await Promise.all([
     payload.find({ collection: 'partners', locale: locale as any, limit: 200, depth: 2 }),
     payload.find({
       collection: 'partnerCategories',
@@ -114,12 +115,19 @@ export default async function Page({ params: paramsPromise }: Args) {
       sort: 'order',
       depth: 1,
     }),
+    payload.find({
+      collection: 'pageHeroes',
+      where: { pageKey: { equals: 'partners' } },
+      locale: locale as any,
+      limit: 1,
+    }),
   ])
 
   const allPartners = partnersReq.docs as Partner[]
   const categories = categoriesReq.docs as PartnerCategory[]
   const benefits = benefitsReq.docs
   const testimonials = testimonialsReq.docs
+  const hero = heroReq.docs[0]
 
   // Group partners by category
   const assignedIds = new Set<string>()
@@ -140,12 +148,11 @@ export default async function Page({ params: paramsPromise }: Args) {
   return (
     <div className="w-full">
       {/* Hero */}
-      <section className="bg-gradient-to-r from-teal-600 to-green-700 text-white py-16">
-        <div className="container mx-auto px-6 max-w-7xl">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">{t.heroTitle}</h1>
-          <p className="text-xl text-green-50">{t.heroSub}</p>
-        </div>
-      </section>
+      <PageHeroBlockComponent
+        title={hero?.title ?? t.heroTitle}
+        subtitle={hero?.subtitle ?? t.heroSub}
+        description={hero?.description}
+      />
 
       {/* Growing Together */}
       <section className="py-16 bg-white">

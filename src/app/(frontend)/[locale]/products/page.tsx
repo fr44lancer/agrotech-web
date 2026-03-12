@@ -2,6 +2,7 @@ import React from 'react'
 import type { Metadata } from 'next'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
+import { PageHeroBlockComponent } from '@/blocks/PageHero/Component'
 
 type Args = {
   params: Promise<{
@@ -45,11 +46,19 @@ export default async function ProductsPage({ params: paramsPromise, searchParams
   const categorySlug = searchParams?.category
   const payload = await getPayload({ config: configPromise })
   
-  const categoriesData = await payload.find({
-    collection: 'productCategories',
-    locale: locale as any,
-    limit: 100
-  })
+  const [categoriesData, heroReq] = await Promise.all([
+    payload.find({
+      collection: 'productCategories',
+      locale: locale as any,
+      limit: 100,
+    }),
+    payload.find({
+      collection: 'pageHeroes',
+      where: { pageKey: { equals: 'products' } },
+      locale: locale as any,
+      limit: 1,
+    }),
+  ])
 
   let productsData;
   if (categorySlug) {
@@ -61,31 +70,24 @@ export default async function ProductsPage({ params: paramsPromise, searchParams
       where: category ? { categories: { contains: category.id } } : undefined
     })
   } else {
-    productsData = await payload.find({ 
-      collection: 'products', 
-      locale: locale as any, 
-      limit: 100 
+    productsData = await payload.find({
+      collection: 'products',
+      locale: locale as any,
+      limit: 100
     })
   }
 
+  const hero = heroReq.docs[0]
   const t = translations[locale as keyof typeof translations] || translations.hy
   const products = productsData.docs
 
   return (
     <div className="w-full">
-      <section className="min-h-[50vh] bg-gradient-to-br from-teal-700 via-green-600 to-green-700 pt-32 pb-20">
-        <div className="container mx-auto px-6 w-full max-w-5xl">
-            <div className="max-w-4xl mx-auto text-center text-white">
-                <h1 className="text-4xl md:text-6xl font-bold mb-6">{t.title}</h1>
-                <p className="text-xl md:text-2xl text-green-50 mb-6">
-                    {t.subtitle}
-                </p>
-                <p className="text-lg md:text-xl text-green-100 mb-8 max-w-2xl mx-auto">
-                    {t.desc}
-                </p>
-            </div>
-        </div>
-      </section>
+      <PageHeroBlockComponent
+        title={hero?.title ?? t.title}
+        subtitle={hero?.subtitle ?? t.subtitle}
+        description={hero?.description ?? t.desc}
+      />
 
       <section className="py-16 bg-gray-50 min-h-[50vh]">
         <div className="container mx-auto px-6 w-full max-w-7xl">

@@ -23,6 +23,8 @@ import { Partners } from '@/collections/Partners'
 import { CompanyValues } from '@/collections/CompanyValues'
 import { PartnerBenefits } from '@/collections/PartnerBenefits'
 import { PartnerTestimonials } from '@/collections/PartnerTestimonials'
+import { ContactLocations } from '@/collections/ContactLocations'
+import { PageHeroes } from '@/collections/PageHeroes'
 
 import { ProductCategories } from '@/collections/ProductCategories'
 import { EventCategories } from '@/collections/EventCategories'
@@ -45,25 +47,27 @@ export default buildConfig({
     },
   },
   collections: [
-    Users, 
-    Media, 
-    Categories, 
+    Users,
+    Media,
+    Categories,
     ProductCategories,
     EventCategories,
     CareerCategories,
     PartnerCategories,
     ServiceCategories,
-    Pages, 
-    Posts, 
-    Events, 
-    EventRegistrations, 
-    Products, 
-    Services, 
+    Pages,
+    Posts,
+    Events,
+    EventRegistrations,
+    Products,
+    Services,
     Careers,
     Partners,
     CompanyValues,
     PartnerBenefits,
     PartnerTestimonials,
+    ContactLocations,
+    PageHeroes,
   ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
@@ -73,6 +77,7 @@ export default buildConfig({
   i18n: {
     fallbackLanguage: 'en',
     supportedLanguages: { hy, en, ru },
+    translations: { hy, en, ru },
   },
   localization: {
     locales: ['hy', 'en', 'ru'],

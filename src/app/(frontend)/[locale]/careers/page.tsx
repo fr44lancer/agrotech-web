@@ -2,6 +2,7 @@ import React from 'react'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import Link from 'next/link'
+import { PageHeroBlockComponent } from '@/blocks/PageHero/Component'
 
 type Args = {
   params: Promise<{
@@ -48,11 +49,20 @@ export default async function Page({ params: paramsPromise }: Args) {
   const { locale = 'hy' } = await paramsPromise
   const payload = await getPayload({ config: configPromise })
 
-  const careersReq = await payload.find({
-    collection: 'careers',
-    locale: locale as any,
-    limit: 100,
-  })
+  const [careersReq, heroReq] = await Promise.all([
+    payload.find({
+      collection: 'careers',
+      locale: locale as any,
+      limit: 100,
+    }),
+    payload.find({
+      collection: 'pageHeroes',
+      where: { pageKey: { equals: 'careers' } },
+      locale: locale as any,
+      limit: 1,
+    }),
+  ])
+  const hero = heroReq.docs[0]
 
   // We fetch categories globally just in case they're needed to display chips/filters,
   // but to keep server component simple, we'll list them all for now or build client-side filtering later.
@@ -61,12 +71,11 @@ export default async function Page({ params: paramsPromise }: Args) {
 
   return (
     <div className="w-full">
-      <section className="bg-gradient-to-r from-teal-600 to-green-700 text-white py-16">
-        <div className="container mx-auto px-6">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">{t.heroTitle}</h1>
-          <p className="text-xl text-green-50">{t.heroSub}</p>
-        </div>
-      </section>
+      <PageHeroBlockComponent
+        title={hero?.title ?? t.heroTitle}
+        subtitle={hero?.subtitle ?? t.heroSub}
+        description={hero?.description}
+      />
 
       {/* Why Work With Us */}
       <section className="py-16 bg-white">

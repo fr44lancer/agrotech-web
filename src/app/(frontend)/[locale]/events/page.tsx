@@ -5,6 +5,7 @@ import { getPayload } from 'payload'
 import { draftMode } from 'next/headers'
 import React from 'react'
 import { Media } from '@/components/Media'
+import { PageHeroBlockComponent } from '@/blocks/PageHero/Component'
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -22,27 +23,34 @@ export default async function EventsPage({
   const { locale = 'hy' } = await paramsPromise
   const payload = await getPayload({ config: configPromise })
 
-  const events = await payload.find({
-    collection: 'events',
-    draft,
-    limit: 100,
-    locale: locale as any,
-    sort: '-date',
-  })
+  const [eventsReq, heroReq] = await Promise.all([
+    payload.find({
+      collection: 'events',
+      draft,
+      limit: 100,
+      locale: locale as any,
+      sort: '-date',
+    }),
+    payload.find({
+      collection: 'pageHeroes',
+      where: { pageKey: { equals: 'events' } },
+      locale: locale as any,
+      limit: 1,
+    }),
+  ])
 
+  const events = eventsReq
+  const hero = heroReq.docs[0]
   const upcomingEvents = events.docs.filter((event) => event.status === 'upcoming')
   const pastEvents = events.docs.filter((event) => event.status === 'past')
 
   return (
     <div className="w-full">
-      <section className="bg-gradient-to-r from-teal-900 to-white-700 text-white py-16">
-        <div className="container mx-auto px-6">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Events & Conferences</h1>
-          <p className="text-xl text-green-50">
-            Join us at upcoming agricultural events and exhibitions worldwide
-          </p>
-        </div>
-      </section>
+      <PageHeroBlockComponent
+        title={hero?.title ?? 'Events & Conferences'}
+        subtitle={hero?.subtitle ?? 'Join us at upcoming agricultural events and exhibitions worldwide'}
+        description={hero?.description}
+      />
       <div className="container mx-auto">
         <section className="py-16 bg-gray-50">
           <div className="container mx-auto px-6">

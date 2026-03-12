@@ -86,6 +86,8 @@ export interface Config {
     companyValues: CompanyValue;
     partnerBenefits: PartnerBenefit;
     partnerTestimonials: PartnerTestimonial;
+    contactLocations: ContactLocation;
+    pageHeroes: PageHero;
     'payload-kv': PayloadKv;
     'payload-jobs': PayloadJob;
     'payload-locked-documents': PayloadLockedDocument;
@@ -113,6 +115,8 @@ export interface Config {
     companyValues: CompanyValuesSelect<false> | CompanyValuesSelect<true>;
     partnerBenefits: PartnerBenefitsSelect<false> | PartnerBenefitsSelect<true>;
     partnerTestimonials: PartnerTestimonialsSelect<false> | PartnerTestimonialsSelect<true>;
+    contactLocations: ContactLocationsSelect<false> | ContactLocationsSelect<true>;
+    pageHeroes: PageHeroesSelect<false> | PageHeroesSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -399,6 +403,7 @@ export interface Page {
     | WhatWeOfferBlock
     | FinancialReportingBlock
     | CorporateBondsBlock
+    | PageHeroBlock
   )[];
   meta?: {
     title?: string | null;
@@ -798,6 +803,21 @@ export interface CorporateBondsBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PageHeroBlock".
+ */
+export interface PageHeroBlock {
+  title: string;
+  subtitle?: string | null;
+  /**
+   * Optional additional paragraph below the subtitle.
+   */
+  description?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'pageHeroBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "events".
  */
 export interface Event {
@@ -949,6 +969,62 @@ export interface PartnerTestimonial {
    * Lower numbers appear first.
    */
   order?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Office and department contact cards displayed on the Contacts page.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contactLocations".
+ */
+export interface ContactLocation {
+  id: string;
+  /**
+   * e.g. "Main Office & Showroom" or "Sales Department"
+   */
+  name: string;
+  /**
+   * Determines which section on the Contacts page this card appears in.
+   */
+  type: 'office' | 'department';
+  /**
+   * Lower numbers appear first.
+   */
+  order?: number | null;
+  address?: string | null;
+  phones?:
+    | {
+        number: string;
+        id?: string | null;
+      }[]
+    | null;
+  email?: string | null;
+  /**
+   * Link to Google Maps for the "View on Map" button.
+   */
+  mapUrl?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Hero banner content for dedicated pages (Events, Careers, Products, Contacts, Partners).
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pageHeroes".
+ */
+export interface PageHero {
+  id: string;
+  /**
+   * Which page this hero applies to.
+   */
+  pageKey: 'events' | 'careers' | 'products' | 'contacts' | 'partners';
+  title: string;
+  subtitle?: string | null;
+  /**
+   * Optional additional paragraph below the subtitle.
+   */
+  description?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1143,6 +1219,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'partnerTestimonials';
         value: string | PartnerTestimonial;
+      } | null)
+    | ({
+        relationTo: 'contactLocations';
+        value: string | ContactLocation;
+      } | null)
+    | ({
+        relationTo: 'pageHeroes';
+        value: string | PageHero;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -1343,6 +1427,7 @@ export interface PagesSelect<T extends boolean = true> {
         whatWeOfferBlock?: T | WhatWeOfferBlockSelect<T>;
         financialReportingBlock?: T | FinancialReportingBlockSelect<T>;
         corporateBondsBlock?: T | CorporateBondsBlockSelect<T>;
+        pageHeroBlock?: T | PageHeroBlockSelect<T>;
       };
   meta?:
     | T
@@ -1534,6 +1619,17 @@ export interface CorporateBondsBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PageHeroBlock_select".
+ */
+export interface PageHeroBlockSelect<T extends boolean = true> {
+  title?: T;
+  subtitle?: T;
+  description?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "posts_select".
  */
 export interface PostsSelect<T extends boolean = true> {
@@ -1692,6 +1788,38 @@ export interface PartnerTestimonialsSelect<T extends boolean = true> {
   authorTitle?: T;
   partner?: T;
   order?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contactLocations_select".
+ */
+export interface ContactLocationsSelect<T extends boolean = true> {
+  name?: T;
+  type?: T;
+  order?: T;
+  address?: T;
+  phones?:
+    | T
+    | {
+        number?: T;
+        id?: T;
+      };
+  email?: T;
+  mapUrl?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pageHeroes_select".
+ */
+export interface PageHeroesSelect<T extends boolean = true> {
+  pageKey?: T;
+  title?: T;
+  subtitle?: T;
+  description?: T;
   updatedAt?: T;
   createdAt?: T;
 }
