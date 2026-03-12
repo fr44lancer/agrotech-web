@@ -1,0 +1,57 @@
+import type { Metadata } from 'next'
+import React, { Suspense } from 'react'
+import '@/app/globals.css'
+import { AdminBar } from '@/components/AdminBar'
+import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
+import { draftMode } from 'next/headers'
+import { getServerSideURL } from '@/utilities/getURL'
+import { AntdRegistry } from '@ant-design/nextjs-registry'
+import AppLayout from '@/components/ui/Layouts/AppLayout'
+import { Header } from '@/Header/Component'
+import { Footer } from '@/Footer/Component'
+import StylesRegistry from '@/utilities/styleRegistry'
+
+export default async function RootLayout({
+  children,
+  params,
+}: {
+  children: React.ReactNode
+  params: Promise<{ locale: string }>
+}) {
+  const { isEnabled } = await draftMode()
+  const { locale } = await params
+
+  return (
+    <html lang={locale} suppressHydrationWarning>
+      <head>
+        <link href="/favicon.ico" rel="icon" sizes="32x32" />
+        <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
+      </head>
+      <body>
+        <AdminBar
+          adminBarProps={{
+            preview: isEnabled,
+          }}
+        />
+        <AntdRegistry>
+          <StylesRegistry>
+            <AppLayout className={'flex flex-col min-h-screen justify-between'}>
+              <Header locale={locale} />
+              <Suspense>{children}</Suspense>
+              <Footer locale={locale} />
+            </AppLayout>
+          </StylesRegistry>
+        </AntdRegistry>
+      </body>
+    </html>
+  )
+}
+
+export const metadata: Metadata = {
+  metadataBase: new URL(getServerSideURL()),
+  openGraph: mergeOpenGraph(),
+  twitter: {
+    card: 'summary_large_image',
+    creator: '@elvs',
+  },
+}
