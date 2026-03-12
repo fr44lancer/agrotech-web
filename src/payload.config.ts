@@ -25,6 +25,7 @@ import { PartnerBenefits } from '@/collections/PartnerBenefits'
 import { PartnerTestimonials } from '@/collections/PartnerTestimonials'
 import { ContactLocations } from '@/collections/ContactLocations'
 import { PageHeroes } from '@/collections/PageHeroes'
+import { CareerApplications } from '@/collections/CareerApplications'
 
 import { ProductCategories } from '@/collections/ProductCategories'
 import { EventCategories } from '@/collections/EventCategories'
@@ -68,6 +69,7 @@ export default buildConfig({
     PartnerTestimonials,
     ContactLocations,
     PageHeroes,
+    CareerApplications,
   ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',

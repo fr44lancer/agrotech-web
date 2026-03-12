@@ -14,32 +14,157 @@ export const Products: CollectionConfig = {
   admin: {
     group: 'Catalog',
     useAsTitle: 'title',
-    defaultColumns: ['title', 'slug', 'updatedAt'],
+    defaultColumns: ['title', 'status', 'featured', 'updatedAt'],
+    description: 'Product catalog entries. Not a shop — no pricing.',
   },
   fields: [
+    // ── Core ──────────────────────────────────────────────────────────────────
     {
       name: 'title',
       type: 'text',
       required: true,
       localized: true,
+      label: 'Product Name',
+    },
+    {
+      name: 'shortDescription',
+      type: 'text',
+      localized: true,
+      label: 'Short Description',
+      admin: {
+        description: 'One-line summary shown on catalog cards.',
+      },
     },
     {
       name: 'description',
-      type: 'textarea',
-      required: true,
+      type: 'richText',
       localized: true,
+      label: 'Full Description',
+    },
+
+    // ── Media ─────────────────────────────────────────────────────────────────
+    {
+      name: 'images',
+      type: 'array',
+      label: 'Images',
+      admin: {
+        description: 'First image is used as the main thumbnail on listing cards.',
+      },
+      fields: [
+        {
+          name: 'image',
+          type: 'upload',
+          relationTo: 'media',
+          required: true,
+          label: 'Image',
+        },
+        {
+          name: 'alt',
+          type: 'text',
+          localized: true,
+          label: 'Alt text',
+        },
+      ],
+    },
+
+    // ── Key Features ──────────────────────────────────────────────────────────
+    {
+      name: 'features',
+      type: 'array',
+      label: 'Key Features',
+      admin: {
+        description: 'Bullet-point highlights shown on the detail page.',
+      },
+      fields: [
+        {
+          name: 'text',
+          type: 'text',
+          required: true,
+          localized: true,
+          label: 'Feature',
+        },
+      ],
+    },
+
+    // ── Specifications ────────────────────────────────────────────────────────
+    {
+      name: 'specifications',
+      type: 'array',
+      label: 'Specifications',
+      admin: {
+        description: 'Technical spec table (e.g. "Package sizes" / "1 kg, 5 kg, 20 kg").',
+      },
+      fields: [
+        {
+          name: 'label',
+          type: 'text',
+          required: true,
+          localized: true,
+          label: 'Label',
+        },
+        {
+          name: 'value',
+          type: 'text',
+          required: true,
+          localized: true,
+          label: 'Value',
+        },
+      ],
+    },
+
+    // ── Documents ─────────────────────────────────────────────────────────────
+    {
+      name: 'documents',
+      type: 'array',
+      label: 'Documents & Downloads',
+      admin: {
+        description: 'Datasheets, brochures, safety sheets etc.',
+      },
+      fields: [
+        {
+          name: 'label',
+          type: 'text',
+          required: true,
+          localized: true,
+          label: 'Label',
+          admin: {
+            description: 'e.g. "Product Datasheet" or "Safety Data Sheet"',
+          },
+        },
+        {
+          name: 'file',
+          type: 'upload',
+          relationTo: 'media',
+          required: true,
+          label: 'File',
+        },
+      ],
+    },
+
+    // ── Sidebar ───────────────────────────────────────────────────────────────
+    {
+      name: 'status',
+      type: 'select',
+      defaultValue: 'active',
+      label: 'Status',
+      options: [
+        { label: 'Active', value: 'active' },
+        { label: 'Coming Soon', value: 'coming-soon' },
+        { label: 'Discontinued', value: 'discontinued' },
+      ],
+      admin: {
+        position: 'sidebar',
+      },
     },
     {
-      name: 'colorGradient',
-      type: 'select',
-      required: true,
-      options: [
-        { label: 'Green to Teal', value: 'from-green-400 to-teal-500' },
-        { label: 'Gold to Green', value: 'from-amber-400 to-green-600' },
-        { label: 'Green to Dark Teal', value: 'from-green-500 to-teal-700' },
-        { label: 'Teal to Light Green', value: 'from-teal-500 to-green-400' },
-      ],
-      defaultValue: 'from-green-400 to-teal-500',
+      name: 'featured',
+      type: 'checkbox',
+      defaultValue: false,
+      label: 'Featured product',
+      admin: {
+        position: 'sidebar',
+        description: 'Highlighted on the category listing.',
+      },
     },
     {
       name: 'categories',
@@ -49,12 +174,6 @@ export const Products: CollectionConfig = {
       admin: {
         position: 'sidebar',
       },
-    },
-    {
-      name: 'image',
-      type: 'upload',
-      relationTo: 'media',
-      required: false,
     },
     slugField(),
   ],

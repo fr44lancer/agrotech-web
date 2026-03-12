@@ -11,6 +11,7 @@ import { WhatWeOfferBlockComponent } from '@/blocks/WhatWeOffer/Component'
 import { FinancialReportingBlockComponent } from '@/blocks/FinancialReporting/Component'
 import { CorporateBondsBlockComponent } from '@/blocks/CorporateBonds/Component'
 import { PageHeroBlockComponent } from '@/blocks/PageHero/Component'
+import { WhyWorkBlockComponent } from '@/blocks/WhyWork/Component'
 
 const blockComponents: Record<string, React.FC<any>> = {
   banner: BannerBlock,
@@ -23,6 +24,7 @@ const blockComponents: Record<string, React.FC<any>> = {
   financialReportingBlock: FinancialReportingBlockComponent,
   corporateBondsBlock: CorporateBondsBlockComponent,
   pageHeroBlock: PageHeroBlockComponent,
+  whyWorkBlock: WhyWorkBlockComponent,
 }
 
 export const RenderBlocks: React.FC<{

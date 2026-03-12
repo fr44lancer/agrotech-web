@@ -21,6 +21,7 @@ import { WhatWeOfferBlock } from '@/blocks/WhatWeOffer/config'
 import { FinancialReportingBlock } from '@/blocks/FinancialReporting/config'
 import { CorporateBondsBlock } from '@/blocks/CorporateBonds/config'
 import { PageHeroBlock } from '@/blocks/PageHero/config'
+import { WhyWorkBlock } from '@/blocks/WhyWork/config'
 import { populatePublishedAt } from '@/hooks/populatePublishedAt'
 import { revalidateDelete, revalidatePage } from '@/hooks/revalidatePage'
 import { hero } from '@/components/heros/config'
@@ -87,6 +88,7 @@ export const Pages: CollectionConfig = {
                 FinancialReportingBlock,
                 CorporateBondsBlock,
                 PageHeroBlock,
+                WhyWorkBlock,
               ],
               required: true,
               localized: true,

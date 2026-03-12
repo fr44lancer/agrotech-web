@@ -88,6 +88,7 @@ export interface Config {
     partnerTestimonials: PartnerTestimonial;
     contactLocations: ContactLocation;
     pageHeroes: PageHero;
+    careerApplications: CareerApplication;
     'payload-kv': PayloadKv;
     'payload-jobs': PayloadJob;
     'payload-locked-documents': PayloadLockedDocument;
@@ -117,6 +118,7 @@ export interface Config {
     partnerTestimonials: PartnerTestimonialsSelect<false> | PartnerTestimonialsSelect<true>;
     contactLocations: ContactLocationsSelect<false> | ContactLocationsSelect<true>;
     pageHeroes: PageHeroesSelect<false> | PageHeroesSelect<true>;
+    careerApplications: CareerApplicationsSelect<false> | CareerApplicationsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -404,6 +406,7 @@ export interface Page {
     | FinancialReportingBlock
     | CorporateBondsBlock
     | PageHeroBlock
+    | WhyWorkBlock
   )[];
   meta?: {
     title?: string | null;
@@ -474,20 +477,81 @@ export interface Post {
   _status?: ('draft' | 'published') | null;
 }
 /**
+ * Product catalog entries. Not a shop — no pricing.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "products".
  */
 export interface Product {
   id: string;
   title: string;
-  description: string;
-  colorGradient:
-    | 'from-green-400 to-teal-500'
-    | 'from-amber-400 to-green-600'
-    | 'from-green-500 to-teal-700'
-    | 'from-teal-500 to-green-400';
+  /**
+   * One-line summary shown on catalog cards.
+   */
+  shortDescription?: string | null;
+  description?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * First image is used as the main thumbnail on listing cards.
+   */
+  images?:
+    | {
+        image: string | Media;
+        alt?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Bullet-point highlights shown on the detail page.
+   */
+  features?:
+    | {
+        text: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Technical spec table (e.g. "Package sizes" / "1 kg, 5 kg, 20 kg").
+   */
+  specifications?:
+    | {
+        label: string;
+        value: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Datasheets, brochures, safety sheets etc.
+   */
+  documents?:
+    | {
+        /**
+         * e.g. "Product Datasheet" or "Safety Data Sheet"
+         */
+        label: string;
+        file: string | Media;
+        id?: string | null;
+      }[]
+    | null;
+  status?: ('active' | 'coming-soon' | 'discontinued') | null;
+  /**
+   * Highlighted on the category listing.
+   */
+  featured?: boolean | null;
   categories?: (string | ProductCategory)[] | null;
-  image?: (string | null) | Media;
   /**
    * When enabled, the slug will auto-generate from the title field on save and autosave.
    */
@@ -818,6 +882,25 @@ export interface PageHeroBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "WhyWorkBlock".
+ */
+export interface WhyWorkBlock {
+  heading?: string | null;
+  subheading?: string | null;
+  items?:
+    | {
+        icon?: ('lightning' | 'globe' | 'people' | 'star' | 'leaf' | 'chart' | 'shield' | 'heart') | null;
+        title: string;
+        description?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'whyWorkBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "events".
  */
 export interface Event {
@@ -1029,6 +1112,22 @@ export interface PageHero {
   createdAt: string;
 }
 /**
+ * Applications submitted via the Apply Now form.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "careerApplications".
+ */
+export interface CareerApplication {
+  id: string;
+  career?: (string | null) | Career;
+  name: string;
+  email: string;
+  phone?: string | null;
+  message?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
@@ -1227,6 +1326,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'pageHeroes';
         value: string | PageHero;
+      } | null)
+    | ({
+        relationTo: 'careerApplications';
+        value: string | CareerApplication;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -1428,6 +1531,7 @@ export interface PagesSelect<T extends boolean = true> {
         financialReportingBlock?: T | FinancialReportingBlockSelect<T>;
         corporateBondsBlock?: T | CorporateBondsBlockSelect<T>;
         pageHeroBlock?: T | PageHeroBlockSelect<T>;
+        whyWorkBlock?: T | WhyWorkBlockSelect<T>;
       };
   meta?:
     | T
@@ -1630,6 +1734,24 @@ export interface PageHeroBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "WhyWorkBlock_select".
+ */
+export interface WhyWorkBlockSelect<T extends boolean = true> {
+  heading?: T;
+  subheading?: T;
+  items?:
+    | T
+    | {
+        icon?: T;
+        title?: T;
+        description?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "posts_select".
  */
 export interface PostsSelect<T extends boolean = true> {
@@ -1704,10 +1826,38 @@ export interface EventRegistrationsSelect<T extends boolean = true> {
  */
 export interface ProductsSelect<T extends boolean = true> {
   title?: T;
+  shortDescription?: T;
   description?: T;
-  colorGradient?: T;
+  images?:
+    | T
+    | {
+        image?: T;
+        alt?: T;
+        id?: T;
+      };
+  features?:
+    | T
+    | {
+        text?: T;
+        id?: T;
+      };
+  specifications?:
+    | T
+    | {
+        label?: T;
+        value?: T;
+        id?: T;
+      };
+  documents?:
+    | T
+    | {
+        label?: T;
+        file?: T;
+        id?: T;
+      };
+  status?: T;
+  featured?: T;
   categories?: T;
-  image?: T;
   generateSlug?: T;
   slug?: T;
   updatedAt?: T;
@@ -1820,6 +1970,19 @@ export interface PageHeroesSelect<T extends boolean = true> {
   title?: T;
   subtitle?: T;
   description?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "careerApplications_select".
+ */
+export interface CareerApplicationsSelect<T extends boolean = true> {
+  career?: T;
+  name?: T;
+  email?: T;
+  phone?: T;
+  message?: T;
   updatedAt?: T;
   createdAt?: T;
 }
