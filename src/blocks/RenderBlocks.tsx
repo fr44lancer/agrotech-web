@@ -1,10 +1,6 @@
 import React, { Fragment } from 'react'
 
 import type { Page } from '@/payload-types'
-import { BannerBlock } from '@/blocks/Banner/Component'
-import { ContentBlock } from '@/blocks/Content/Component'
-import { CallToActionBlock } from '@/blocks/CallToAction/Component'
-import { MediaBlock } from '@/blocks/MediaBlock/Component'
 import { ValuesBlockComponent } from '@/blocks/Values/Component'
 import { CultureBlockComponent } from '@/blocks/CultureItems/Component'
 import { WhatWeOfferBlockComponent } from '@/blocks/WhatWeOffer/Component'
@@ -15,10 +11,6 @@ import { WhyWorkBlockComponent } from '@/blocks/WhyWork/Component'
 import { ArticleBlockComponent } from '@/blocks/Article/Component'
 
 const blockComponents: Record<string, React.FC<any>> = {
-  banner: BannerBlock,
-  content: ContentBlock,
-  cta: CallToActionBlock,
-  mediaBlock: MediaBlock,
   valuesBlock: ValuesBlockComponent as unknown as React.FC<any>,
   cultureBlock: CultureBlockComponent,
   whatWeOfferBlock: WhatWeOfferBlockComponent,
