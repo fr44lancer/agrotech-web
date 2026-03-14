@@ -90,6 +90,11 @@ export const SiteTranslations: GlobalConfig = {
         { name: 'officesTitle', type: 'text', localized: true, defaultValue: 'Our Offices' },
         { name: 'departmentsTitle', type: 'text', localized: true, defaultValue: 'Department Contacts' },
         { name: 'viewOnMap', type: 'text', localized: true, defaultValue: 'View on Map' },
+        { name: 'followUs', type: 'text', localized: true, defaultValue: 'Follow Us' },
+        { name: 'website', type: 'text', localized: true, defaultValue: 'Website' },
+        { name: 'sending', type: 'text', localized: true, defaultValue: 'Sending…' },
+        { name: 'successMsg', type: 'text', localized: true, defaultValue: "Thank you! We'll be in touch soon." },
+        { name: 'errorMsg', type: 'text', localized: true, defaultValue: 'Something went wrong. Please try again.' },
         {
           name: 'subjectOptions',
           type: 'array',

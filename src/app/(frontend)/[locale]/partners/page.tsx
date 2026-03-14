@@ -243,7 +243,7 @@ function PartnerGrid({ partners, visitLabel }: { partners: Partner[]; visitLabel
         >
           <div className="h-60 w-full flex items-center justify-center mb-4">
             {partner.logo && typeof partner.logo === 'object' ? (
-              <Media resource={partner.logo} className="max-h-full max-w-full object-contain" />
+              <Media resource={partner.logo} className="max-h-64 max-w-full object-contain" />
             ) : (
               <div className="text-gray-400 font-bold text-2xl">{partner.title}</div>
             )}

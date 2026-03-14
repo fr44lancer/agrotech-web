@@ -30,7 +30,7 @@ export async function generateStaticParams() {
 
   // Exclude slugs that have dedicated page routes to prevent pre-rendered
   // static HTML from shadowing the dynamic route components in production.
-  const dedicatedRoutes = ['careers', 'events', 'products', 'partners', 'contacts']
+  const dedicatedRoutes = ['about-us', 'careers', 'events', 'products', 'partners', 'contacts']
 
   pages.docs?.forEach((doc) => {
     if (doc.slug !== 'home' && !dedicatedRoutes.includes(doc.slug as string)) {
@@ -72,7 +72,7 @@ export default async function Page({ params: paramsPromise }: Args) {
   return (
     <>
       <RenderBlocks blocks={heroBlocks} locale={locale} />
-      <BaseWrapper className={'w-full container m-auto'}>
+      <BaseWrapper className={'w-full  m-auto'}>
         <article className="pt-16 pb-24">
           <PageClient />
 

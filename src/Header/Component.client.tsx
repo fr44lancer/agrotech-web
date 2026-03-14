@@ -31,7 +31,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data, locale }) => {
 
   return (
     <header className="w-full sticky top-0 z-50 bg-white shadow-md">
-      <BaseWrapper className={'container m-auto'}>
+      <BaseWrapper className={'container m-auto px-2 sm:px-6'}>
         <div className="flex items-center justify-between py-4">
           {/* Logo Section */}
           <Link href={`/${locale || ''}`} className="z-50 relative flex-shrink-0 ml-2 sm:ml-0">

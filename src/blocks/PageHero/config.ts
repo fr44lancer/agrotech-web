@@ -4,8 +4,8 @@ export const PageHeroBlock: Block = {
   slug: 'pageHeroBlock',
   interfaceName: 'PageHeroBlock',
   labels: {
-    singular: 'Page Hero',
-    plural: 'Page Heroes',
+    singular: 'Page Header',
+    plural: 'Page Headers',
   },
   fields: [
     {

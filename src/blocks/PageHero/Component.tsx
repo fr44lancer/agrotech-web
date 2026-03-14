@@ -8,7 +8,7 @@ type Props = {
 
 export function PageHeroBlockComponent({ title, subtitle, description }: Props) {
   return (
-    <section className="bg-gradient-to-r from-teal-700 to-white-700 text-white py-16 px-6">
+    <section className="bg-gradient-to-r from-teal-800 to-gray-200 text-white py-16 px-6">
       <div className="container mx-auto px-6 ">
         {title && <h1 className="text-4xl md:text-5xl font-bold mb-4">{title}</h1>}
         {subtitle && <p className="text-xl text-green-50">{subtitle}</p>}

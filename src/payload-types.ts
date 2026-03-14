@@ -87,7 +87,7 @@ export interface Config {
     partnerBenefits: PartnerBenefit;
     partnerTestimonials: PartnerTestimonial;
     contactLocations: ContactLocation;
-    pageHeroes: PageHero;
+    contactSubmissions: ContactSubmission;
     careerApplications: CareerApplication;
     'payload-kv': PayloadKv;
     'payload-jobs': PayloadJob;
@@ -117,7 +117,7 @@ export interface Config {
     partnerBenefits: PartnerBenefitsSelect<false> | PartnerBenefitsSelect<true>;
     partnerTestimonials: PartnerTestimonialsSelect<false> | PartnerTestimonialsSelect<true>;
     contactLocations: ContactLocationsSelect<false> | ContactLocationsSelect<true>;
-    pageHeroes: PageHeroesSelect<false> | PageHeroesSelect<true>;
+    contactSubmissions: ContactSubmissionsSelect<false> | ContactSubmissionsSelect<true>;
     careerApplications: CareerApplicationsSelect<false> | CareerApplicationsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
@@ -402,16 +402,13 @@ export interface Page {
     media?: (string | null) | Media;
   };
   layout: (
-    | ContentBlock
-    | BannerBlock
-    | CallToActionBlock
-    | MediaBlock
+    | ArticleBlock
+    | PageHeroBlock
     | ValuesBlock
     | CultureBlock
     | WhatWeOfferBlock
     | FinancialReportingBlock
     | CorporateBondsBlock
-    | PageHeroBlock
     | WhyWorkBlock
   )[];
   meta?: {
@@ -605,97 +602,12 @@ export interface Career {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ContentBlock".
+ * via the `definition` "ArticleBlock".
  */
-export interface ContentBlock {
-  columns?:
-    | {
-        size?: ('oneThird' | 'half' | 'twoThirds' | 'full') | null;
-        richText?: {
-          root: {
-            type: string;
-            children: {
-              type: any;
-              version: number;
-              [k: string]: unknown;
-            }[];
-            direction: ('ltr' | 'rtl') | null;
-            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-            indent: number;
-            version: number;
-          };
-          [k: string]: unknown;
-        } | null;
-        enableLink?: boolean | null;
-        link?: {
-          type?: ('reference' | 'custom') | null;
-          newTab?: boolean | null;
-          reference?:
-            | ({
-                relationTo: 'pages';
-                value: string | Page;
-              } | null)
-            | ({
-                relationTo: 'posts';
-                value: string | Post;
-              } | null)
-            | ({
-                relationTo: 'products';
-                value: string | Product;
-              } | null)
-            | ({
-                relationTo: 'productCategories';
-                value: string | ProductCategory;
-              } | null)
-            | ({
-                relationTo: 'careers';
-                value: string | Career;
-              } | null);
-          url?: string | null;
-          label: string;
-          /**
-           * Choose how the link should be rendered.
-           */
-          appearance?: ('default' | 'outline') | null;
-        };
-        id?: string | null;
-      }[]
-    | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'content';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "BannerBlock".
- */
-export interface BannerBlock {
-  style: 'info' | 'warning' | 'error' | 'success';
-  content: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'banner';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CallToActionBlock".
- */
-export interface CallToActionBlock {
-  richText?: {
+export interface ArticleBlock {
+  title?: string | null;
+  titleType?: ('h1' | 'h2' | 'h3') | null;
+  content?: {
     root: {
       type: string;
       children: {
@@ -710,55 +622,27 @@ export interface CallToActionBlock {
     };
     [k: string]: unknown;
   } | null;
-  links?:
-    | {
-        link: {
-          type?: ('reference' | 'custom') | null;
-          newTab?: boolean | null;
-          reference?:
-            | ({
-                relationTo: 'pages';
-                value: string | Page;
-              } | null)
-            | ({
-                relationTo: 'posts';
-                value: string | Post;
-              } | null)
-            | ({
-                relationTo: 'products';
-                value: string | Product;
-              } | null)
-            | ({
-                relationTo: 'productCategories';
-                value: string | ProductCategory;
-              } | null)
-            | ({
-                relationTo: 'careers';
-                value: string | Career;
-              } | null);
-          url?: string | null;
-          label: string;
-          /**
-           * Choose how the link should be rendered.
-           */
-          appearance?: ('default' | 'outline') | null;
-        };
-        id?: string | null;
-      }[]
-    | null;
+  image?: (string | null) | Media;
+  imageAlignment?: ('left' | 'right') | null;
+  imageColPercent?: ('25' | '33' | '40' | '50') | null;
   id?: string | null;
   blockName?: string | null;
-  blockType: 'cta';
+  blockType: 'articleBlock';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "MediaBlock".
+ * via the `definition` "PageHeroBlock".
  */
-export interface MediaBlock {
-  media: string | Media;
+export interface PageHeroBlock {
+  title: string;
+  subtitle?: string | null;
+  /**
+   * Optional additional paragraph below the subtitle.
+   */
+  description?: string | null;
   id?: string | null;
   blockName?: string | null;
-  blockType: 'mediaBlock';
+  blockType: 'pageHeroBlock';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -870,21 +754,6 @@ export interface CorporateBondsBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'corporateBondsBlock';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "PageHeroBlock".
- */
-export interface PageHeroBlock {
-  title: string;
-  subtitle?: string | null;
-  /**
-   * Optional additional paragraph below the subtitle.
-   */
-  description?: string | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'pageHeroBlock';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1096,23 +965,20 @@ export interface ContactLocation {
   createdAt: string;
 }
 /**
- * Hero banner content for dedicated pages (Events, Careers, Products, Contacts, Partners).
+ * Messages submitted through the Contact Us form.
  *
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "pageHeroes".
+ * via the `definition` "contactSubmissions".
  */
-export interface PageHero {
+export interface ContactSubmission {
   id: string;
-  /**
-   * Which page this hero applies to.
-   */
-  pageKey: 'events' | 'careers' | 'products' | 'contacts' | 'partners';
-  title: string;
-  subtitle?: string | null;
-  /**
-   * Optional additional paragraph below the subtitle.
-   */
-  description?: string | null;
+  firstName: string;
+  lastName?: string | null;
+  email: string;
+  phone?: string | null;
+  company?: string | null;
+  subject?: string | null;
+  message: string;
   updatedAt: string;
   createdAt: string;
 }
@@ -1329,8 +1195,8 @@ export interface PayloadLockedDocument {
         value: string | ContactLocation;
       } | null)
     | ({
-        relationTo: 'pageHeroes';
-        value: string | PageHero;
+        relationTo: 'contactSubmissions';
+        value: string | ContactSubmission;
       } | null)
     | ({
         relationTo: 'careerApplications';
@@ -1527,16 +1393,13 @@ export interface PagesSelect<T extends boolean = true> {
   layout?:
     | T
     | {
-        content?: T | ContentBlockSelect<T>;
-        banner?: T | BannerBlockSelect<T>;
-        cta?: T | CallToActionBlockSelect<T>;
-        mediaBlock?: T | MediaBlockSelect<T>;
+        articleBlock?: T | ArticleBlockSelect<T>;
+        pageHeroBlock?: T | PageHeroBlockSelect<T>;
         valuesBlock?: T | ValuesBlockSelect<T>;
         cultureBlock?: T | CultureBlockSelect<T>;
         whatWeOfferBlock?: T | WhatWeOfferBlockSelect<T>;
         financialReportingBlock?: T | FinancialReportingBlockSelect<T>;
         corporateBondsBlock?: T | CorporateBondsBlockSelect<T>;
-        pageHeroBlock?: T | PageHeroBlockSelect<T>;
         whyWorkBlock?: T | WhyWorkBlockSelect<T>;
       };
   meta?:
@@ -1555,70 +1418,26 @@ export interface PagesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ContentBlock_select".
+ * via the `definition` "ArticleBlock_select".
  */
-export interface ContentBlockSelect<T extends boolean = true> {
-  columns?:
-    | T
-    | {
-        size?: T;
-        richText?: T;
-        enableLink?: T;
-        link?:
-          | T
-          | {
-              type?: T;
-              newTab?: T;
-              reference?: T;
-              url?: T;
-              label?: T;
-              appearance?: T;
-            };
-        id?: T;
-      };
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "BannerBlock_select".
- */
-export interface BannerBlockSelect<T extends boolean = true> {
-  style?: T;
+export interface ArticleBlockSelect<T extends boolean = true> {
+  title?: T;
+  titleType?: T;
   content?: T;
+  image?: T;
+  imageAlignment?: T;
+  imageColPercent?: T;
   id?: T;
   blockName?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CallToActionBlock_select".
+ * via the `definition` "PageHeroBlock_select".
  */
-export interface CallToActionBlockSelect<T extends boolean = true> {
-  richText?: T;
-  links?:
-    | T
-    | {
-        link?:
-          | T
-          | {
-              type?: T;
-              newTab?: T;
-              reference?: T;
-              url?: T;
-              label?: T;
-              appearance?: T;
-            };
-        id?: T;
-      };
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "MediaBlock_select".
- */
-export interface MediaBlockSelect<T extends boolean = true> {
-  media?: T;
+export interface PageHeroBlockSelect<T extends boolean = true> {
+  title?: T;
+  subtitle?: T;
+  description?: T;
   id?: T;
   blockName?: T;
 }
@@ -1724,17 +1543,6 @@ export interface CorporateBondsBlockSelect<T extends boolean = true> {
       };
   ctaLabel?: T;
   ctaUrl?: T;
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "PageHeroBlock_select".
- */
-export interface PageHeroBlockSelect<T extends boolean = true> {
-  title?: T;
-  subtitle?: T;
-  description?: T;
   id?: T;
   blockName?: T;
 }
@@ -1968,13 +1776,16 @@ export interface ContactLocationsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "pageHeroes_select".
+ * via the `definition` "contactSubmissions_select".
  */
-export interface PageHeroesSelect<T extends boolean = true> {
-  pageKey?: T;
-  title?: T;
-  subtitle?: T;
-  description?: T;
+export interface ContactSubmissionsSelect<T extends boolean = true> {
+  firstName?: T;
+  lastName?: T;
+  email?: T;
+  phone?: T;
+  company?: T;
+  subject?: T;
+  message?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -2109,38 +1920,65 @@ export interface Header {
  */
 export interface Footer {
   id: string;
-  navItems?:
+  companyName?: string | null;
+  companyTagline?: string | null;
+  contact?: {
+    columnLabel?: string | null;
+    address?: string | null;
+    phone?: string | null;
+    email?: string | null;
+  };
+  /**
+   * Up to 3 link columns shown in the footer.
+   */
+  navColumns?:
     | {
-        link: {
-          type?: ('reference' | 'custom') | null;
-          newTab?: boolean | null;
-          reference?:
-            | ({
-                relationTo: 'pages';
-                value: string | Page;
-              } | null)
-            | ({
-                relationTo: 'posts';
-                value: string | Post;
-              } | null)
-            | ({
-                relationTo: 'products';
-                value: string | Product;
-              } | null)
-            | ({
-                relationTo: 'productCategories';
-                value: string | ProductCategory;
-              } | null)
-            | ({
-                relationTo: 'careers';
-                value: string | Career;
-              } | null);
-          url?: string | null;
-          label: string;
-        };
+        links?:
+          | {
+              link: {
+                type?: ('reference' | 'custom') | null;
+                newTab?: boolean | null;
+                reference?:
+                  | ({
+                      relationTo: 'pages';
+                      value: string | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'posts';
+                      value: string | Post;
+                    } | null)
+                  | ({
+                      relationTo: 'products';
+                      value: string | Product;
+                    } | null)
+                  | ({
+                      relationTo: 'productCategories';
+                      value: string | ProductCategory;
+                    } | null)
+                  | ({
+                      relationTo: 'careers';
+                      value: string | Career;
+                    } | null);
+                url?: string | null;
+                label: string;
+              };
+              id?: string | null;
+            }[]
+          | null;
         id?: string | null;
       }[]
     | null;
+  /**
+   * Shown in the footer and on the Contacts page.
+   */
+  socialLinks?:
+    | {
+        platform: 'facebook' | 'instagram' | 'linkedin' | 'youtube' | 'twitter' | 'telegram' | 'whatsapp';
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  copyrightText?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -2212,6 +2050,11 @@ export interface SiteTranslation {
     officesTitle?: string | null;
     departmentsTitle?: string | null;
     viewOnMap?: string | null;
+    followUs?: string | null;
+    website?: string | null;
+    sending?: string | null;
+    successMsg?: string | null;
+    errorMsg?: string | null;
     /**
      * Value is used for form processing — keep it lowercase, no spaces. Label is what users see.
      */
@@ -2288,20 +2131,43 @@ export interface HeaderSelect<T extends boolean = true> {
  * via the `definition` "footer_select".
  */
 export interface FooterSelect<T extends boolean = true> {
-  navItems?:
+  companyName?: T;
+  companyTagline?: T;
+  contact?:
     | T
     | {
-        link?:
+        columnLabel?: T;
+        address?: T;
+        phone?: T;
+        email?: T;
+      };
+  navColumns?:
+    | T
+    | {
+        links?:
           | T
           | {
-              type?: T;
-              newTab?: T;
-              reference?: T;
-              url?: T;
-              label?: T;
+              link?:
+                | T
+                | {
+                    type?: T;
+                    newTab?: T;
+                    reference?: T;
+                    url?: T;
+                    label?: T;
+                  };
+              id?: T;
             };
         id?: T;
       };
+  socialLinks?:
+    | T
+    | {
+        platform?: T;
+        url?: T;
+        id?: T;
+      };
+  copyrightText?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -2377,6 +2243,11 @@ export interface SiteTranslationsSelect<T extends boolean = true> {
         officesTitle?: T;
         departmentsTitle?: T;
         viewOnMap?: T;
+        followUs?: T;
+        website?: T;
+        sending?: T;
+        successMsg?: T;
+        errorMsg?: T;
         subjectOptions?:
           | T
           | {

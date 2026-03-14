@@ -25,7 +25,7 @@ import { CompanyValues } from '@/collections/CompanyValues'
 import { PartnerBenefits } from '@/collections/PartnerBenefits'
 import { PartnerTestimonials } from '@/collections/PartnerTestimonials'
 import { ContactLocations } from '@/collections/ContactLocations'
-import { PageHeroes } from '@/collections/PageHeroes'
+import { ContactSubmissions } from '@/collections/ContactSubmissions'
 import { CareerApplications } from '@/collections/CareerApplications'
 
 import { ProductCategories } from '@/collections/ProductCategories'
@@ -70,7 +70,7 @@ export default buildConfig({
     PartnerBenefits,
     PartnerTestimonials,
     ContactLocations,
-    PageHeroes,
+    ContactSubmissions,
     CareerApplications,
   ],
   editor: lexicalEditor(),
