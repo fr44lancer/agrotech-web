@@ -59,9 +59,10 @@ export const Footer: GlobalConfig = {
       name: 'navColumns',
       type: 'array',
       label: 'Footer Navigation',
+      localized: true,
       maxRows: 2,
       admin: {
-        description: 'Up to 3 link columns shown in the footer.',
+        description: 'Up to 2 link columns shown in the footer.',
       },
       fields: [
         {
@@ -111,10 +112,14 @@ export const Footer: GlobalConfig = {
 
     // ── Copyright ─────────────────────────────────────────────────────────────
     {
-      name: 'copyrightText',
+      name: 'copyrightSuffix',
       type: 'text',
       localized: true,
-      defaultValue: '© 2026 AGROTECH LLC. All rights reserved.',
+      label: 'Copyright Suffix',
+      defaultValue: 'AGROTECH LLC. All rights reserved.',
+      admin: {
+        description: 'The current year and © symbol are added automatically. Only edit the text after the year.',
+      },
     },
   ],
   hooks: {

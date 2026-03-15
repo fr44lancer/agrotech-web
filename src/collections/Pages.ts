@@ -96,26 +96,17 @@ export const Pages: CollectionConfig = {
         {
           name: 'meta',
           label: 'SEO',
-          localized: true,
           fields: [
             OverviewField({
               titlePath: 'meta.title',
               descriptionPath: 'meta.description',
               imagePath: 'meta.image',
             }),
-            MetaTitleField({
-              hasGenerateFn: true,
-            }),
-            MetaImageField({
-              relationTo: 'media',
-            }),
-
-            MetaDescriptionField({}),
+            { ...MetaTitleField({ hasGenerateFn: false }), localized: true },
+            MetaImageField({ relationTo: 'media' }),
+            { ...MetaDescriptionField({}), localized: true },
             PreviewField({
-              // if the `generateUrl` function is configured
-              hasGenerateFn: true,
-
-              // field paths to match the target field for data
+              hasGenerateFn: false,
               titlePath: 'meta.title',
               descriptionPath: 'meta.description',
             }),

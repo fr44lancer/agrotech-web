@@ -4,6 +4,7 @@ import React from 'react'
 import type { Footer } from '@/payload-types'
 
 import { CMSLink } from '@/components/Link'
+import { FooterDevCredit } from '@/components/FooterDevCredit'
 import { Col, Row } from 'antd'
 
 export async function Footer({ locale = 'hy' }: { locale?: string }) {
@@ -13,8 +14,8 @@ export async function Footer({ locale = 'hy' }: { locale?: string }) {
   const companyTagline = footerData?.companyTagline || ''
   const contact = footerData?.contact
   const navColumns = footerData?.navColumns || []
-  const copyrightText =
-    footerData?.copyrightText || `© ${new Date().getFullYear()} AGROTECH LLC. All rights reserved.`
+  const copyrightSuffix = (footerData as any)?.copyrightSuffix || 'AGROTECH LLC. All rights reserved.'
+  const copyrightText = `© ${new Date().getFullYear()} ${copyrightSuffix}`
 
   return (
     <footer className="bg-gray-800 text-white">
@@ -115,11 +116,12 @@ export async function Footer({ locale = 'hy' }: { locale?: string }) {
         </Row>
       </div>
 
-      <Row className="border-t border-gray-700">
-        <div className="container mx-auto px-6 max-w-7xl py-5 text-center text-gray-500 text-sm">
-          {copyrightText}
+      <div className="border-t border-gray-700">
+        <div className="container mx-auto px-6 max-w-7xl py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <span className="text-gray-500 text-sm">{copyrightText}</span>
+          <FooterDevCredit />
         </div>
-      </Row>
+      </div>
     </footer>
   )
 }

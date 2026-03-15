@@ -131,6 +131,24 @@ export const SiteTranslations: GlobalConfig = {
       ],
     },
 
+    // ── Blog ──────────────────────────────────────────────────────────────────
+    {
+      name: 'blog',
+      type: 'group',
+      label: 'Blog Page',
+      fields: [
+        { name: 'pageTitle', type: 'text', localized: true, defaultValue: 'Blog' },
+        { name: 'allCategories', type: 'text', localized: true, defaultValue: 'All Categories' },
+        { name: 'allTags', type: 'text', localized: true, defaultValue: 'All Tags' },
+        { name: 'readMore', type: 'text', localized: true, defaultValue: 'Read More' },
+        { name: 'noPosts', type: 'text', localized: true, defaultValue: 'No articles found.' },
+        { name: 'backToBlog', type: 'text', localized: true, defaultValue: 'Back to Blog' },
+        { name: 'tags', type: 'text', localized: true, defaultValue: 'Tags' },
+        { name: 'relatedPosts', type: 'text', localized: true, defaultValue: 'Related Articles' },
+        { name: 'searchPlaceholder', type: 'text', localized: true, defaultValue: 'Search articles…' },
+      ],
+    },
+
     // ── Products ──────────────────────────────────────────────────────────────
     {
       name: 'products',

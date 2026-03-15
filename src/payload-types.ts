@@ -70,6 +70,7 @@ export interface Config {
     users: User;
     media: Media;
     categories: Category;
+    tags: Tag;
     productCategories: ProductCategory;
     eventCategories: EventCategory;
     careerCategories: CareerCategory;
@@ -100,6 +101,7 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
+    tags: TagsSelect<false> | TagsSelect<true>;
     productCategories: ProductCategoriesSelect<false> | ProductCategoriesSelect<true>;
     eventCategories: EventCategoriesSelect<false> | EventCategoriesSelect<true>;
     careerCategories: CareerCategoriesSelect<false> | CareerCategoriesSelect<true>;
@@ -234,6 +236,21 @@ export interface Media {
  * via the `definition` "categories".
  */
 export interface Category {
+  id: string;
+  title: string;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tags".
+ */
+export interface Tag {
   id: string;
   title: string;
   /**
@@ -413,11 +430,11 @@ export interface Page {
   )[];
   meta?: {
     title?: string | null;
-    description?: string | null;
     /**
      * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
      */
     image?: (string | null) | Media;
+    description?: string | null;
   };
   publishedAt?: string | null;
   /**
@@ -437,23 +454,28 @@ export interface Post {
   id: string;
   title: string;
   heroImage?: (string | null) | Media;
-  content: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
+  /**
+   * Short summary shown on listing/cards.
+   */
+  excerpt?: string | null;
+  /**
+   * Build the article body using content blocks.
+   */
+  layout?:
+    | (
+        | ArticleBlock
+        | ValuesBlock
+        | CultureBlock
+        | WhatWeOfferBlock
+        | FinancialReportingBlock
+        | CorporateBondsBlock
+        | PageHeroBlock
+        | WhyWorkBlock
+      )[]
+    | null;
   relatedPosts?: (string | Post)[] | null;
   categories?: (string | Category)[] | null;
+  tags?: (string | Tag)[] | null;
   meta?: {
     title?: string | null;
     /**
@@ -478,6 +500,180 @@ export interface Post {
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ArticleBlock".
+ */
+export interface ArticleBlock {
+  title?: string | null;
+  titleType?: ('h1' | 'h2' | 'h3') | null;
+  content?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  image?: (string | null) | Media;
+  imageAlignment?: ('left' | 'right') | null;
+  imageColPercent?: ('25' | '33' | '40' | '50') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'articleBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ValuesBlock".
+ */
+export interface ValuesBlock {
+  heading?: string | null;
+  subheading?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'valuesBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CultureBlock".
+ */
+export interface CultureBlock {
+  heading?: string | null;
+  subheading?: string | null;
+  items?:
+    | {
+        title: string;
+        description?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'cultureBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "WhatWeOfferBlock".
+ */
+export interface WhatWeOfferBlock {
+  heading?: string | null;
+  subheading?: string | null;
+  categories?:
+    | {
+        title: string;
+        items?:
+          | {
+              text: string;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'whatWeOfferBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FinancialReportingBlock".
+ */
+export interface FinancialReportingBlock {
+  heading?: string | null;
+  subheading?: string | null;
+  annualReports?:
+    | {
+        year: string;
+        file: string | Media;
+        id?: string | null;
+      }[]
+    | null;
+  quarterlyResults?:
+    | {
+        quarter: string;
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  investorRelations?: {
+    text?: string | null;
+    url?: string | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'financialReportingBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CorporateBondsBlock".
+ */
+export interface CorporateBondsBlock {
+  heading?: string | null;
+  subheading?: string | null;
+  productName?: string | null;
+  /**
+   * e.g. "Annual Interest Rate" / "4.5%"
+   */
+  stats?:
+    | {
+        label: string;
+        value: string;
+        id?: string | null;
+      }[]
+    | null;
+  benefits?:
+    | {
+        text: string;
+        id?: string | null;
+      }[]
+    | null;
+  ctaLabel?: string | null;
+  ctaUrl?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'corporateBondsBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PageHeroBlock".
+ */
+export interface PageHeroBlock {
+  title: string;
+  subtitle?: string | null;
+  /**
+   * Optional additional paragraph below the subtitle.
+   */
+  description?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'pageHeroBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "WhyWorkBlock".
+ */
+export interface WhyWorkBlock {
+  heading?: string | null;
+  subheading?: string | null;
+  items?:
+    | {
+        icon?: ('lightning' | 'globe' | 'people' | 'star' | 'leaf' | 'chart' | 'shield' | 'heart') | null;
+        title: string;
+        description?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'whyWorkBlock';
 }
 /**
  * Product catalog entries. Not a shop — no pricing.
@@ -599,180 +795,6 @@ export interface Career {
   slug: string;
   updatedAt: string;
   createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ArticleBlock".
- */
-export interface ArticleBlock {
-  title?: string | null;
-  titleType?: ('h1' | 'h2' | 'h3') | null;
-  content?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  image?: (string | null) | Media;
-  imageAlignment?: ('left' | 'right') | null;
-  imageColPercent?: ('25' | '33' | '40' | '50') | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'articleBlock';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "PageHeroBlock".
- */
-export interface PageHeroBlock {
-  title: string;
-  subtitle?: string | null;
-  /**
-   * Optional additional paragraph below the subtitle.
-   */
-  description?: string | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'pageHeroBlock';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ValuesBlock".
- */
-export interface ValuesBlock {
-  heading?: string | null;
-  subheading?: string | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'valuesBlock';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CultureBlock".
- */
-export interface CultureBlock {
-  heading?: string | null;
-  subheading?: string | null;
-  items?:
-    | {
-        title: string;
-        description?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'cultureBlock';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "WhatWeOfferBlock".
- */
-export interface WhatWeOfferBlock {
-  heading?: string | null;
-  subheading?: string | null;
-  categories?:
-    | {
-        title: string;
-        items?:
-          | {
-              text: string;
-              id?: string | null;
-            }[]
-          | null;
-        id?: string | null;
-      }[]
-    | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'whatWeOfferBlock';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "FinancialReportingBlock".
- */
-export interface FinancialReportingBlock {
-  heading?: string | null;
-  subheading?: string | null;
-  annualReports?:
-    | {
-        year: string;
-        file: string | Media;
-        id?: string | null;
-      }[]
-    | null;
-  quarterlyResults?:
-    | {
-        quarter: string;
-        url: string;
-        id?: string | null;
-      }[]
-    | null;
-  investorRelations?: {
-    text?: string | null;
-    url?: string | null;
-  };
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'financialReportingBlock';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CorporateBondsBlock".
- */
-export interface CorporateBondsBlock {
-  heading?: string | null;
-  subheading?: string | null;
-  productName?: string | null;
-  /**
-   * e.g. "Annual Interest Rate" / "4.5%"
-   */
-  stats?:
-    | {
-        label: string;
-        value: string;
-        id?: string | null;
-      }[]
-    | null;
-  benefits?:
-    | {
-        text: string;
-        id?: string | null;
-      }[]
-    | null;
-  ctaLabel?: string | null;
-  ctaUrl?: string | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'corporateBondsBlock';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "WhyWorkBlock".
- */
-export interface WhyWorkBlock {
-  heading?: string | null;
-  subheading?: string | null;
-  items?:
-    | {
-        icon?: ('lightning' | 'globe' | 'people' | 'star' | 'leaf' | 'chart' | 'shield' | 'heart') | null;
-        title: string;
-        description?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'whyWorkBlock';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1127,6 +1149,10 @@ export interface PayloadLockedDocument {
         value: string | Category;
       } | null)
     | ({
+        relationTo: 'tags';
+        value: string | Tag;
+      } | null)
+    | ({
         relationTo: 'productCategories';
         value: string | ProductCategory;
       } | null)
@@ -1298,6 +1324,17 @@ export interface CategoriesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tags_select".
+ */
+export interface TagsSelect<T extends boolean = true> {
+  title?: T;
+  generateSlug?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "productCategories_select".
  */
 export interface ProductCategoriesSelect<T extends boolean = true> {
@@ -1406,8 +1443,8 @@ export interface PagesSelect<T extends boolean = true> {
     | T
     | {
         title?: T;
-        description?: T;
         image?: T;
+        description?: T;
       };
   publishedAt?: T;
   generateSlug?: T;
@@ -1571,9 +1608,22 @@ export interface WhyWorkBlockSelect<T extends boolean = true> {
 export interface PostsSelect<T extends boolean = true> {
   title?: T;
   heroImage?: T;
-  content?: T;
+  excerpt?: T;
+  layout?:
+    | T
+    | {
+        articleBlock?: T | ArticleBlockSelect<T>;
+        valuesBlock?: T | ValuesBlockSelect<T>;
+        cultureBlock?: T | CultureBlockSelect<T>;
+        whatWeOfferBlock?: T | WhatWeOfferBlockSelect<T>;
+        financialReportingBlock?: T | FinancialReportingBlockSelect<T>;
+        corporateBondsBlock?: T | CorporateBondsBlockSelect<T>;
+        pageHeroBlock?: T | PageHeroBlockSelect<T>;
+        whyWorkBlock?: T | WhyWorkBlockSelect<T>;
+      };
   relatedPosts?: T;
   categories?: T;
+  tags?: T;
   meta?:
     | T
     | {
@@ -1908,6 +1958,41 @@ export interface Header {
           url?: string | null;
           label: string;
         };
+        /**
+         * Optional sub-links shown in a dropdown under this item.
+         */
+        children?:
+          | {
+              link: {
+                type?: ('reference' | 'custom') | null;
+                newTab?: boolean | null;
+                reference?:
+                  | ({
+                      relationTo: 'pages';
+                      value: string | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'posts';
+                      value: string | Post;
+                    } | null)
+                  | ({
+                      relationTo: 'products';
+                      value: string | Product;
+                    } | null)
+                  | ({
+                      relationTo: 'productCategories';
+                      value: string | ProductCategory;
+                    } | null)
+                  | ({
+                      relationTo: 'careers';
+                      value: string | Career;
+                    } | null);
+                url?: string | null;
+                label: string;
+              };
+              id?: string | null;
+            }[]
+          | null;
         id?: string | null;
       }[]
     | null;
@@ -1929,7 +2014,7 @@ export interface Footer {
     email?: string | null;
   };
   /**
-   * Up to 3 link columns shown in the footer.
+   * Up to 2 link columns shown in the footer.
    */
   navColumns?:
     | {
@@ -1978,7 +2063,10 @@ export interface Footer {
         id?: string | null;
       }[]
     | null;
-  copyrightText?: string | null;
+  /**
+   * The current year and © symbol are added automatically. Only edit the text after the year.
+   */
+  copyrightSuffix?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -2085,6 +2173,17 @@ export interface SiteTranslation {
     visitWebsite?: string | null;
     noPartners?: string | null;
   };
+  blog?: {
+    pageTitle?: string | null;
+    allCategories?: string | null;
+    allTags?: string | null;
+    readMore?: string | null;
+    noPosts?: string | null;
+    backToBlog?: string | null;
+    tags?: string | null;
+    relatedPosts?: string | null;
+    searchPlaceholder?: string | null;
+  };
   products?: {
     allCategories?: string | null;
     viewProducts?: string | null;
@@ -2119,6 +2218,20 @@ export interface HeaderSelect<T extends boolean = true> {
               reference?: T;
               url?: T;
               label?: T;
+            };
+        children?:
+          | T
+          | {
+              link?:
+                | T
+                | {
+                    type?: T;
+                    newTab?: T;
+                    reference?: T;
+                    url?: T;
+                    label?: T;
+                  };
+              id?: T;
             };
         id?: T;
       };
@@ -2167,7 +2280,7 @@ export interface FooterSelect<T extends boolean = true> {
         url?: T;
         id?: T;
       };
-  copyrightText?: T;
+  copyrightSuffix?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -2273,6 +2386,19 @@ export interface SiteTranslationsSelect<T extends boolean = true> {
         testimonialsTitle?: T;
         visitWebsite?: T;
         noPartners?: T;
+      };
+  blog?:
+    | T
+    | {
+        pageTitle?: T;
+        allCategories?: T;
+        allTags?: T;
+        readMore?: T;
+        noPosts?: T;
+        backToBlog?: T;
+        tags?: T;
+        relatedPosts?: T;
+        searchPlaceholder?: T;
       };
   products?:
     | T

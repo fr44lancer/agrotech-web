@@ -27,13 +27,13 @@ import { PartnerTestimonials } from '@/collections/PartnerTestimonials'
 import { ContactLocations } from '@/collections/ContactLocations'
 import { ContactSubmissions } from '@/collections/ContactSubmissions'
 import { CareerApplications } from '@/collections/CareerApplications'
+import { Tags } from '@/collections/Tags'
 
 import { ProductCategories } from '@/collections/ProductCategories'
 import { EventCategories } from '@/collections/EventCategories'
 import { CareerCategories } from '@/collections/CareerCategories'
 import { PartnerCategories } from '@/collections/PartnerCategories'
 import { ServiceCategories } from '@/collections/ServiceCategories'
-import { seoPlugin } from '@payloadcms/plugin-seo'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -53,6 +53,7 @@ export default buildConfig({
     Users,
     Media,
     Categories,
+    Tags,
     ProductCategories,
     EventCategories,
     CareerCategories,
@@ -98,12 +99,6 @@ export default buildConfig({
         media: true,
       },
       token: process.env.BLOB_READ_WRITE_TOKEN || '',
-    }),
-    seoPlugin({
-      collections: ['pages'],
-      uploadsCollection: 'media',
-      generateTitle: ({ doc }) => `Website.com — ${doc.title}`,
-      generateDescription: ({ doc }) => doc.excerpt,
     }),
   ],
 })

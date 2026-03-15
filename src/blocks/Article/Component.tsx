@@ -58,7 +58,7 @@ export const ArticleBlockComponent: React.FC<Props> = ({
 
   return (
     <div className="py-12 px-6">
-      <div className="container mx-auto max-w-7xl">
+      <div className="container mx-auto ">
         <Row gutter={[48, 32]} align="middle">
           {imageAlignment === 'left' ? (
             <>
