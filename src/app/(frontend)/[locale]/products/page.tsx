@@ -5,6 +5,7 @@ import configPromise from '@payload-config'
 import { draftMode } from 'next/headers'
 import { RenderBlocks } from '@/blocks/RenderBlocks'
 import { getSiteTranslations } from '@/utilities/getSiteTranslations'
+import CategorySelect from './CategorySelect'
 
 type Args = {
   params: Promise<{
@@ -65,7 +66,18 @@ export default async function ProductsPage({
 
       <section className="py-16 bg-gray-50 min-h-[50vh]">
         <div className="container mx-auto px-6 w-full max-w-7xl">
-          <div className="flex flex-wrap justify-center gap-2 mb-12">
+          {/* Mobile: dropdown */}
+          <div className="md:hidden mb-8">
+            <CategorySelect
+              categories={categoriesData.docs.map((c: any) => ({ id: c.id, title: c.title, slug: c.slug }))}
+              locale={locale}
+              currentSlug={categorySlug}
+              allLabel={t.all}
+            />
+          </div>
+
+          {/* Desktop: pills */}
+          <div className="hidden md:flex flex-wrap justify-center gap-2 mb-12">
             <a
               href={`/${locale}/products`}
               className={`px-5 py-2 rounded-full text-sm font-semibold transition shadow-sm ${!categorySlug ? 'bg-teal-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-100'}`}
