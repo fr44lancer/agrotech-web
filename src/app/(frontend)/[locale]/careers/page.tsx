@@ -1,10 +1,12 @@
 import React, { cache } from 'react'
+import type { Metadata } from 'next'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import { RenderBlocks } from '@/blocks/RenderBlocks'
 import { draftMode } from 'next/headers'
 import CareersSection from './CareersSection'
 import { getSiteTranslations } from '@/utilities/getSiteTranslations'
+import { generateMeta } from '@/utilities/generateMeta'
 
 type Args = {
   params: Promise<{
@@ -13,6 +15,12 @@ type Args = {
 }
 
 export const dynamic = 'force-dynamic'
+
+export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
+  const { locale = 'hy' } = await paramsPromise
+  const page = await queryPageBySlug({ slug: 'careers', locale })
+  return generateMeta({ doc: page })
+}
 
 export default async function Page({ params: paramsPromise }: Args) {
   const { isEnabled: draft } = await draftMode()

@@ -1,16 +1,32 @@
 import React from 'react'
+import type { Metadata } from 'next'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import RichText from '@/components/RichText'
 import Link from 'next/link'
 import ApplyForm from '../ApplyForm'
 import { getSiteTranslations } from '@/utilities/getSiteTranslations'
+import { generateMeta } from '@/utilities/generateMeta'
 
 type Args = {
   params: Promise<{
     locale?: string
     slug: string
   }>
+}
+
+export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
+  const { slug, locale = 'hy' } = await paramsPromise
+  const payload = await getPayload({ config: configPromise })
+  const result = await payload.find({
+    collection: 'careers',
+    where: { slug: { equals: slug } },
+    locale: locale as any,
+    limit: 1,
+  })
+  const career = result.docs[0]
+  if (!career) return { title: 'Position Not Found' }
+  return generateMeta({ doc: career as any })
 }
 
 export default async function Page({ params: paramsPromise }: Args) {

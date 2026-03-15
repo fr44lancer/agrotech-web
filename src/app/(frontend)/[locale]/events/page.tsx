@@ -5,20 +5,19 @@ import { draftMode } from 'next/headers'
 import React, { cache } from 'react'
 import { RenderBlocks } from '@/blocks/RenderBlocks'
 import { getSiteTranslations } from '@/utilities/getSiteTranslations'
+import { generateMeta } from '@/utilities/generateMeta'
 import EventsSection from './EventsSection'
 
-export async function generateMetadata(): Promise<Metadata> {
-  return {
-    title: 'Events & Conferences',
-    description: 'Join us at upcoming agricultural events and exhibitions worldwide.',
-  }
+type Args = {
+  params: Promise<{ locale?: string }>
 }
 
-type Args = {
-  params: Promise<{
-    locale?: string
-  }>
+export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
+  const { locale = 'hy' } = await paramsPromise
+  const page = await queryPageBySlug({ slug: 'events', locale })
+  return generateMeta({ doc: page })
 }
+
 
 export const dynamic = 'force-dynamic'
 

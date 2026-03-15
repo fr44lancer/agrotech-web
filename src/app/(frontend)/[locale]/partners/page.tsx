@@ -1,4 +1,5 @@
 import React, { cache } from 'react'
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
@@ -7,11 +8,18 @@ import { Media } from '@/components/Media'
 import type { Partner, PartnerCategory } from '@/payload-types'
 import { RenderBlocks } from '@/blocks/RenderBlocks'
 import { getSiteTranslations } from '@/utilities/getSiteTranslations'
+import { generateMeta } from '@/utilities/generateMeta'
 import BaseWrapper from '@/components/ui/Containers/BaseContainer'
 import { Col, Row } from 'antd'
 
 type Args = {
   params: Promise<{ locale?: string }>
+}
+
+export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
+  const { locale = 'hy' } = await paramsPromise
+  const page = await queryPageBySlug({ slug: 'partners', locale })
+  return generateMeta({ doc: page })
 }
 
 const accentColors = [

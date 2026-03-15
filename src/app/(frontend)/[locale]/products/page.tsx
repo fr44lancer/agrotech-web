@@ -5,6 +5,7 @@ import configPromise from '@payload-config'
 import { draftMode } from 'next/headers'
 import { RenderBlocks } from '@/blocks/RenderBlocks'
 import { getSiteTranslations } from '@/utilities/getSiteTranslations'
+import { generateMeta } from '@/utilities/generateMeta'
 import CategorySelect from './CategorySelect'
 
 type Args = {
@@ -175,11 +176,9 @@ export default async function ProductsPage({
 }
 
 export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
-  const { locale = 'en' } = await paramsPromise
-  return {
-    title: 'Products | Agrotech',
-    description: 'Our Product Catalog is Under Development',
-  }
+  const { locale = 'hy' } = await paramsPromise
+  const page = await queryPageBySlug({ slug: 'products', locale })
+  return generateMeta({ doc: page })
 }
 
 const queryPageBySlug = cache(

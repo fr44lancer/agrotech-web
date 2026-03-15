@@ -8,6 +8,7 @@ import Link from 'next/link'
 import RichText from '@/components/RichText'
 import { EventRegistrationForm } from '@/components/EventRegistrationForm'
 import { getSiteTranslations } from '@/utilities/getSiteTranslations'
+import { generateMeta } from '@/utilities/generateMeta'
 
 type Args = {
   params: Promise<{
@@ -45,10 +46,7 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
   })
   const event = result.docs[0]
   if (!event) return { title: 'Event Not Found' }
-  return {
-    title: event.meta?.title || event.title || 'Event',
-    description: event.meta?.description || event.description,
-  }
+  return generateMeta({ doc: event as any })
 }
 
 export default async function EventPage({ params: paramsPromise }: Args) {

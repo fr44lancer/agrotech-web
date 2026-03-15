@@ -7,6 +7,7 @@ import Link from 'next/link'
 import RichText from '@/components/RichText'
 import ProductGallery from '../../ProductGallery'
 import { getSiteTranslations } from '@/utilities/getSiteTranslations'
+import { generateMeta } from '@/utilities/generateMeta'
 
 type Args = {
   params: Promise<{
@@ -248,7 +249,7 @@ export default async function ProductDetailPage({ params: paramsPromise }: Args)
 }
 
 export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
-  const { productSlug, locale = 'en' } = await paramsPromise
+  const { productSlug, locale = 'hy' } = await paramsPromise
   if (!productSlug) return { title: 'Product Not Found' }
 
   const payload = await getPayload({ config: configPromise })
@@ -262,8 +263,5 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
   const product = result.docs[0]
   if (!product) return { title: 'Product Not Found' }
 
-  return {
-    title: `${product.title} | Agrotech Products`,
-    description: product.shortDescription ?? undefined,
-  }
+  return generateMeta({ doc: product as any })
 }

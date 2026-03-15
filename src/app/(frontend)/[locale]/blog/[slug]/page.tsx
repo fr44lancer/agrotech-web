@@ -7,6 +7,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { RenderBlocks } from '@/blocks/RenderBlocks'
 import { getSiteTranslations } from '@/utilities/getSiteTranslations'
+import { generateMeta } from '@/utilities/generateMeta'
 
 type Args = {
   params: Promise<{ slug: string; locale?: string }>
@@ -40,10 +41,7 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
   })
   const post = result.docs[0]
   if (!post) return { title: 'Article Not Found' }
-  return {
-    title: (post.meta as any)?.title || (post.title as string) || 'Article',
-    description: (post.meta as any)?.description || (post as any).excerpt,
-  }
+  return generateMeta({ doc: post as any })
 }
 
 export default async function BlogPostPage({ params: paramsPromise }: Args) {

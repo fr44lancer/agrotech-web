@@ -5,17 +5,17 @@ import { draftMode } from 'next/headers'
 import React, { cache } from 'react'
 import { RenderBlocks } from '@/blocks/RenderBlocks'
 import { getSiteTranslations } from '@/utilities/getSiteTranslations'
+import { generateMeta } from '@/utilities/generateMeta'
 import BlogSection from './BlogSection'
-
-export async function generateMetadata(): Promise<Metadata> {
-  return {
-    title: 'Blog',
-    description: 'Latest news, insights, and articles.',
-  }
-}
 
 type Args = {
   params: Promise<{ locale?: string }>
+}
+
+export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
+  const { locale = 'hy' } = await paramsPromise
+  const page = await queryPageBySlug({ slug: 'blog', locale })
+  return generateMeta({ doc: page })
 }
 
 export const dynamic = 'force-dynamic'

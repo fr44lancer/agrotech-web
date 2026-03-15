@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import { draftMode } from 'next/headers'
+import { generateMeta } from '@/utilities/generateMeta'
 import { Col, Row } from 'antd'
 import type { ContactLocation } from '@/payload-types'
 import { RenderBlocks } from '@/blocks/RenderBlocks'
@@ -494,9 +495,9 @@ function LocationGrid({
 }
 
 export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
-  const { locale = 'en' } = await paramsPromise
-  const title = locale === 'hy' ? 'Կապ' : locale === 'ru' ? 'Контакты' : 'Contact Us'
-  return { title: `${title} | Agrotech`, description: 'Get in touch with Agrotech.' }
+  const { locale = 'hy' } = await paramsPromise
+  const page = await queryPageBySlug({ slug: 'contacts', locale })
+  return generateMeta({ doc: page })
 }
 
 const queryPageBySlug = cache(

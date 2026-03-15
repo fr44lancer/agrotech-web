@@ -779,6 +779,14 @@ export interface Product {
         id?: string | null;
       }[]
     | null;
+  meta?: {
+    title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (string | null) | Media;
+    description?: string | null;
+  };
   status?: ('active' | 'coming-soon' | 'discontinued') | null;
   /**
    * Highlighted on the category listing.
@@ -806,7 +814,6 @@ export interface Career {
    * e.g., Full-time, Part-time
    */
   type?: string | null;
-  categories?: (string | CareerCategory)[] | null;
   description: {
     root: {
       type: string;
@@ -822,6 +829,15 @@ export interface Career {
     };
     [k: string]: unknown;
   };
+  meta?: {
+    title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (string | null) | Media;
+    description?: string | null;
+  };
+  categories?: (string | CareerCategory)[] | null;
   /**
    * When enabled, the slug will auto-generate from the title field on save and autosave.
    */
@@ -1758,6 +1774,13 @@ export interface ProductsSelect<T extends boolean = true> {
         file?: T;
         id?: T;
       };
+  meta?:
+    | T
+    | {
+        title?: T;
+        image?: T;
+        description?: T;
+      };
   status?: T;
   featured?: T;
   categories?: T;
@@ -1787,8 +1810,15 @@ export interface CareersSelect<T extends boolean = true> {
   department?: T;
   location?: T;
   type?: T;
-  categories?: T;
   description?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        image?: T;
+        description?: T;
+      };
+  categories?: T;
   generateSlug?: T;
   slug?: T;
   updatedAt?: T;
