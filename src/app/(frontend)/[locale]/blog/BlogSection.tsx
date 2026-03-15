@@ -68,7 +68,7 @@ export default function BlogSection({
     <section className="pb-12 bg-gray-50 min-h-screen">
       <div className="container mx-auto px-6 ">
         {/* Filter Bar */}
-        <div className="border border-gray-100 p-5 mb-10">
+        <div className="border border-gray-100 py-5 mb-10">
           {/* Search */}
           {/*<div className="mb-4">*/}
           {/*  <input*/}

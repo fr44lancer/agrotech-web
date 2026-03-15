@@ -39,14 +39,14 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data, locale }) => {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-6">
+          <div className="hidden lg:flex items-center gap-6">
             <HeaderNav data={data} />
             <div className="border-l border-gray-200 h-6 mx-2 hidden lg:block"></div>
             <LanguageSwitcher currentLocale={locale} minimal showFlag />
           </div>
 
           {/* Mobile: language switcher + hamburger */}
-          <div className="md:hidden flex items-center gap-1 z-50">
+          <div className="lg:hidden flex items-center gap-1 z-50">
             <LanguageSwitcher
               currentLocale={locale}
               minimal

@@ -21,7 +21,7 @@ export const WhatWeOfferBlockComponent: React.FC<WhatWeOfferBlockProps> = ({
         )}
 
         {categories && categories.length > 0 && (
-          <Row gutter={40} justify={'space-between'}>
+          <Row gutter={[40, 40]} justify={'space-between'}>
             {categories.map((cat, i) => (
               <Col xs={24} md={12} key={cat.id ?? i}>
                 <BaseWrapper className="bg-gray-50 rounded-lg p-6 border border-gray-100 h-full">

@@ -5,6 +5,7 @@ import configPromise from '@payload-config'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { getSiteTranslations } from '@/utilities/getSiteTranslations'
+import CategorySelect from '../CategorySelect'
 
 type Args = {
   params: Promise<{
@@ -69,8 +70,18 @@ export default async function CategoryProductsPage({ params: paramsPromise }: Ar
 
       <section className="py-12 bg-gray-50 min-h-[50vh]">
         <div className="container mx-auto px-6 max-w-7xl">
-          {/* Category filter pills */}
-          <div className="flex flex-wrap gap-2 mb-10">
+          {/* Mobile: dropdown */}
+          <div className="md:hidden mb-8">
+            <CategorySelect
+              categories={allCategoriesReq.docs.map((c: any) => ({ id: c.id, title: c.title, slug: c.slug }))}
+              locale={locale}
+              currentSlug={categorySlug}
+              allLabel={t.all}
+            />
+          </div>
+
+          {/* Desktop: pills */}
+          <div className="hidden md:flex flex-wrap gap-2 mb-10">
             <Link
               href={`/${locale}/products`}
               className="px-4 py-2 rounded-full text-sm font-medium bg-white text-gray-600 border border-gray-200 hover:border-teal-400 transition"

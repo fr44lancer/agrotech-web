@@ -56,10 +56,15 @@ export const FinancialReportingBlock: Block = {
           label: 'Quarter (e.g. Q4 2025)',
         },
         {
+          name: 'file',
+          type: 'upload',
+          relationTo: 'media',
+          label: 'File (optional)',
+        },
+        {
           name: 'url',
           type: 'text',
-          required: true,
-          label: 'View URL',
+          label: 'View URL (optional, used if no file)',
         },
       ],
     },

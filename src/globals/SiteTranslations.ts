@@ -131,6 +131,19 @@ export const SiteTranslations: GlobalConfig = {
       ],
     },
 
+    // ── Financial Reporting ───────────────────────────────────────────────────
+    {
+      name: 'financialReporting',
+      type: 'group',
+      label: 'Financial Reporting Block',
+      fields: [
+        { name: 'annualReports', type: 'text', localized: true, defaultValue: 'Annual Reports' },
+        { name: 'quarterlyResults', type: 'text', localized: true, defaultValue: 'Quarterly Results' },
+        { name: 'download', type: 'text', localized: true, defaultValue: 'Download' },
+        { name: 'view', type: 'text', localized: true, defaultValue: 'View' },
+      ],
+    },
+
     // ── Blog ──────────────────────────────────────────────────────────────────
     {
       name: 'blog',

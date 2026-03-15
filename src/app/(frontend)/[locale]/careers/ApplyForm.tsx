@@ -1,10 +1,17 @@
 'use client'
 
 import React, { useState } from 'react'
+import { Button, Col, Form, Input, Row } from 'antd'
 
 type Labels = {
-  name?: string; email?: string; phone?: string; message?: string
-  submit?: string; sending?: string; success?: string; error?: string
+  name?: string
+  email?: string
+  phone?: string
+  message?: string
+  submit?: string
+  sending?: string
+  success?: string
+  error?: string
 }
 
 type Props = {
@@ -13,7 +20,7 @@ type Props = {
   labels?: Labels
 }
 
-export default function ApplyForm({ careerId, locale = 'hy', labels }: Props) {
+export default function ApplyForm({ careerId, labels }: Props) {
   const t = {
     name: labels?.name ?? 'Full Name',
     email: labels?.email ?? 'Email Address',
@@ -25,27 +32,23 @@ export default function ApplyForm({ careerId, locale = 'hy', labels }: Props) {
     error: labels?.error ?? 'Something went wrong. Please try again.',
   }
 
-  const [form, setForm] = useState({ name: '', email: '', phone: '', message: '' })
   const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle')
+  const [form] = Form.useForm()
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }))
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!form.name || !form.email) {
-      setStatus('error')
-      return
-    }
+  const handleFinish = async (values: Record<string, string>) => {
     setStatus('sending')
     try {
       const res = await fetch('/api/apply', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...form, careerId }),
+        body: JSON.stringify({ ...values, careerId }),
       })
-      setStatus(res.ok ? 'success' : 'error')
+      if (res.ok) {
+        setStatus('success')
+        form.resetFields()
+      } else {
+        setStatus('error')
+      }
     } catch {
       setStatus('error')
     }
@@ -60,61 +63,46 @@ export default function ApplyForm({ careerId, locale = 'hy', labels }: Props) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">{t.name} *</label>
-          <input
-            name="name"
-            type="text"
-            required
-            value={form.name}
-            onChange={handleChange}
-            className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-gray-800 focus:outline-none focus:ring-2 focus:ring-teal-500"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">{t.email} *</label>
-          <input
+    <Form form={form} layout="vertical" onFinish={handleFinish} disabled={status === 'sending'}>
+      {status === 'error' && <p className="text-red-600 text-sm mb-4">{t.error}</p>}
+
+      <Row gutter={16}>
+        <Col xs={24}>
+          <Form.Item name="name" label={`${t.name}`} rules={[{ required: true, message: '' }]}>
+            <Input size="large" />
+          </Form.Item>
+        </Col>
+        <Col xs={24}>
+          <Form.Item
             name="email"
-            type="email"
-            required
-            value={form.email}
-            onChange={handleChange}
-            className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-gray-800 focus:outline-none focus:ring-2 focus:ring-teal-500"
-          />
-        </div>
-      </div>
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">{t.phone}</label>
-        <input
-          name="phone"
-          type="tel"
-          value={form.phone}
-          onChange={handleChange}
-          className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-gray-800 focus:outline-none focus:ring-2 focus:ring-teal-500"
-        />
-      </div>
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">{t.message}</label>
-        <textarea
-          name="message"
-          rows={5}
-          value={form.message}
-          onChange={handleChange}
-          className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-gray-800 focus:outline-none focus:ring-2 focus:ring-teal-500 resize-none"
-        />
-      </div>
-      {status === 'error' && (
-        <p className="text-red-600 text-sm">{t.error}</p>
-      )}
-      <button
-        type="submit"
-        disabled={status === 'sending'}
-        className="bg-teal-600 text-white px-8 py-3 rounded-lg font-bold text-base hover:bg-teal-700 transition disabled:opacity-60"
-      >
-        {status === 'sending' ? t.sending : t.submit}
-      </button>
-    </form>
+            label={`${t.email}`}
+            rules={[{ required: true, type: 'email', message: '' }]}
+          >
+            <Input type="email" size="large" />
+          </Form.Item>
+        </Col>
+      </Row>
+
+      <Form.Item name="phone" label={t.phone}>
+        <Input type="tel" size="large" />
+      </Form.Item>
+
+      <Form.Item name="message" label={t.message}>
+        <Input.TextArea rows={5} />
+      </Form.Item>
+
+      <Form.Item>
+        <Button
+          type="primary"
+          htmlType="submit"
+          loading={status === 'sending'}
+          size="large"
+          className={'w-full'}
+          style={{ backgroundColor: '#0d9488', borderColor: '#0d9488' }}
+        >
+          {status === 'sending' ? t.sending : t.submit}
+        </Button>
+      </Form.Item>
+    </Form>
   )
 }

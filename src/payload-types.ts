@@ -92,11 +92,16 @@ export interface Config {
     careerApplications: CareerApplication;
     'payload-kv': PayloadKv;
     'payload-jobs': PayloadJob;
+    'payload-folders': FolderInterface;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
-  collectionsJoins: {};
+  collectionsJoins: {
+    'payload-folders': {
+      documentsAndFolders: 'payload-folders' | 'media';
+    };
+  };
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
@@ -123,6 +128,7 @@ export interface Config {
     careerApplications: CareerApplicationsSelect<false> | CareerApplicationsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
+    'payload-folders': PayloadFoldersSelect<false> | PayloadFoldersSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -219,6 +225,7 @@ export interface Media {
     };
     [k: string]: unknown;
   } | null;
+  folder?: (string | null) | FolderInterface;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -230,6 +237,32 @@ export interface Media {
   height?: number | null;
   focalX?: number | null;
   focalY?: number | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-folders".
+ */
+export interface FolderInterface {
+  id: string;
+  name: string;
+  folder?: (string | null) | FolderInterface;
+  documentsAndFolders?: {
+    docs?: (
+      | {
+          relationTo?: 'payload-folders';
+          value: string | FolderInterface;
+        }
+      | {
+          relationTo?: 'media';
+          value: string | Media;
+        }
+    )[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  folderType?: 'media'[] | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -599,7 +632,8 @@ export interface FinancialReportingBlock {
   quarterlyResults?:
     | {
         quarter: string;
-        url: string;
+        file?: (string | null) | Media;
+        url?: string | null;
         id?: string | null;
       }[]
     | null;
@@ -1227,6 +1261,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'careerApplications';
         value: string | CareerApplication;
+      } | null)
+    | ({
+        relationTo: 'payload-folders';
+        value: string | FolderInterface;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -1299,6 +1337,7 @@ export interface UsersSelect<T extends boolean = true> {
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
   caption?: T;
+  folder?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
@@ -1545,6 +1584,7 @@ export interface FinancialReportingBlockSelect<T extends boolean = true> {
     | T
     | {
         quarter?: T;
+        file?: T;
         url?: T;
         id?: T;
       };
@@ -1893,6 +1933,18 @@ export interface PayloadJobsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-folders_select".
+ */
+export interface PayloadFoldersSelect<T extends boolean = true> {
+  name?: T;
+  folder?: T;
+  documentsAndFolders?: T;
+  folderType?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents_select".
  */
 export interface PayloadLockedDocumentsSelect<T extends boolean = true> {
@@ -2173,6 +2225,12 @@ export interface SiteTranslation {
     visitWebsite?: string | null;
     noPartners?: string | null;
   };
+  financialReporting?: {
+    annualReports?: string | null;
+    quarterlyResults?: string | null;
+    download?: string | null;
+    view?: string | null;
+  };
   blog?: {
     pageTitle?: string | null;
     allCategories?: string | null;
@@ -2386,6 +2444,14 @@ export interface SiteTranslationsSelect<T extends boolean = true> {
         testimonialsTitle?: T;
         visitWebsite?: T;
         noPartners?: T;
+      };
+  financialReporting?:
+    | T
+    | {
+        annualReports?: T;
+        quarterlyResults?: T;
+        download?: T;
+        view?: T;
       };
   blog?:
     | T

@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import { Select } from 'antd'
 import { useRouter } from 'next/navigation'
 
 type Category = { id: string; title: string; slug: string }
@@ -18,23 +19,22 @@ export default function CategorySelect({
 }) {
   const router = useRouter()
 
-  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const val = e.target.value
+  const options = [
+    { value: '', label: allLabel },
+    ...categories.map((cat) => ({ value: cat.slug, label: cat.title })),
+  ]
+
+  const handleChange = (val: string) => {
     router.push(val ? `/${locale}/products/${val}` : `/${locale}/products`)
   }
 
   return (
-    <select
+    <Select
       value={currentSlug ?? ''}
       onChange={handleChange}
-      className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-white text-sm font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-400 shadow-sm"
-    >
-      <option value="">{allLabel}</option>
-      {categories.map((cat) => (
-        <option key={cat.id} value={cat.slug}>
-          {cat.title}
-        </option>
-      ))}
-    </select>
+      options={options}
+      className="w-full"
+      size="large"
+    />
   )
 }

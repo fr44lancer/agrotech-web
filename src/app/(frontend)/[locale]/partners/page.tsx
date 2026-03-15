@@ -7,6 +7,8 @@ import { Media } from '@/components/Media'
 import type { Partner, PartnerCategory } from '@/payload-types'
 import { RenderBlocks } from '@/blocks/RenderBlocks'
 import { getSiteTranslations } from '@/utilities/getSiteTranslations'
+import BaseWrapper from '@/components/ui/Containers/BaseContainer'
+import { Col, Row } from 'antd'
 
 type Args = {
   params: Promise<{ locale?: string }>
@@ -235,36 +237,37 @@ export default async function Page({ params: paramsPromise }: Args) {
 
 function PartnerGrid({ partners, visitLabel }: { partners: Partner[]; visitLabel: string }) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {partners.map((partner) => (
-        <div
-          key={partner.id}
-          className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 flex flex-col items-center text-center hover:shadow-md transition-shadow"
-        >
-          <div className="h-60 w-full flex items-center justify-center mb-4">
-            {partner.logo && typeof partner.logo === 'object' ? (
-              <Media resource={partner.logo} className="max-h-64 max-w-full object-contain" />
-            ) : (
-              <div className="text-gray-400 font-bold text-2xl">{partner.title}</div>
-            )}
-          </div>
-          <h3 className="text-lg font-bold text-gray-800 mb-2">{partner.title}</h3>
-          {partner.description && (
-            <p className="text-gray-600 text-sm mb-4 flex-grow">{partner.description}</p>
-          )}
-          {partner.websiteUrl && (
-            <a
-              href={partner.websiteUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-auto text-teal-950 font-semibold hover:text-teal-700 w-full rounded border border-teal-600 py-2 text-sm transition hover:bg-teal-50"
-            >
-              {visitLabel}
-            </a>
-          )}
-        </div>
-      ))}
-    </div>
+    <BaseWrapper>
+      <Row gutter={[24, 24]} justify={'start'}>
+        {partners.map((partner) => (
+          <Col xs={24} md={6} key={partner.id}>
+            <BaseWrapper className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 flex flex-col items-center text-center hover:shadow-md transition-shadow">
+              <div className="h-60 w-full flex items-center justify-center mb-4 overflow-hidden">
+                {partner.logo && typeof partner.logo === 'object' ? (
+                  <Media resource={partner.logo} className="max-h-60 max-w-full object-contain" />
+                ) : (
+                  <div className="text-gray-400 font-bold text-2xl">{partner.title}</div>
+                )}
+              </div>
+              <h3 className="text-lg font-bold text-gray-800 mb-2">{partner.title}</h3>
+              {partner.description && (
+                <p className="text-gray-600 text-sm mb-4 flex-grow">{partner.description}</p>
+              )}
+              {partner.websiteUrl && (
+                <a
+                  href={partner.websiteUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-auto text-teal-950 font-semibold hover:text-teal-700 w-full rounded border border-teal-600 py-2 text-sm transition hover:bg-teal-50"
+                >
+                  {visitLabel}
+                </a>
+              )}
+            </BaseWrapper>
+          </Col>
+        ))}
+      </Row>
+    </BaseWrapper>
   )
 }
 

@@ -1,7 +1,9 @@
 'use client'
 
-import React, { useActionState, useEffect, useRef } from 'react'
+import React, { useActionState, useEffect } from 'react'
+import { Button, Col, Form, Input, Row } from 'antd'
 import { submitEventRegistration } from '@/app/(frontend)/_actions/submitEventRegistration'
+import BaseWrapper from '@/components/ui/Containers/BaseContainer'
 
 type Labels = {
   title?: string
@@ -41,13 +43,20 @@ export const EventRegistrationForm: React.FC<Props> = ({ eventId, isPast = false
   }
 
   const [state, formAction, isPending] = useActionState(submitEventRegistration, null)
-  const formRef = useRef<HTMLFormElement>(null)
+  const [form] = Form.useForm()
 
   useEffect(() => {
     if (state?.success) {
-      formRef.current?.reset()
+      form.resetFields()
     }
-  }, [state])
+  }, [state, form])
+
+  const handleFinish = (values: Record<string, string>) => {
+    const fd = new FormData()
+    Object.entries(values).forEach(([k, v]) => fd.append(k, v ?? ''))
+    fd.append('event', eventId)
+    formAction(fd)
+  }
 
   if (isPast) {
     return (
@@ -92,95 +101,65 @@ export const EventRegistrationForm: React.FC<Props> = ({ eventId, isPast = false
   }
 
   return (
-    <div>
+    <BaseWrapper>
       <h3 className="text-xl font-bold text-gray-800 mb-5">{t.title}</h3>
-      <form ref={formRef} action={formAction} className="flex flex-col gap-4">
-        {state && !state.success && (
-          <div className="p-3 rounded-lg text-sm font-medium bg-red-50 text-red-700 border border-red-200">
-            {state.message ?? t.error}
-          </div>
-        )}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">{t.firstName} *</label>
-            <input
-              type="text"
+      {state && !state.success && (
+        <div className="mb-4 p-3 rounded-lg text-sm font-medium bg-red-50 text-red-700 border border-red-200">
+          {state.message ?? t.error}
+        </div>
+      )}
+      <Form form={form} layout="vertical" onFinish={handleFinish} disabled={isPending}>
+        <Row gutter={16}>
+          <Col xs={24} sm={24}>
+            <Form.Item
               name="firstName"
-              required
-              disabled={isPending}
-              className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-gray-800 focus:outline-none focus:ring-2 focus:ring-teal-500 disabled:opacity-60"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">{t.lastName} *</label>
-            <input
-              type="text"
+              label={`${t.firstName}`}
+              rules={[{ required: true, message: '' }]}
+            >
+              <Input size="large" />
+            </Form.Item>
+          </Col>
+          <Col xs={24} sm={24}>
+            <Form.Item
               name="lastName"
-              required
-              disabled={isPending}
-              className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-gray-800 focus:outline-none focus:ring-2 focus:ring-teal-500 disabled:opacity-60"
-            />
-          </div>
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">{t.email} *</label>
-          <input
-            type="email"
-            name="email"
-            required
-            disabled={isPending}
-            className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-gray-800 focus:outline-none focus:ring-2 focus:ring-teal-500 disabled:opacity-60"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">{t.phone}</label>
-          <input
-            type="tel"
-            name="phone"
-            disabled={isPending}
-            className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-gray-800 focus:outline-none focus:ring-2 focus:ring-teal-500 disabled:opacity-60"
-          />
-        </div>
-        <input type="hidden" name="event" value={eventId} />
-        <button
-          type="submit"
-          disabled={isPending}
-          className="w-full bg-teal-600 text-white px-6 py-3 rounded-lg font-bold text-base hover:bg-teal-700 transition disabled:opacity-60 flex items-center justify-center gap-2"
-        >
-          {isPending ? (
-            <>
-              <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                />
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-                />
-              </svg>
-              {t.registering}
-            </>
-          ) : (
-            <>
-              {t.registerBtn}
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M17 8l4 4m0 0l-4 4m4-4H3"
-                />
-              </svg>
-            </>
-          )}
-        </button>
-      </form>
-    </div>
+              label={`${t.lastName}`}
+              rules={[{ required: true, message: '' }]}
+            >
+              <Input size="large" />
+            </Form.Item>
+          </Col>
+        </Row>
+
+        <Row gutter={16}>
+          <Col xs={24} sm={24}>
+            <Form.Item
+              name="email"
+              label={`${t.email}`}
+              rules={[{ required: true, type: 'email', message: '' }]}
+            >
+              <Input type="email" size="large" />
+            </Form.Item>
+          </Col>
+          <Col xs={24} sm={24}>
+            <Form.Item name="phone" label={t.phone}>
+              <Input type="tel" size="large" />
+            </Form.Item>
+          </Col>
+        </Row>
+
+        <Form.Item>
+          <Button
+            type="primary"
+            htmlType="submit"
+            loading={isPending}
+            size="large"
+            block
+            style={{ backgroundColor: '#0d9488', borderColor: '#0d9488' }}
+          >
+            {isPending ? t.registering : t.registerBtn}
+          </Button>
+        </Form.Item>
+      </Form>
+    </BaseWrapper>
   )
 }
