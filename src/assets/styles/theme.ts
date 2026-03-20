@@ -104,11 +104,8 @@ const theme = {
     violetMedium: '#C8CADF',
     violetLow: '#ECEDF4',
 
-    yesemPrimary: '#004FA3',
-    yesemBlue600: '#2677CE',
-
     backgroundWhite: '#FFFFFF',
-    backgroundAlternative: '#F5F5F580'
+    backgroundAlternative: '#F5F5F580',
   },
 
   mediaSizes: {
@@ -120,12 +117,12 @@ const theme = {
     '2xl': '1536px', // Tailwind default
     viewportStandard: '80%',
     viewportNarrow: '767px',
-    viewportMobile: '100%'
+    viewportMobile: '100%',
   },
 
   fontFamily: {
     sans: '"Noto Sans", "Noto Sans Armenian", Arial',
-    custom: '"Noto Sans", "Noto Sans Armenian"'
+    custom: '"Noto Sans", "Noto Sans Armenian"',
   },
 
   boxShadows: {
@@ -133,23 +130,23 @@ const theme = {
     cardsHover: '0 2px 8px 0 #00000026',
     accessibilityOutline: '0 0 0 3px #BD13B8',
     modalWindow: '0 8px 16px 0 #0000004D',
-    overflowMenu: '0px 4px 8px 0px #0000004D'
+    overflowMenu: '0px 4px 8px 0px #0000004D',
   },
 
   keyframes: {
     accessibilityOutlinePulse: {
       '0%, 100%': { boxShadow: '0 0 0 3px #BD13B8' },
-      '50%': { boxShadow: '0 0 0 6px #BD13B8' }
-    }
+      '50%': { boxShadow: '0 0 0 6px #BD13B8' },
+    },
   },
 
   animations: {
-    accessibilityOutlinePulse: 'accessibility-outline-pulse 300ms ease-in-out'
+    accessibilityOutlinePulse: 'accessibility-outline-pulse 300ms ease-in-out',
   },
 
   transitionProperties: {
-    maxHeight: 'max-height'
-  }
+    maxHeight: 'max-height',
+  },
 } as const
 
 // Exporting type based on colors

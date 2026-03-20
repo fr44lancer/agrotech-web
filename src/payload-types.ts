@@ -453,6 +453,7 @@ export interface Page {
   };
   layout: (
     | ArticleBlock
+    | HeroSliderBlock
     | PageHeroBlock
     | ValuesBlock
     | CultureBlock
@@ -845,6 +846,82 @@ export interface Career {
   slug: string;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "HeroSliderBlock".
+ */
+export interface HeroSliderBlock {
+  /**
+   * Add 1–5 slides. Each slide shares the same layout as the home hero.
+   */
+  slides?:
+    | {
+        /**
+         * Full-width background image for this slide.
+         */
+        backgroundImage?: (string | null) | Media;
+        title?: string | null;
+        slogan?: string | null;
+        /**
+         * Bullet-point features shown below the slogan.
+         */
+        features?:
+          | {
+              text: string;
+              id?: string | null;
+            }[]
+          | null;
+        links?:
+          | {
+              link: {
+                type?: ('reference' | 'custom') | null;
+                newTab?: boolean | null;
+                reference?:
+                  | ({
+                      relationTo: 'pages';
+                      value: string | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'posts';
+                      value: string | Post;
+                    } | null)
+                  | ({
+                      relationTo: 'products';
+                      value: string | Product;
+                    } | null)
+                  | ({
+                      relationTo: 'productCategories';
+                      value: string | ProductCategory;
+                    } | null)
+                  | ({
+                      relationTo: 'careers';
+                      value: string | Career;
+                    } | null);
+                url?: string | null;
+                label: string;
+                /**
+                 * Choose how the link should be rendered.
+                 */
+                appearance?: ('default' | 'outline') | null;
+              };
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Automatically advance slides every 5 seconds.
+   */
+  autoplay?: boolean | null;
+  /**
+   * Milliseconds between slide transitions.
+   */
+  autoplayInterval?: number | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'heroSliderBlock';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1486,6 +1563,7 @@ export interface PagesSelect<T extends boolean = true> {
     | T
     | {
         articleBlock?: T | ArticleBlockSelect<T>;
+        heroSliderBlock?: T | HeroSliderBlockSelect<T>;
         pageHeroBlock?: T | PageHeroBlockSelect<T>;
         valuesBlock?: T | ValuesBlockSelect<T>;
         cultureBlock?: T | CultureBlockSelect<T>;
@@ -1519,6 +1597,45 @@ export interface ArticleBlockSelect<T extends boolean = true> {
   image?: T;
   imageAlignment?: T;
   imageColPercent?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "HeroSliderBlock_select".
+ */
+export interface HeroSliderBlockSelect<T extends boolean = true> {
+  slides?:
+    | T
+    | {
+        backgroundImage?: T;
+        title?: T;
+        slogan?: T;
+        features?:
+          | T
+          | {
+              text?: T;
+              id?: T;
+            };
+        links?:
+          | T
+          | {
+              link?:
+                | T
+                | {
+                    type?: T;
+                    newTab?: T;
+                    reference?: T;
+                    url?: T;
+                    label?: T;
+                    appearance?: T;
+                  };
+              id?: T;
+            };
+        id?: T;
+      };
+  autoplay?: T;
+  autoplayInterval?: T;
   id?: T;
   blockName?: T;
 }

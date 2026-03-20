@@ -64,9 +64,9 @@ export const CorporateBondsBlockComponent: React.FC<CorporateBondsBlockProps> = 
                   <ul className="space-y-4">
                     {benefits.map((benefit, i) => (
                       <li key={benefit.id ?? i} className="flex items-start gap-3">
-                        <div className="w-6 h-6 bg-teal-100 rounded-full flex-shrink-0 flex items-center justify-center mt-0.5">
+                        <div className="w-6 h-6 bg-teal-800 rounded-full flex-shrink-0 flex items-center justify-center mt-0.5">
                           <svg
-                            className="w-3.5 h-3.5 text-teal-700"
+                            className="w-3.5 h-3.5 text-white"
                             fill="currentColor"
                             viewBox="0 0 20 20"
                           >

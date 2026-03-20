@@ -51,7 +51,7 @@ export default async function BlogPage({ params: paramsPromise }: Args) {
     getSiteTranslations(locale),
   ])
 
-  const heroBlocks = ((page?.layout ?? []) as any[]).filter((b) => b.blockType === 'pageHeroBlock')
+  const heroBlocks = ((page?.layout ?? []) as any[]).filter((b) => b.blockType !== 'pageHeroBlock')
 
   const t = {
     allCategories: tr.blog?.allCategories ?? 'All Categories',

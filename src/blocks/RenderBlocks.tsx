@@ -9,6 +9,7 @@ import { CorporateBondsBlockComponent } from '@/blocks/CorporateBonds/Component'
 import { PageHeroBlockComponent } from '@/blocks/PageHero/Component'
 import { WhyWorkBlockComponent } from '@/blocks/WhyWork/Component'
 import { ArticleBlockComponent } from '@/blocks/Article/Component'
+import { HeroSliderBlockComponent } from '@/blocks/HeroSlider/Component'
 
 const blockComponents: Record<string, React.FC<any>> = {
   valuesBlock: ValuesBlockComponent as unknown as React.FC<any>,
@@ -19,6 +20,7 @@ const blockComponents: Record<string, React.FC<any>> = {
   pageHeroBlock: PageHeroBlockComponent,
   whyWorkBlock: WhyWorkBlockComponent,
   articleBlock: ArticleBlockComponent,
+  heroSliderBlock: HeroSliderBlockComponent,
 }
 
 export const RenderBlocks: React.FC<{

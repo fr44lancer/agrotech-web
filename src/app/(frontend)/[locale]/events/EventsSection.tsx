@@ -218,7 +218,7 @@ function UpcomingCard({ event, locale, t }: { event: EventDoc; locale: string; t
         {/* Content */}
         <div className="p-6 flex flex-col flex-1">
           <div className="flex flex-wrap items-center gap-2 mb-3">
-            <span className="bg-teal-50 text-teal-700 text-xs font-semibold px-3 py-1 rounded-full border border-teal-100">
+            <span className="bg-teal-800 text-white text-xs font-semibold px-3 py-1 rounded-full">
               {t.eventLabel}
             </span>
             {cats.map((c: any) => (
@@ -257,7 +257,7 @@ function UpcomingCard({ event, locale, t }: { event: EventDoc; locale: string; t
             {event.location && (
               <span className="flex items-center gap-1.5">
                 <svg
-                  className="w-4 h-4 text-teal-500"
+                  className="w-4 h-4 text-teal-800"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"

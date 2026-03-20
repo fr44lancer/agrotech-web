@@ -19,6 +19,7 @@ import { CorporateBondsBlock } from '@/blocks/CorporateBonds/config'
 import { PageHeroBlock } from '@/blocks/PageHero/config'
 import { WhyWorkBlock } from '@/blocks/WhyWork/config'
 import { ArticleBlock } from '@/blocks/Article/config'
+import { HeroSliderBlock } from '@/blocks/HeroSlider/config'
 import { populatePublishedAt } from '@/hooks/populatePublishedAt'
 import { revalidateDelete, revalidatePage } from '@/hooks/revalidatePage'
 import { hero } from '@/components/heros/config'
@@ -76,6 +77,7 @@ export const Pages: CollectionConfig = {
               type: 'blocks',
               blocks: [
                 ArticleBlock,
+                HeroSliderBlock,
                 PageHeroBlock,
                 ValuesBlock,
                 CultureBlock,
