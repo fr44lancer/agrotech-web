@@ -2,14 +2,6 @@ import type { CollectionConfig } from 'payload'
 import { slugField } from 'payload'
 
 import {
-  FixedToolbarFeature,
-  HeadingFeature,
-  HorizontalRuleFeature,
-  InlineToolbarFeature,
-  lexicalEditor,
-} from '@payloadcms/richtext-lexical'
-
-import {
   MetaDescriptionField,
   MetaImageField,
   MetaTitleField,
@@ -22,6 +14,14 @@ import { generatePreviewPath } from '@/utilities/generatePreviewPath'
 import { revalidateDelete } from '@/hooks/revalidatePage'
 import { populateAuthors } from '@/hooks/populateAuthors'
 import { revalidatePost } from '@/hooks/revalidatePost'
+import { ValuesBlock } from '@/blocks/Values/config'
+import { CultureBlock } from '@/blocks/CultureItems/config'
+import { WhatWeOfferBlock } from '@/blocks/WhatWeOffer/config'
+import { FinancialReportingBlock } from '@/blocks/FinancialReporting/config'
+import { CorporateBondsBlock } from '@/blocks/CorporateBonds/config'
+import { PageHeroBlock } from '@/blocks/PageHero/config'
+import { WhyWorkBlock } from '@/blocks/WhyWork/config'
+import { ArticleBlock } from '@/blocks/Article/config'
 
 export const Posts: CollectionConfig<'posts'> = {
   slug: 'posts',
@@ -31,9 +31,6 @@ export const Posts: CollectionConfig<'posts'> = {
     read: authenticatedOrPublished,
     update: authenticated,
   },
-  // This config controls what's populated by default when a post is referenced
-  // https://payloadcms.com/docs/queries/select#defaultpopulate-collection-config-property
-  // Type safe if the collection slug generic is passed to `CollectionConfig` - `CollectionConfig<'posts'>
   defaultPopulate: {
     title: true,
     slug: true,
@@ -45,7 +42,7 @@ export const Posts: CollectionConfig<'posts'> = {
   },
   admin: {
     group: 'Content',
-    defaultColumns: ['title', 'slug', 'updatedAt'],
+    defaultColumns: ['title', 'slug', 'publishedAt', 'updatedAt'],
     livePreview: {
       url: ({ data, req }) =>
         generatePreviewPath({
@@ -73,6 +70,7 @@ export const Posts: CollectionConfig<'posts'> = {
       type: 'tabs',
       tabs: [
         {
+          label: 'Content',
           fields: [
             {
               name: 'heroImage',
@@ -80,27 +78,36 @@ export const Posts: CollectionConfig<'posts'> = {
               relationTo: 'media',
             },
             {
-              name: 'content',
-              type: 'richText',
-              editor: lexicalEditor({
-                features: ({ rootFeatures }) => {
-                  return [
-                    ...rootFeatures,
-                    HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4'] }),
-                    FixedToolbarFeature(),
-                    InlineToolbarFeature(),
-                    HorizontalRuleFeature(),
-                  ]
-                },
-              }),
-              label: false,
-              required: true,
+              name: 'excerpt',
+              type: 'textarea',
               localized: true,
+              admin: {
+                description: 'Short summary shown on listing/cards.',
+              },
+            },
+            {
+              name: 'layout',
+              type: 'blocks',
+              localized: true,
+              blocks: [
+                ArticleBlock,
+                ValuesBlock,
+                CultureBlock,
+                WhatWeOfferBlock,
+                FinancialReportingBlock,
+                CorporateBondsBlock,
+                PageHeroBlock,
+                WhyWorkBlock,
+              ],
+              admin: {
+                initCollapsed: true,
+                description: 'Build the article body using content blocks.',
+              },
             },
           ],
-          label: 'Content',
         },
         {
+          label: 'Meta',
           fields: [
             {
               name: 'relatedPosts',
@@ -108,13 +115,9 @@ export const Posts: CollectionConfig<'posts'> = {
               admin: {
                 position: 'sidebar',
               },
-              filterOptions: ({ id }) => {
-                return {
-                  id: {
-                    not_in: [id],
-                  },
-                }
-              },
+              filterOptions: ({ id }) => ({
+                id: { not_in: [id] },
+              }),
               hasMany: true,
               relationTo: 'posts',
             },
@@ -127,32 +130,31 @@ export const Posts: CollectionConfig<'posts'> = {
               hasMany: true,
               relationTo: 'categories',
             },
+            {
+              name: 'tags',
+              type: 'relationship',
+              admin: {
+                position: 'sidebar',
+              },
+              hasMany: true,
+              relationTo: 'tags',
+            },
           ],
-          label: 'Meta',
         },
         {
           name: 'meta',
           label: 'SEO',
-          localized: true,
           fields: [
             OverviewField({
               titlePath: 'meta.title',
               descriptionPath: 'meta.description',
               imagePath: 'meta.image',
             }),
-            MetaTitleField({
-              hasGenerateFn: true,
-            }),
-            MetaImageField({
-              relationTo: 'media',
-            }),
-
-            MetaDescriptionField({}),
+            { ...MetaTitleField({ hasGenerateFn: false }), localized: true },
+            MetaImageField({ relationTo: 'media' }),
+            { ...MetaDescriptionField({}), localized: true },
             PreviewField({
-              // if the `generateUrl` function is configured
-              hasGenerateFn: true,
-
-              // field paths to match the target field for data
+              hasGenerateFn: false,
               titlePath: 'meta.title',
               descriptionPath: 'meta.description',
             }),
@@ -164,9 +166,7 @@ export const Posts: CollectionConfig<'posts'> = {
       name: 'publishedAt',
       type: 'date',
       admin: {
-        date: {
-          pickerAppearance: 'dayAndTime',
-        },
+        date: { pickerAppearance: 'dayAndTime' },
         position: 'sidebar',
       },
       hooks: {
@@ -183,34 +183,18 @@ export const Posts: CollectionConfig<'posts'> = {
     {
       name: 'authors',
       type: 'relationship',
-      admin: {
-        position: 'sidebar',
-      },
+      admin: { position: 'sidebar' },
       hasMany: true,
       relationTo: 'users',
     },
-    // This field is only used to populate the user data via the `populateAuthors` hook
-    // This is because the `user` collection has access control locked to protect user privacy
-    // GraphQL will also not return mutated user data that differs from the underlying schema
     {
       name: 'populatedAuthors',
       type: 'array',
-      access: {
-        update: () => false,
-      },
-      admin: {
-        disabled: true,
-        readOnly: true,
-      },
+      access: { update: () => false },
+      admin: { disabled: true, readOnly: true },
       fields: [
-        {
-          name: 'id',
-          type: 'text',
-        },
-        {
-          name: 'name',
-          type: 'text',
-        },
+        { name: 'id', type: 'text' },
+        { name: 'name', type: 'text' },
       ],
     },
     slugField(),
@@ -222,9 +206,7 @@ export const Posts: CollectionConfig<'posts'> = {
   },
   versions: {
     drafts: {
-      autosave: {
-        interval: 100, // We set this interval for optimal live preview
-      },
+      autosave: { interval: 100 },
       schedulePublish: true,
     },
     maxPerDoc: 50,

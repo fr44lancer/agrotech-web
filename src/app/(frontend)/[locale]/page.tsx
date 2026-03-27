@@ -103,9 +103,14 @@ export default async function Page({ params: paramsPromise }: Args) {
                 )}
                 <div className="p-6 flex-1 flex flex-col">
                   <h3 className="text-xl font-semibold text-gray-800 mb-2">{category.title}</h3>
+                  {category.description && (
+                    <p className="text-gray-500 text-sm line-clamp-3 flex-1">
+                      {category.description}
+                    </p>
+                  )}
                   <a
                     href={`/${locale}/products/${category.slug}`}
-                    className="text-teal-600 font-semibold hover:underline inline-block mt-auto pt-6"
+                    className="text-teal-950 font-semibold hover:underline inline-block mt-auto pt-6"
                   >
                     {t.learnMore}
                   </a>
@@ -128,20 +133,11 @@ export default async function Page({ params: paramsPromise }: Args) {
             {services.map((service: any) => (
               <div key={service.id} className="text-center p-6   hover:shadow-lg transition">
                 <div
-                  className="w-16 h-16 bg-teal-600 rounded-full flex items-center justify-center mx-auto mb-4"
+                  className="w-16 h-16 bg-teal-800 rounded-full flex items-center justify-center mx-auto mb-4"
                   dangerouslySetInnerHTML={{ __html: service.iconSvg }}
                 />
                 <h3 className="text-xl font-semibold mb-2">{service.title}</h3>
-                <div className="mb-3 flex flex-wrap justify-center gap-2">
-                  {(service.categories || []).map((cat: any) => (
-                    <span
-                      key={cat.id}
-                      className="bg-teal-50 text-teal-700 text-xs font-semibold px-2 py-1 rounded inline-block"
-                    >
-                      {cat.title}
-                    </span>
-                  ))}
-                </div>
+
                 <p className="text-gray-600">{service.description}</p>
               </div>
             ))}

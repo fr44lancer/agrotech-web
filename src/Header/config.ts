@@ -17,6 +17,20 @@ export const Header: GlobalConfig = {
         link({
           appearances: false,
         }),
+        {
+          name: 'children',
+          type: 'array',
+          label: 'Dropdown Links',
+          admin: {
+            description: 'Optional sub-links shown in a dropdown under this item.',
+            initCollapsed: true,
+          },
+          fields: [
+            link({
+              appearances: false,
+            }),
+          ],
+        },
       ],
       maxRows: 8,
       admin: {

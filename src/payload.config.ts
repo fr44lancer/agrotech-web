@@ -14,6 +14,7 @@ import { Posts } from '@/collections/Posts'
 import { Categories } from '@/collections/Categories'
 import { Header } from '@/Header/config'
 import { Footer } from '@/Footer/config'
+import { SiteTranslations } from '@/globals/SiteTranslations'
 import { Events } from '@/collections/Events'
 import { EventRegistrations } from '@/collections/EventRegistrations'
 import { Products } from '@/collections/Products'
@@ -24,7 +25,9 @@ import { CompanyValues } from '@/collections/CompanyValues'
 import { PartnerBenefits } from '@/collections/PartnerBenefits'
 import { PartnerTestimonials } from '@/collections/PartnerTestimonials'
 import { ContactLocations } from '@/collections/ContactLocations'
-import { PageHeroes } from '@/collections/PageHeroes'
+import { ContactSubmissions } from '@/collections/ContactSubmissions'
+import { CareerApplications } from '@/collections/CareerApplications'
+import { Tags } from '@/collections/Tags'
 
 import { ProductCategories } from '@/collections/ProductCategories'
 import { EventCategories } from '@/collections/EventCategories'
@@ -50,6 +53,7 @@ export default buildConfig({
     Users,
     Media,
     Categories,
+    Tags,
     ProductCategories,
     EventCategories,
     CareerCategories,
@@ -67,7 +71,8 @@ export default buildConfig({
     PartnerBenefits,
     PartnerTestimonials,
     ContactLocations,
-    PageHeroes,
+    ContactSubmissions,
+    CareerApplications,
   ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
@@ -87,7 +92,7 @@ export default buildConfig({
   db: mongooseAdapter({
     url: process.env.MONGODB_URL || '',
   }),
-  globals: [Header, Footer],
+  globals: [Header, Footer, SiteTranslations],
   plugins: [
     vercelBlobStorage({
       collections: {

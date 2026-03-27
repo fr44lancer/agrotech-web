@@ -1,4 +1,5 @@
 import React, { cache } from 'react'
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
@@ -6,77 +7,19 @@ import { draftMode } from 'next/headers'
 import { Media } from '@/components/Media'
 import type { Partner, PartnerCategory } from '@/payload-types'
 import { RenderBlocks } from '@/blocks/RenderBlocks'
+import { getSiteTranslations } from '@/utilities/getSiteTranslations'
+import { generateMeta } from '@/utilities/generateMeta'
+import BaseWrapper from '@/components/ui/Containers/BaseContainer'
+import { Col, Row } from 'antd'
 
 type Args = {
   params: Promise<{ locale?: string }>
 }
 
-const translations = {
-  en: {
-    heroTitle: 'Our Partners',
-    heroSub: 'Building strong relationships for sustainable agricultural success',
-    growingTitle: 'Growing Together',
-    growingSub1:
-      'At AGROTECH, we believe in the power of collaboration. Our partnerships with leading organizations, research institutions, and distributors enable us to deliver innovative solutions and expand our global reach.',
-    growingSub2:
-      "Together, we're shaping the future of sustainable agriculture and making a positive impact on communities worldwide.",
-    strategicTitle: 'Strategic Partners',
-    strategicSub: 'Our global network of trusted partners across key sectors',
-    otherPartners: 'Other Partners',
-    benefitsTitle: 'Partnership Benefits',
-    benefitsSub:
-      'Partnering with AGROTECH means access to innovative solutions and a global support network',
-    becomeTitle: 'Become a Partner',
-    becomeText:
-      'Join our growing network of partners and help shape the future of sustainable agriculture. Together we can make a greater impact.',
-    contactBtn: 'Contact Partnership Team',
-    testimonialsTitle: 'What Our Partners Say',
-    visitWebsite: 'Visit Website',
-    noPartners: 'No partners listed yet.',
-  },
-  ru: {
-    heroTitle: 'Наши партнеры',
-    heroSub: 'Построение прочных отношений для устойчивого успеха в сельском хозяйстве',
-    growingTitle: 'Растем вместе',
-    growingSub1:
-      'В AGROTECH мы верим в силу сотрудничества. Наше партнерство с ведущими организациями, исследовательскими институтами и дистрибьюторами позволяет нам предлагать инновационные решения.',
-    growingSub2:
-      'Вместе мы формируем будущее устойчивого сельского хозяйства и оказываем положительное влияние на сообщества по всему миру.',
-    strategicTitle: 'Стратегические партнеры',
-    strategicSub: 'Наша глобальная сеть надёжных партнёров в ключевых отраслях',
-    otherPartners: 'Другие партнеры',
-    benefitsTitle: 'Преимущества партнерства',
-    benefitsSub:
-      'Партнерство с AGROTECH открывает доступ к инновационным решениям и глобальной сети поддержки',
-    becomeTitle: 'Станьте партнером',
-    becomeText:
-      'Присоединяйтесь к нашей растущей сети партнёров и помогайте формировать будущее устойчивого сельского хозяйства.',
-    contactBtn: 'Связаться с командой по партнерству',
-    testimonialsTitle: 'Что говорят наши партнеры',
-    visitWebsite: 'Посетить сайт',
-    noPartners: 'Партнеры пока не указаны.',
-  },
-  hy: {
-    heroTitle: 'Մեր Գործընկերները',
-    heroSub: 'Ամուր հարաբերությունների կառուցում կայուն գյուղատնտեսական հաջողության համար',
-    growingTitle: 'Աճում ենք միասին',
-    growingSub1:
-      'AGROTECH-ում մենք հավատում ենք համագործակցության ուժին: Առաջատար կազմակերպությունների, հետազոտական ինստիտուտների և դիստրիբյուտորների հետ մեր գործընկերությունը թույլ է տալիս մեզ տրամադրել նորարարական լուծումներ:',
-    growingSub2: 'Միասին մենք կերտում ենք կայուն գյուղատնտեսության ապագան:',
-    strategicTitle: 'Ռազմավարական գործընկերներ',
-    strategicSub: 'Մեր գլոբալ ցանցը հիմնական ոլորտներում վստահելի գործընկերների',
-    otherPartners: 'Այլ գործընկերներ',
-    benefitsTitle: 'Գործընկերության առավելություններ',
-    benefitsSub:
-      'AGROTECH-ի հետ գործընկերությունը նշանակում է հասանելիություն նորարարական լուծումների և գլոբալ աջակցության ցանցի',
-    becomeTitle: 'Դարձեք գործընկեր',
-    becomeText:
-      'Միացեք մեր աճող գործընկերների ցանցին և օգնեք ձևավորել կայուն գյուղատնտեսության ապագան:',
-    contactBtn: 'Կապ գործընկերության թիմի հետ',
-    testimonialsTitle: 'Ինչ են ասում մեր գործընկերները',
-    visitWebsite: 'Այցելել կայք',
-    noPartners: 'Դեռևս գործընկերներ չկան:',
-  },
+export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
+  const { locale = 'hy' } = await paramsPromise
+  const page = await queryPageBySlug({ slug: 'partners', locale })
+  return generateMeta({ doc: page })
 }
 
 const accentColors = [
@@ -93,9 +36,8 @@ export const dynamic = 'force-dynamic'
 export default async function Page({ params: paramsPromise }: Args) {
   const { locale = 'hy' } = await paramsPromise
   const payload = await getPayload({ config: configPromise })
-  const t = translations[locale as keyof typeof translations] || translations.hy
 
-  const [partnersReq, categoriesReq, benefitsReq, testimonialsReq, page] = await Promise.all([
+  const [partnersReq, categoriesReq, benefitsReq, testimonialsReq, page, tr] = await Promise.all([
     payload.find({ collection: 'partners', locale: locale as any, limit: 200, depth: 2 }),
     payload.find({
       collection: 'partnerCategories',
@@ -117,7 +59,34 @@ export default async function Page({ params: paramsPromise }: Args) {
       depth: 1,
     }),
     queryPageBySlug({ slug: 'partners', locale }),
+    getSiteTranslations(locale),
   ])
+
+  const t = {
+    growingTitle: tr.partners?.growingTitle ?? 'Growing Together',
+    growingSub1:
+      tr.partners?.growingSub1 ??
+      'At AGROTECH, we believe in the power of collaboration. Our partnerships with leading organizations, research institutions, and distributors enable us to deliver innovative solutions and expand our global reach.',
+    growingSub2:
+      tr.partners?.growingSub2 ??
+      "Together, we're shaping the future of sustainable agriculture and making a positive impact on communities worldwide.",
+    strategicTitle: tr.partners?.strategicTitle ?? 'Strategic Partners',
+    strategicSub:
+      tr.partners?.strategicSub ?? 'Our global network of trusted partners across key sectors',
+    otherPartners: tr.partners?.otherPartners ?? 'Other Partners',
+    benefitsTitle: tr.partners?.benefitsTitle ?? 'Partnership Benefits',
+    benefitsSub:
+      tr.partners?.benefitsSub ??
+      'Partnering with AGROTECH means access to innovative solutions and a global support network',
+    becomeTitle: tr.partners?.becomeTitle ?? 'Become a Partner',
+    becomeText:
+      tr.partners?.becomeText ??
+      'Join our growing network of partners and help shape the future of sustainable agriculture. Together we can make a greater impact.',
+    contactBtn: tr.partners?.contactBtn ?? 'Contact Partnership Team',
+    testimonialsTitle: tr.partners?.testimonialsTitle ?? 'What Our Partners Say',
+    visitWebsite: tr.partners?.visitWebsite ?? 'Visit Website',
+    noPartners: tr.partners?.noPartners ?? 'No partners listed yet.',
+  }
 
   const allPartners = partnersReq.docs as Partner[]
   const categories = categoriesReq.docs as PartnerCategory[]
@@ -248,20 +217,13 @@ export default async function Page({ params: paramsPromise }: Args) {
                   key={testimonial.id}
                   className="bg-white rounded-lg p-8 shadow-sm border border-gray-100 flex flex-col"
                 >
-                  <svg
-                    className="w-8 h-8 text-teal-200 mb-4 flex-shrink-0"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
-                  </svg>
                   <p className="text-gray-600 leading-relaxed mb-6 flex-grow italic">
                     {testimonial.quote}
                   </p>
                   <div className="border-t border-gray-100 pt-4">
                     <p className="font-bold text-gray-800">{testimonial.authorName}</p>
                     {testimonial.authorTitle && (
-                      <p className="text-sm text-teal-600">{testimonial.authorTitle}</p>
+                      <p className="text-sm text-teal-950">{testimonial.authorTitle}</p>
                     )}
                   </div>
                 </div>
@@ -276,36 +238,37 @@ export default async function Page({ params: paramsPromise }: Args) {
 
 function PartnerGrid({ partners, visitLabel }: { partners: Partner[]; visitLabel: string }) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {partners.map((partner) => (
-        <div
-          key={partner.id}
-          className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 flex flex-col items-center text-center hover:shadow-md transition-shadow"
-        >
-          <div className="h-28 w-full flex items-center justify-center mb-4">
-            {partner.logo && typeof partner.logo === 'object' ? (
-              <Media resource={partner.logo} className="max-h-full max-w-full object-contain" />
-            ) : (
-              <div className="text-gray-400 font-bold text-2xl">{partner.title}</div>
-            )}
-          </div>
-          <h3 className="text-lg font-bold text-gray-800 mb-2">{partner.title}</h3>
-          {partner.description && (
-            <p className="text-gray-600 text-sm mb-4 flex-grow">{partner.description}</p>
-          )}
-          {partner.websiteUrl && (
-            <a
-              href={partner.websiteUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-auto text-teal-600 font-semibold hover:text-teal-700 w-full rounded border border-teal-600 py-2 text-sm transition hover:bg-teal-50"
-            >
-              {visitLabel}
-            </a>
-          )}
-        </div>
-      ))}
-    </div>
+    <BaseWrapper>
+      <Row gutter={[24, 24]} justify={'start'}>
+        {partners.map((partner) => (
+          <Col xs={24} md={6} key={partner.id}>
+            <BaseWrapper className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 flex flex-col items-center text-center hover:shadow-md transition-shadow">
+              <div className="h-60 w-full flex items-center justify-center mb-4 overflow-hidden">
+                {partner.logo && typeof partner.logo === 'object' ? (
+                  <Media resource={partner.logo} className="max-h-60 max-w-full object-contain" />
+                ) : (
+                  <div className="text-gray-400 font-bold text-2xl">{partner.title}</div>
+                )}
+              </div>
+              <h3 className="text-lg font-bold text-gray-800 mb-2">{partner.title}</h3>
+              {partner.description && (
+                <p className="text-gray-600 text-sm mb-4 flex-grow">{partner.description}</p>
+              )}
+              {partner.websiteUrl && (
+                <a
+                  href={partner.websiteUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-auto text-teal-950 font-semibold hover:text-teal-700 w-full rounded border border-teal-600 py-2 text-sm transition hover:bg-teal-50"
+                >
+                  {visitLabel}
+                </a>
+              )}
+            </BaseWrapper>
+          </Col>
+        ))}
+      </Row>
+    </BaseWrapper>
   )
 }
 

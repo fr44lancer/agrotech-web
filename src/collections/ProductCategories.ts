@@ -23,6 +23,14 @@ export const ProductCategories: CollectionConfig = {
       localized: true,
     },
     {
+      name: 'description',
+      type: 'textarea',
+      localized: true,
+      admin: {
+        description: 'Short description shown on category cards.',
+      },
+    },
+    {
       name: 'image',
       type: 'upload',
       relationTo: 'media',

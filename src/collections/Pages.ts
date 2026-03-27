@@ -11,16 +11,15 @@ import {
 import { authenticated } from '@/access/authenticated'
 import { authenticatedOrPublished } from '@/access/authenticatedOrPublished'
 import { generatePreviewPath } from '@/utilities/generatePreviewPath'
-import { Content } from '@/blocks/Content/config'
-import { Banner } from '@/blocks/Banner/config'
-import { CallToAction } from '@/blocks/CallToAction/config'
-import { MediaBlock } from '@/blocks/MediaBlock/config'
 import { ValuesBlock } from '@/blocks/Values/config'
 import { CultureBlock } from '@/blocks/CultureItems/config'
 import { WhatWeOfferBlock } from '@/blocks/WhatWeOffer/config'
 import { FinancialReportingBlock } from '@/blocks/FinancialReporting/config'
 import { CorporateBondsBlock } from '@/blocks/CorporateBonds/config'
 import { PageHeroBlock } from '@/blocks/PageHero/config'
+import { WhyWorkBlock } from '@/blocks/WhyWork/config'
+import { ArticleBlock } from '@/blocks/Article/config'
+import { HeroSliderBlock } from '@/blocks/HeroSlider/config'
 import { populatePublishedAt } from '@/hooks/populatePublishedAt'
 import { revalidateDelete, revalidatePage } from '@/hooks/revalidatePage'
 import { hero } from '@/components/heros/config'
@@ -77,16 +76,15 @@ export const Pages: CollectionConfig = {
               name: 'layout',
               type: 'blocks',
               blocks: [
-                Content,
-                Banner,
-                CallToAction,
-                MediaBlock,
+                ArticleBlock,
+                HeroSliderBlock,
+                PageHeroBlock,
                 ValuesBlock,
                 CultureBlock,
                 WhatWeOfferBlock,
                 FinancialReportingBlock,
                 CorporateBondsBlock,
-                PageHeroBlock,
+                WhyWorkBlock,
               ],
               required: true,
               localized: true,
@@ -100,26 +98,17 @@ export const Pages: CollectionConfig = {
         {
           name: 'meta',
           label: 'SEO',
-          localized: true,
           fields: [
             OverviewField({
               titlePath: 'meta.title',
               descriptionPath: 'meta.description',
               imagePath: 'meta.image',
             }),
-            MetaTitleField({
-              hasGenerateFn: true,
-            }),
-            MetaImageField({
-              relationTo: 'media',
-            }),
-
-            MetaDescriptionField({}),
+            { ...MetaTitleField({ hasGenerateFn: false }), localized: true },
+            MetaImageField({ relationTo: 'media' }),
+            { ...MetaDescriptionField({}), localized: true },
             PreviewField({
-              // if the `generateUrl` function is configured
-              hasGenerateFn: true,
-
-              // field paths to match the target field for data
+              hasGenerateFn: false,
               titlePath: 'meta.title',
               descriptionPath: 'meta.description',
             }),

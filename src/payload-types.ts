@@ -70,6 +70,7 @@ export interface Config {
     users: User;
     media: Media;
     categories: Category;
+    tags: Tag;
     productCategories: ProductCategory;
     eventCategories: EventCategory;
     careerCategories: CareerCategory;
@@ -87,18 +88,25 @@ export interface Config {
     partnerBenefits: PartnerBenefit;
     partnerTestimonials: PartnerTestimonial;
     contactLocations: ContactLocation;
-    pageHeroes: PageHero;
+    contactSubmissions: ContactSubmission;
+    careerApplications: CareerApplication;
     'payload-kv': PayloadKv;
     'payload-jobs': PayloadJob;
+    'payload-folders': FolderInterface;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
-  collectionsJoins: {};
+  collectionsJoins: {
+    'payload-folders': {
+      documentsAndFolders: 'payload-folders' | 'media';
+    };
+  };
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
+    tags: TagsSelect<false> | TagsSelect<true>;
     productCategories: ProductCategoriesSelect<false> | ProductCategoriesSelect<true>;
     eventCategories: EventCategoriesSelect<false> | EventCategoriesSelect<true>;
     careerCategories: CareerCategoriesSelect<false> | CareerCategoriesSelect<true>;
@@ -116,9 +124,11 @@ export interface Config {
     partnerBenefits: PartnerBenefitsSelect<false> | PartnerBenefitsSelect<true>;
     partnerTestimonials: PartnerTestimonialsSelect<false> | PartnerTestimonialsSelect<true>;
     contactLocations: ContactLocationsSelect<false> | ContactLocationsSelect<true>;
-    pageHeroes: PageHeroesSelect<false> | PageHeroesSelect<true>;
+    contactSubmissions: ContactSubmissionsSelect<false> | ContactSubmissionsSelect<true>;
+    careerApplications: CareerApplicationsSelect<false> | CareerApplicationsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
+    'payload-folders': PayloadFoldersSelect<false> | PayloadFoldersSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -130,10 +140,12 @@ export interface Config {
   globals: {
     header: Header;
     footer: Footer;
+    siteTranslations: SiteTranslation;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
+    siteTranslations: SiteTranslationsSelect<false> | SiteTranslationsSelect<true>;
   };
   locale: 'hy' | 'en' | 'ru';
   user: User;
@@ -213,6 +225,7 @@ export interface Media {
     };
     [k: string]: unknown;
   } | null;
+  folder?: (string | null) | FolderInterface;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -224,6 +237,32 @@ export interface Media {
   height?: number | null;
   focalX?: number | null;
   focalY?: number | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-folders".
+ */
+export interface FolderInterface {
+  id: string;
+  name: string;
+  folder?: (string | null) | FolderInterface;
+  documentsAndFolders?: {
+    docs?: (
+      | {
+          relationTo?: 'payload-folders';
+          value: string | FolderInterface;
+        }
+      | {
+          relationTo?: 'media';
+          value: string | Media;
+        }
+    )[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  folderType?: 'media'[] | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -242,11 +281,30 @@ export interface Category {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tags".
+ */
+export interface Tag {
+  id: string;
+  title: string;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "productCategories".
  */
 export interface ProductCategory {
   id: string;
   title: string;
+  /**
+   * Short description shown on category cards.
+   */
+  description?: string | null;
   image?: (string | null) | Media;
   /**
    * When enabled, the slug will auto-generate from the title field on save and autosave.
@@ -394,16 +452,15 @@ export interface Page {
     media?: (string | null) | Media;
   };
   layout: (
-    | ContentBlock
-    | BannerBlock
-    | CallToActionBlock
-    | MediaBlock
+    | ArticleBlock
+    | HeroSliderBlock
+    | PageHeroBlock
     | ValuesBlock
     | CultureBlock
     | WhatWeOfferBlock
     | FinancialReportingBlock
     | CorporateBondsBlock
-    | PageHeroBlock
+    | WhyWorkBlock
   )[];
   meta?: {
     title?: string | null;
@@ -431,23 +488,28 @@ export interface Post {
   id: string;
   title: string;
   heroImage?: (string | null) | Media;
-  content: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
+  /**
+   * Short summary shown on listing/cards.
+   */
+  excerpt?: string | null;
+  /**
+   * Build the article body using content blocks.
+   */
+  layout?:
+    | (
+        | ArticleBlock
+        | ValuesBlock
+        | CultureBlock
+        | WhatWeOfferBlock
+        | FinancialReportingBlock
+        | CorporateBondsBlock
+        | PageHeroBlock
+        | WhyWorkBlock
+      )[]
+    | null;
   relatedPosts?: (string | Post)[] | null;
   categories?: (string | Category)[] | null;
+  tags?: (string | Tag)[] | null;
   meta?: {
     title?: string | null;
     /**
@@ -475,157 +537,12 @@ export interface Post {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "products".
+ * via the `definition` "ArticleBlock".
  */
-export interface Product {
-  id: string;
-  title: string;
-  description: string;
-  colorGradient:
-    | 'from-green-400 to-teal-500'
-    | 'from-amber-400 to-green-600'
-    | 'from-green-500 to-teal-700'
-    | 'from-teal-500 to-green-400';
-  categories?: (string | ProductCategory)[] | null;
-  image?: (string | null) | Media;
-  /**
-   * When enabled, the slug will auto-generate from the title field on save and autosave.
-   */
-  generateSlug?: boolean | null;
-  slug: string;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "careers".
- */
-export interface Career {
-  id: string;
-  title: string;
-  department?: string | null;
-  location?: string | null;
-  /**
-   * e.g., Full-time, Part-time
-   */
-  type?: string | null;
-  categories?: (string | CareerCategory)[] | null;
-  description: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
-  /**
-   * When enabled, the slug will auto-generate from the title field on save and autosave.
-   */
-  generateSlug?: boolean | null;
-  slug: string;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ContentBlock".
- */
-export interface ContentBlock {
-  columns?:
-    | {
-        size?: ('oneThird' | 'half' | 'twoThirds' | 'full') | null;
-        richText?: {
-          root: {
-            type: string;
-            children: {
-              type: any;
-              version: number;
-              [k: string]: unknown;
-            }[];
-            direction: ('ltr' | 'rtl') | null;
-            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-            indent: number;
-            version: number;
-          };
-          [k: string]: unknown;
-        } | null;
-        enableLink?: boolean | null;
-        link?: {
-          type?: ('reference' | 'custom') | null;
-          newTab?: boolean | null;
-          reference?:
-            | ({
-                relationTo: 'pages';
-                value: string | Page;
-              } | null)
-            | ({
-                relationTo: 'posts';
-                value: string | Post;
-              } | null)
-            | ({
-                relationTo: 'products';
-                value: string | Product;
-              } | null)
-            | ({
-                relationTo: 'productCategories';
-                value: string | ProductCategory;
-              } | null)
-            | ({
-                relationTo: 'careers';
-                value: string | Career;
-              } | null);
-          url?: string | null;
-          label: string;
-          /**
-           * Choose how the link should be rendered.
-           */
-          appearance?: ('default' | 'outline') | null;
-        };
-        id?: string | null;
-      }[]
-    | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'content';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "BannerBlock".
- */
-export interface BannerBlock {
-  style: 'info' | 'warning' | 'error' | 'success';
-  content: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'banner';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CallToActionBlock".
- */
-export interface CallToActionBlock {
-  richText?: {
+export interface ArticleBlock {
+  title?: string | null;
+  titleType?: ('h1' | 'h2' | 'h3') | null;
+  content?: {
     root: {
       type: string;
       children: {
@@ -640,55 +557,12 @@ export interface CallToActionBlock {
     };
     [k: string]: unknown;
   } | null;
-  links?:
-    | {
-        link: {
-          type?: ('reference' | 'custom') | null;
-          newTab?: boolean | null;
-          reference?:
-            | ({
-                relationTo: 'pages';
-                value: string | Page;
-              } | null)
-            | ({
-                relationTo: 'posts';
-                value: string | Post;
-              } | null)
-            | ({
-                relationTo: 'products';
-                value: string | Product;
-              } | null)
-            | ({
-                relationTo: 'productCategories';
-                value: string | ProductCategory;
-              } | null)
-            | ({
-                relationTo: 'careers';
-                value: string | Career;
-              } | null);
-          url?: string | null;
-          label: string;
-          /**
-           * Choose how the link should be rendered.
-           */
-          appearance?: ('default' | 'outline') | null;
-        };
-        id?: string | null;
-      }[]
-    | null;
+  image?: (string | null) | Media;
+  imageAlignment?: ('left' | 'right') | null;
+  imageColPercent?: ('25' | '33' | '40' | '50') | null;
   id?: string | null;
   blockName?: string | null;
-  blockType: 'cta';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "MediaBlock".
- */
-export interface MediaBlock {
-  media: string | Media;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'mediaBlock';
+  blockType: 'articleBlock';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -759,7 +633,8 @@ export interface FinancialReportingBlock {
   quarterlyResults?:
     | {
         quarter: string;
-        url: string;
+        file?: (string | null) | Media;
+        url?: string | null;
         id?: string | null;
       }[]
     | null;
@@ -818,6 +693,238 @@ export interface PageHeroBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "WhyWorkBlock".
+ */
+export interface WhyWorkBlock {
+  heading?: string | null;
+  subheading?: string | null;
+  items?:
+    | {
+        icon?: ('lightning' | 'globe' | 'people' | 'star' | 'leaf' | 'chart' | 'shield' | 'heart') | null;
+        title: string;
+        description?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'whyWorkBlock';
+}
+/**
+ * Product catalog entries. Not a shop — no pricing.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "products".
+ */
+export interface Product {
+  id: string;
+  title: string;
+  /**
+   * One-line summary shown on catalog cards.
+   */
+  shortDescription?: string | null;
+  description?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * First image is used as the main thumbnail on listing cards.
+   */
+  images?:
+    | {
+        image: string | Media;
+        alt?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Bullet-point highlights shown on the detail page.
+   */
+  features?:
+    | {
+        text: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Technical spec table (e.g. "Package sizes" / "1 kg, 5 kg, 20 kg").
+   */
+  specifications?:
+    | {
+        label: string;
+        value: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Datasheets, brochures, safety sheets etc.
+   */
+  documents?:
+    | {
+        /**
+         * e.g. "Product Datasheet" or "Safety Data Sheet"
+         */
+        label: string;
+        file: string | Media;
+        id?: string | null;
+      }[]
+    | null;
+  meta?: {
+    title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (string | null) | Media;
+    description?: string | null;
+  };
+  status?: ('active' | 'coming-soon' | 'discontinued') | null;
+  /**
+   * Highlighted on the category listing.
+   */
+  featured?: boolean | null;
+  categories?: (string | ProductCategory)[] | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "careers".
+ */
+export interface Career {
+  id: string;
+  title: string;
+  department?: string | null;
+  location?: string | null;
+  /**
+   * e.g., Full-time, Part-time
+   */
+  type?: string | null;
+  description: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  meta?: {
+    title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (string | null) | Media;
+    description?: string | null;
+  };
+  categories?: (string | CareerCategory)[] | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "HeroSliderBlock".
+ */
+export interface HeroSliderBlock {
+  /**
+   * Add 1–5 slides. Each slide shares the same layout as the home hero.
+   */
+  slides?:
+    | {
+        /**
+         * Full-width background image for this slide.
+         */
+        backgroundImage?: (string | null) | Media;
+        title?: string | null;
+        slogan?: string | null;
+        /**
+         * Bullet-point features shown below the slogan.
+         */
+        features?:
+          | {
+              text: string;
+              id?: string | null;
+            }[]
+          | null;
+        links?:
+          | {
+              link: {
+                type?: ('reference' | 'custom') | null;
+                newTab?: boolean | null;
+                reference?:
+                  | ({
+                      relationTo: 'pages';
+                      value: string | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'posts';
+                      value: string | Post;
+                    } | null)
+                  | ({
+                      relationTo: 'products';
+                      value: string | Product;
+                    } | null)
+                  | ({
+                      relationTo: 'productCategories';
+                      value: string | ProductCategory;
+                    } | null)
+                  | ({
+                      relationTo: 'careers';
+                      value: string | Career;
+                    } | null);
+                url?: string | null;
+                label: string;
+                /**
+                 * Choose how the link should be rendered.
+                 */
+                appearance?: ('default' | 'outline') | null;
+              };
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Automatically advance slides every 5 seconds.
+   */
+  autoplay?: boolean | null;
+  /**
+   * Milliseconds between slide transitions.
+   */
+  autoplayInterval?: number | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'heroSliderBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "events".
  */
 export interface Event {
@@ -825,7 +932,6 @@ export interface Event {
   title: string;
   date: string;
   location: string;
-  status: 'upcoming' | 'past';
   image?: (string | null) | Media;
   /**
    * A short description shown on the events list page.
@@ -1008,23 +1114,36 @@ export interface ContactLocation {
   createdAt: string;
 }
 /**
- * Hero banner content for dedicated pages (Events, Careers, Products, Contacts, Partners).
+ * Messages submitted through the Contact Us form.
  *
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "pageHeroes".
+ * via the `definition` "contactSubmissions".
  */
-export interface PageHero {
+export interface ContactSubmission {
   id: string;
-  /**
-   * Which page this hero applies to.
-   */
-  pageKey: 'events' | 'careers' | 'products' | 'contacts' | 'partners';
-  title: string;
-  subtitle?: string | null;
-  /**
-   * Optional additional paragraph below the subtitle.
-   */
-  description?: string | null;
+  firstName: string;
+  lastName?: string | null;
+  email: string;
+  phone?: string | null;
+  company?: string | null;
+  subject?: string | null;
+  message: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Applications submitted via the Apply Now form.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "careerApplications".
+ */
+export interface CareerApplication {
+  id: string;
+  career?: (string | null) | Career;
+  name: string;
+  email: string;
+  phone?: string | null;
+  message?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1157,6 +1276,10 @@ export interface PayloadLockedDocument {
         value: string | Category;
       } | null)
     | ({
+        relationTo: 'tags';
+        value: string | Tag;
+      } | null)
+    | ({
         relationTo: 'productCategories';
         value: string | ProductCategory;
       } | null)
@@ -1225,8 +1348,16 @@ export interface PayloadLockedDocument {
         value: string | ContactLocation;
       } | null)
     | ({
-        relationTo: 'pageHeroes';
-        value: string | PageHero;
+        relationTo: 'contactSubmissions';
+        value: string | ContactSubmission;
+      } | null)
+    | ({
+        relationTo: 'careerApplications';
+        value: string | CareerApplication;
+      } | null)
+    | ({
+        relationTo: 'payload-folders';
+        value: string | FolderInterface;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -1299,6 +1430,7 @@ export interface UsersSelect<T extends boolean = true> {
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
   caption?: T;
+  folder?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
@@ -1324,10 +1456,22 @@ export interface CategoriesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tags_select".
+ */
+export interface TagsSelect<T extends boolean = true> {
+  title?: T;
+  generateSlug?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "productCategories_select".
  */
 export interface ProductCategoriesSelect<T extends boolean = true> {
   title?: T;
+  description?: T;
   image?: T;
   generateSlug?: T;
   slug?: T;
@@ -1418,16 +1562,15 @@ export interface PagesSelect<T extends boolean = true> {
   layout?:
     | T
     | {
-        content?: T | ContentBlockSelect<T>;
-        banner?: T | BannerBlockSelect<T>;
-        cta?: T | CallToActionBlockSelect<T>;
-        mediaBlock?: T | MediaBlockSelect<T>;
+        articleBlock?: T | ArticleBlockSelect<T>;
+        heroSliderBlock?: T | HeroSliderBlockSelect<T>;
+        pageHeroBlock?: T | PageHeroBlockSelect<T>;
         valuesBlock?: T | ValuesBlockSelect<T>;
         cultureBlock?: T | CultureBlockSelect<T>;
         whatWeOfferBlock?: T | WhatWeOfferBlockSelect<T>;
         financialReportingBlock?: T | FinancialReportingBlockSelect<T>;
         corporateBondsBlock?: T | CorporateBondsBlockSelect<T>;
-        pageHeroBlock?: T | PageHeroBlockSelect<T>;
+        whyWorkBlock?: T | WhyWorkBlockSelect<T>;
       };
   meta?:
     | T
@@ -1445,70 +1588,65 @@ export interface PagesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ContentBlock_select".
+ * via the `definition` "ArticleBlock_select".
  */
-export interface ContentBlockSelect<T extends boolean = true> {
-  columns?:
-    | T
-    | {
-        size?: T;
-        richText?: T;
-        enableLink?: T;
-        link?:
-          | T
-          | {
-              type?: T;
-              newTab?: T;
-              reference?: T;
-              url?: T;
-              label?: T;
-              appearance?: T;
-            };
-        id?: T;
-      };
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "BannerBlock_select".
- */
-export interface BannerBlockSelect<T extends boolean = true> {
-  style?: T;
+export interface ArticleBlockSelect<T extends boolean = true> {
+  title?: T;
+  titleType?: T;
   content?: T;
+  image?: T;
+  imageAlignment?: T;
+  imageColPercent?: T;
   id?: T;
   blockName?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CallToActionBlock_select".
+ * via the `definition` "HeroSliderBlock_select".
  */
-export interface CallToActionBlockSelect<T extends boolean = true> {
-  richText?: T;
-  links?:
+export interface HeroSliderBlockSelect<T extends boolean = true> {
+  slides?:
     | T
     | {
-        link?:
+        backgroundImage?: T;
+        title?: T;
+        slogan?: T;
+        features?:
           | T
           | {
-              type?: T;
-              newTab?: T;
-              reference?: T;
-              url?: T;
-              label?: T;
-              appearance?: T;
+              text?: T;
+              id?: T;
+            };
+        links?:
+          | T
+          | {
+              link?:
+                | T
+                | {
+                    type?: T;
+                    newTab?: T;
+                    reference?: T;
+                    url?: T;
+                    label?: T;
+                    appearance?: T;
+                  };
+              id?: T;
             };
         id?: T;
       };
+  autoplay?: T;
+  autoplayInterval?: T;
   id?: T;
   blockName?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "MediaBlock_select".
+ * via the `definition` "PageHeroBlock_select".
  */
-export interface MediaBlockSelect<T extends boolean = true> {
-  media?: T;
+export interface PageHeroBlockSelect<T extends boolean = true> {
+  title?: T;
+  subtitle?: T;
+  description?: T;
   id?: T;
   blockName?: T;
 }
@@ -1579,6 +1717,7 @@ export interface FinancialReportingBlockSelect<T extends boolean = true> {
     | T
     | {
         quarter?: T;
+        file?: T;
         url?: T;
         id?: T;
       };
@@ -1619,12 +1758,19 @@ export interface CorporateBondsBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "PageHeroBlock_select".
+ * via the `definition` "WhyWorkBlock_select".
  */
-export interface PageHeroBlockSelect<T extends boolean = true> {
-  title?: T;
-  subtitle?: T;
-  description?: T;
+export interface WhyWorkBlockSelect<T extends boolean = true> {
+  heading?: T;
+  subheading?: T;
+  items?:
+    | T
+    | {
+        icon?: T;
+        title?: T;
+        description?: T;
+        id?: T;
+      };
   id?: T;
   blockName?: T;
 }
@@ -1635,9 +1781,22 @@ export interface PageHeroBlockSelect<T extends boolean = true> {
 export interface PostsSelect<T extends boolean = true> {
   title?: T;
   heroImage?: T;
-  content?: T;
+  excerpt?: T;
+  layout?:
+    | T
+    | {
+        articleBlock?: T | ArticleBlockSelect<T>;
+        valuesBlock?: T | ValuesBlockSelect<T>;
+        cultureBlock?: T | CultureBlockSelect<T>;
+        whatWeOfferBlock?: T | WhatWeOfferBlockSelect<T>;
+        financialReportingBlock?: T | FinancialReportingBlockSelect<T>;
+        corporateBondsBlock?: T | CorporateBondsBlockSelect<T>;
+        pageHeroBlock?: T | PageHeroBlockSelect<T>;
+        whyWorkBlock?: T | WhyWorkBlockSelect<T>;
+      };
   relatedPosts?: T;
   categories?: T;
+  tags?: T;
   meta?:
     | T
     | {
@@ -1667,7 +1826,6 @@ export interface EventsSelect<T extends boolean = true> {
   title?: T;
   date?: T;
   location?: T;
-  status?: T;
   image?: T;
   description?: T;
   content?: T;
@@ -1704,10 +1862,45 @@ export interface EventRegistrationsSelect<T extends boolean = true> {
  */
 export interface ProductsSelect<T extends boolean = true> {
   title?: T;
+  shortDescription?: T;
   description?: T;
-  colorGradient?: T;
+  images?:
+    | T
+    | {
+        image?: T;
+        alt?: T;
+        id?: T;
+      };
+  features?:
+    | T
+    | {
+        text?: T;
+        id?: T;
+      };
+  specifications?:
+    | T
+    | {
+        label?: T;
+        value?: T;
+        id?: T;
+      };
+  documents?:
+    | T
+    | {
+        label?: T;
+        file?: T;
+        id?: T;
+      };
+  meta?:
+    | T
+    | {
+        title?: T;
+        image?: T;
+        description?: T;
+      };
+  status?: T;
+  featured?: T;
   categories?: T;
-  image?: T;
   generateSlug?: T;
   slug?: T;
   updatedAt?: T;
@@ -1734,8 +1927,15 @@ export interface CareersSelect<T extends boolean = true> {
   department?: T;
   location?: T;
   type?: T;
-  categories?: T;
   description?: T;
+  meta?:
+    | T
+    | {
+        title?: T;
+        image?: T;
+        description?: T;
+      };
+  categories?: T;
   generateSlug?: T;
   slug?: T;
   updatedAt?: T;
@@ -1813,13 +2013,29 @@ export interface ContactLocationsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "pageHeroes_select".
+ * via the `definition` "contactSubmissions_select".
  */
-export interface PageHeroesSelect<T extends boolean = true> {
-  pageKey?: T;
-  title?: T;
-  subtitle?: T;
-  description?: T;
+export interface ContactSubmissionsSelect<T extends boolean = true> {
+  firstName?: T;
+  lastName?: T;
+  email?: T;
+  phone?: T;
+  company?: T;
+  subject?: T;
+  message?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "careerApplications_select".
+ */
+export interface CareerApplicationsSelect<T extends boolean = true> {
+  career?: T;
+  name?: T;
+  email?: T;
+  phone?: T;
+  message?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1859,6 +2075,18 @@ export interface PayloadJobsSelect<T extends boolean = true> {
   queue?: T;
   waitUntil?: T;
   processing?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-folders_select".
+ */
+export interface PayloadFoldersSelect<T extends boolean = true> {
+  name?: T;
+  folder?: T;
+  documentsAndFolders?: T;
+  folderType?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1929,6 +2157,41 @@ export interface Header {
           url?: string | null;
           label: string;
         };
+        /**
+         * Optional sub-links shown in a dropdown under this item.
+         */
+        children?:
+          | {
+              link: {
+                type?: ('reference' | 'custom') | null;
+                newTab?: boolean | null;
+                reference?:
+                  | ({
+                      relationTo: 'pages';
+                      value: string | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'posts';
+                      value: string | Post;
+                    } | null)
+                  | ({
+                      relationTo: 'products';
+                      value: string | Product;
+                    } | null)
+                  | ({
+                      relationTo: 'productCategories';
+                      value: string | ProductCategory;
+                    } | null)
+                  | ({
+                      relationTo: 'careers';
+                      value: string | Career;
+                    } | null);
+                url?: string | null;
+                label: string;
+              };
+              id?: string | null;
+            }[]
+          | null;
         id?: string | null;
       }[]
     | null;
@@ -1941,38 +2204,206 @@ export interface Header {
  */
 export interface Footer {
   id: string;
-  navItems?:
+  companyName?: string | null;
+  companyTagline?: string | null;
+  contact?: {
+    columnLabel?: string | null;
+    address?: string | null;
+    phone?: string | null;
+    email?: string | null;
+  };
+  /**
+   * Up to 2 link columns shown in the footer.
+   */
+  navColumns?:
     | {
-        link: {
-          type?: ('reference' | 'custom') | null;
-          newTab?: boolean | null;
-          reference?:
-            | ({
-                relationTo: 'pages';
-                value: string | Page;
-              } | null)
-            | ({
-                relationTo: 'posts';
-                value: string | Post;
-              } | null)
-            | ({
-                relationTo: 'products';
-                value: string | Product;
-              } | null)
-            | ({
-                relationTo: 'productCategories';
-                value: string | ProductCategory;
-              } | null)
-            | ({
-                relationTo: 'careers';
-                value: string | Career;
-              } | null);
-          url?: string | null;
-          label: string;
-        };
+        links?:
+          | {
+              link: {
+                type?: ('reference' | 'custom') | null;
+                newTab?: boolean | null;
+                reference?:
+                  | ({
+                      relationTo: 'pages';
+                      value: string | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'posts';
+                      value: string | Post;
+                    } | null)
+                  | ({
+                      relationTo: 'products';
+                      value: string | Product;
+                    } | null)
+                  | ({
+                      relationTo: 'productCategories';
+                      value: string | ProductCategory;
+                    } | null)
+                  | ({
+                      relationTo: 'careers';
+                      value: string | Career;
+                    } | null);
+                url?: string | null;
+                label: string;
+              };
+              id?: string | null;
+            }[]
+          | null;
         id?: string | null;
       }[]
     | null;
+  /**
+   * Shown in the footer and on the Contacts page.
+   */
+  socialLinks?:
+    | {
+        platform: 'facebook' | 'instagram' | 'linkedin' | 'youtube' | 'twitter' | 'telegram' | 'whatsapp';
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * The current year and © symbol are added automatically. Only edit the text after the year.
+   */
+  copyrightSuffix?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * Editable UI strings for all pages (buttons, labels, messages).
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "siteTranslations".
+ */
+export interface SiteTranslation {
+  id: string;
+  events?: {
+    upcomingTitle?: string | null;
+    pastTitle?: string | null;
+    noUpcoming?: string | null;
+    noPast?: string | null;
+    registerNow?: string | null;
+    viewHighlights?: string | null;
+    eventLabel?: string | null;
+    allEvents?: string | null;
+    upcoming?: string | null;
+    past?: string | null;
+    allCategories?: string | null;
+    registrationClosed?: string | null;
+    registrationClosedMsg?: string | null;
+    registerTitle?: string | null;
+    firstName?: string | null;
+    lastName?: string | null;
+    emailLabel?: string | null;
+    phoneLabel?: string | null;
+    registering?: string | null;
+    registerSuccess?: string | null;
+    registerError?: string | null;
+    backToEvents?: string | null;
+    noResults?: string | null;
+  };
+  careers?: {
+    openPositions?: string | null;
+    allCategories?: string | null;
+    viewPosition?: string | null;
+    noPositions?: string | null;
+    back?: string | null;
+    applyTitle?: string | null;
+    applyName?: string | null;
+    applyEmail?: string | null;
+    applyPhone?: string | null;
+    applyMessage?: string | null;
+    applySubmit?: string | null;
+    applySending?: string | null;
+    applySuccess?: string | null;
+    applyError?: string | null;
+  };
+  contacts?: {
+    infoTitle?: string | null;
+    desc?: string | null;
+    addressTitle?: string | null;
+    callUs?: string | null;
+    emailUs?: string | null;
+    viewMap?: string | null;
+    formTitle?: string | null;
+    firstName?: string | null;
+    lastName?: string | null;
+    emailLabel?: string | null;
+    phoneLabel?: string | null;
+    company?: string | null;
+    subject?: string | null;
+    message?: string | null;
+    send?: string | null;
+    officesTitle?: string | null;
+    departmentsTitle?: string | null;
+    viewOnMap?: string | null;
+    followUs?: string | null;
+    website?: string | null;
+    sending?: string | null;
+    successMsg?: string | null;
+    errorMsg?: string | null;
+    /**
+     * Value is used for form processing — keep it lowercase, no spaces. Label is what users see.
+     */
+    subjectOptions?:
+      | {
+          /**
+           * e.g. "general", "partnership"
+           */
+          value: string;
+          label: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  partners?: {
+    growingTitle?: string | null;
+    growingSub1?: string | null;
+    growingSub2?: string | null;
+    strategicTitle?: string | null;
+    strategicSub?: string | null;
+    otherPartners?: string | null;
+    benefitsTitle?: string | null;
+    benefitsSub?: string | null;
+    becomeTitle?: string | null;
+    becomeText?: string | null;
+    contactBtn?: string | null;
+    testimonialsTitle?: string | null;
+    visitWebsite?: string | null;
+    noPartners?: string | null;
+  };
+  financialReporting?: {
+    annualReports?: string | null;
+    quarterlyResults?: string | null;
+    download?: string | null;
+    view?: string | null;
+  };
+  blog?: {
+    pageTitle?: string | null;
+    allCategories?: string | null;
+    allTags?: string | null;
+    readMore?: string | null;
+    noPosts?: string | null;
+    backToBlog?: string | null;
+    tags?: string | null;
+    relatedPosts?: string | null;
+    searchPlaceholder?: string | null;
+  };
+  products?: {
+    allCategories?: string | null;
+    viewProducts?: string | null;
+    contactBtn?: string | null;
+    noProducts?: string | null;
+    viewDetails?: string | null;
+    featured?: string | null;
+    comingSoon?: string | null;
+    discontinued?: string | null;
+    featuresHeading?: string | null;
+    specsHeading?: string | null;
+    documentsHeading?: string | null;
+    download?: string | null;
+    inquire?: string | null;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1993,6 +2424,20 @@ export interface HeaderSelect<T extends boolean = true> {
               url?: T;
               label?: T;
             };
+        children?:
+          | T
+          | {
+              link?:
+                | T
+                | {
+                    type?: T;
+                    newTab?: T;
+                    reference?: T;
+                    url?: T;
+                    label?: T;
+                  };
+              id?: T;
+            };
         id?: T;
       };
   updatedAt?: T;
@@ -2004,19 +2449,186 @@ export interface HeaderSelect<T extends boolean = true> {
  * via the `definition` "footer_select".
  */
 export interface FooterSelect<T extends boolean = true> {
-  navItems?:
+  companyName?: T;
+  companyTagline?: T;
+  contact?:
     | T
     | {
-        link?:
+        columnLabel?: T;
+        address?: T;
+        phone?: T;
+        email?: T;
+      };
+  navColumns?:
+    | T
+    | {
+        links?:
           | T
           | {
-              type?: T;
-              newTab?: T;
-              reference?: T;
-              url?: T;
-              label?: T;
+              link?:
+                | T
+                | {
+                    type?: T;
+                    newTab?: T;
+                    reference?: T;
+                    url?: T;
+                    label?: T;
+                  };
+              id?: T;
             };
         id?: T;
+      };
+  socialLinks?:
+    | T
+    | {
+        platform?: T;
+        url?: T;
+        id?: T;
+      };
+  copyrightSuffix?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "siteTranslations_select".
+ */
+export interface SiteTranslationsSelect<T extends boolean = true> {
+  events?:
+    | T
+    | {
+        upcomingTitle?: T;
+        pastTitle?: T;
+        noUpcoming?: T;
+        noPast?: T;
+        registerNow?: T;
+        viewHighlights?: T;
+        eventLabel?: T;
+        allEvents?: T;
+        upcoming?: T;
+        past?: T;
+        allCategories?: T;
+        registrationClosed?: T;
+        registrationClosedMsg?: T;
+        registerTitle?: T;
+        firstName?: T;
+        lastName?: T;
+        emailLabel?: T;
+        phoneLabel?: T;
+        registering?: T;
+        registerSuccess?: T;
+        registerError?: T;
+        backToEvents?: T;
+        noResults?: T;
+      };
+  careers?:
+    | T
+    | {
+        openPositions?: T;
+        allCategories?: T;
+        viewPosition?: T;
+        noPositions?: T;
+        back?: T;
+        applyTitle?: T;
+        applyName?: T;
+        applyEmail?: T;
+        applyPhone?: T;
+        applyMessage?: T;
+        applySubmit?: T;
+        applySending?: T;
+        applySuccess?: T;
+        applyError?: T;
+      };
+  contacts?:
+    | T
+    | {
+        infoTitle?: T;
+        desc?: T;
+        addressTitle?: T;
+        callUs?: T;
+        emailUs?: T;
+        viewMap?: T;
+        formTitle?: T;
+        firstName?: T;
+        lastName?: T;
+        emailLabel?: T;
+        phoneLabel?: T;
+        company?: T;
+        subject?: T;
+        message?: T;
+        send?: T;
+        officesTitle?: T;
+        departmentsTitle?: T;
+        viewOnMap?: T;
+        followUs?: T;
+        website?: T;
+        sending?: T;
+        successMsg?: T;
+        errorMsg?: T;
+        subjectOptions?:
+          | T
+          | {
+              value?: T;
+              label?: T;
+              id?: T;
+            };
+      };
+  partners?:
+    | T
+    | {
+        growingTitle?: T;
+        growingSub1?: T;
+        growingSub2?: T;
+        strategicTitle?: T;
+        strategicSub?: T;
+        otherPartners?: T;
+        benefitsTitle?: T;
+        benefitsSub?: T;
+        becomeTitle?: T;
+        becomeText?: T;
+        contactBtn?: T;
+        testimonialsTitle?: T;
+        visitWebsite?: T;
+        noPartners?: T;
+      };
+  financialReporting?:
+    | T
+    | {
+        annualReports?: T;
+        quarterlyResults?: T;
+        download?: T;
+        view?: T;
+      };
+  blog?:
+    | T
+    | {
+        pageTitle?: T;
+        allCategories?: T;
+        allTags?: T;
+        readMore?: T;
+        noPosts?: T;
+        backToBlog?: T;
+        tags?: T;
+        relatedPosts?: T;
+        searchPlaceholder?: T;
+      };
+  products?:
+    | T
+    | {
+        allCategories?: T;
+        viewProducts?: T;
+        contactBtn?: T;
+        noProducts?: T;
+        viewDetails?: T;
+        featured?: T;
+        comingSoon?: T;
+        discontinued?: T;
+        featuresHeading?: T;
+        specsHeading?: T;
+        documentsHeading?: T;
+        download?: T;
+        inquire?: T;
       };
   updatedAt?: T;
   createdAt?: T;

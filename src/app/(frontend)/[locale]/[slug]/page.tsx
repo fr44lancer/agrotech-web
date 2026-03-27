@@ -11,6 +11,7 @@ import PageClient from './page.client'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 import { RenderHero } from '@/components/heros/RenderHero'
 import BaseWrapper from '@/components/ui/Containers/BaseContainer'
+import { notFound } from 'next/navigation'
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
@@ -30,7 +31,7 @@ export async function generateStaticParams() {
 
   // Exclude slugs that have dedicated page routes to prevent pre-rendered
   // static HTML from shadowing the dynamic route components in production.
-  const dedicatedRoutes = ['careers', 'events', 'products', 'partners', 'contacts']
+  const dedicatedRoutes = ['about-us', 'careers', 'events', 'products', 'partners', 'contacts', 'blog']
 
   pages.docs?.forEach((doc) => {
     if (doc.slug !== 'home' && !dedicatedRoutes.includes(doc.slug as string)) {
@@ -61,7 +62,7 @@ export default async function Page({ params: paramsPromise }: Args) {
     locale,
   })
 
-  if (!page) return null
+  if (!page) return notFound()
 
   const { hero, layout } = page
 
@@ -72,7 +73,7 @@ export default async function Page({ params: paramsPromise }: Args) {
   return (
     <>
       <RenderBlocks blocks={heroBlocks} locale={locale} />
-      <BaseWrapper className={'w-full container m-auto'}>
+      <BaseWrapper className={'w-full  m-auto'}>
         <article className="pt-16 pb-24">
           <PageClient />
 
