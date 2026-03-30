@@ -149,13 +149,13 @@ export default function EventsSection({ events, categories, locale, t }: Props) 
         {/* Past events */}
         {showPast && pastFiltered.length > 0 && (
           <div>
-            <h2 className="text-2xl font-bold text-gray-700 mb-6 flex items-center gap-3">
-              <span className="w-1 h-7 bg-gray-400 rounded-full inline-block" />
+            <h2 className="text-2xl font-bold text-teal-800 mb-6 flex items-center gap-3">
+              <span className="w-1 h-7 bg-teal-600 rounded-full inline-block" />
               {t.pastTitle}
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="flex flex-col gap-6">
               {pastFiltered.map((event) => (
-                <PastCard key={event.id} event={event} locale={locale} t={t} />
+                <UpcomingCard key={event.id} event={event} locale={locale} t={t} />
               ))}
             </div>
           </div>

@@ -14,11 +14,12 @@ export async function Footer({ locale = 'hy' }: { locale?: string }) {
   const companyTagline = footerData?.companyTagline || ''
   const contact = footerData?.contact
   const navColumns = footerData?.navColumns || []
-  const copyrightSuffix = (footerData as any)?.copyrightSuffix || 'AGROTECH LLC. All rights reserved.'
+  const copyrightSuffix =
+    (footerData as any)?.copyrightSuffix || 'AGROTECH LLC. All rights reserved.'
   const copyrightText = `© ${new Date().getFullYear()} ${copyrightSuffix}`
 
   return (
-    <footer className="bg-gray-800 text-white">
+    <footer className="bg-gray-800 text-white mt-10">
       <div className="container mx-auto px-6 max-w-7xl py-14">
         <Row gutter={[40, 40]} justify="space-between">
           <Col xs={24} md={6}>
@@ -36,7 +37,7 @@ export async function Footer({ locale = 'hy' }: { locale?: string }) {
                     <CMSLink
                       {...link}
                       locale={locale}
-                      className="text-gray-400 hover:text-white transition hover:pl-1.5 inline-block text-sm"
+                      className="text-gray-400 hover:text-white transition  inline-block text-sm"
                     />
                   </li>
                 ))}

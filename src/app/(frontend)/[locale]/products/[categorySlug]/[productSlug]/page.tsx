@@ -119,9 +119,13 @@ export default async function ProductDetailPage({ params: paramsPromise }: Args)
                 )}
               </div>
 
-              <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 leading-tight">
+              <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2 leading-tight">
                 {product.title}
               </h1>
+
+              {(product as any).identifier && (
+                <p className="text-sm text-gray-600  mb-4">{(product as any).identifier}</p>
+              )}
 
               {product.shortDescription && (
                 <p className="text-lg text-gray-500 mb-8 leading-relaxed">

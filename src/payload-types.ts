@@ -720,6 +720,10 @@ export interface Product {
   id: string;
   title: string;
   /**
+   * Custom product identifier or SKU (e.g. AGR-001).
+   */
+  identifier?: string | null;
+  /**
    * One-line summary shown on catalog cards.
    */
   shortDescription?: string | null;
@@ -1862,6 +1866,7 @@ export interface EventRegistrationsSelect<T extends boolean = true> {
  */
 export interface ProductsSelect<T extends boolean = true> {
   title?: T;
+  identifier?: T;
   shortDescription?: T;
   description?: T;
   images?:

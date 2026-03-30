@@ -144,7 +144,27 @@ export default async function ContactsPage({ params: paramsPromise }: Args) {
   return (
     <div className="w-full">
       <RenderBlocks blocks={heroBlocks} locale={locale} />
+      {/* ── Offices ───────────────────────────────────────────────────── */}
+      {offices.length > 0 && (
+        <section className="py-16 bg-white">
+          <div className="container mx-auto px-6 max-w-7xl">
+            <h2 className="text-3xl font-bold text-gray-800 mb-10 text-center">{t.officesTitle}</h2>
+            <LocationGrid locations={offices} viewOnMapLabel={t.viewOnMap} />
+          </div>
+        </section>
+      )}
 
+      {/* ── Departments ───────────────────────────────────────────────── */}
+      {departments.length > 0 && (
+        <section className="py-16 bg-gray-50">
+          <div className="container mx-auto px-6 max-w-7xl">
+            <h2 className="text-3xl font-bold text-gray-800 mb-10 text-center">
+              {t.departmentsTitle}
+            </h2>
+            <LocationGrid locations={departments} viewOnMapLabel={t.viewOnMap} />
+          </div>
+        </section>
+      )}
       <BaseWrapper className={'container m-auto'}>
         <Row align={'middle'}>
           <Col xs={24} md={12}>
@@ -319,27 +339,6 @@ export default async function ContactsPage({ params: paramsPromise }: Args) {
           </Col>
         </Row>
       </BaseWrapper>
-      {/* ── Offices ───────────────────────────────────────────────────── */}
-      {offices.length > 0 && (
-        <section className="py-16 bg-white">
-          <div className="container mx-auto px-6 max-w-7xl">
-            <h2 className="text-3xl font-bold text-gray-800 mb-10 text-center">{t.officesTitle}</h2>
-            <LocationGrid locations={offices} viewOnMapLabel={t.viewOnMap} />
-          </div>
-        </section>
-      )}
-
-      {/* ── Departments ───────────────────────────────────────────────── */}
-      {departments.length > 0 && (
-        <section className="py-16 bg-gray-50">
-          <div className="container mx-auto px-6 max-w-7xl">
-            <h2 className="text-3xl font-bold text-gray-800 mb-10 text-center">
-              {t.departmentsTitle}
-            </h2>
-            <LocationGrid locations={departments} viewOnMapLabel={t.viewOnMap} />
-          </div>
-        </section>
-      )}
     </div>
   )
 }
