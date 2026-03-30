@@ -112,7 +112,7 @@ export const HeroSliderBlockComponent: React.FC<Props> = ({
 
   return (
     <section
-      className="relative text-white min-h-[520px] overflow-hidden"
+      className="relative text-white min-h-[620px] overflow-hidden"
       onMouseEnter={() => {
         isHoveringRef.current = true
       }}
@@ -147,10 +147,10 @@ export const HeroSliderBlockComponent: React.FC<Props> = ({
           <div className="absolute inset-0 bg-gradient-to-r from-teal-900/90" />
 
           {/* Content */}
-          <div className="container mx-auto px-6 py-16 md:py-32 relative z-10 w-full min-h-[520px] flex items-center">
-            <div className="max-w-4xl">
+          <div className="container mx-auto px-6 py-16 md:py-32 relative z-10 w-full min-h-[560px] flex items-center">
+            <div className="max-w-7xl">
               {slide.title && (
-                <h1 className="text-2xl md:text-5xl font-bold mb-8 max-w-2xl">{slide.title}</h1>
+                <h1 className="text-2xl md:text-5xl font-bold mb-8 max-w-5xl">{slide.title}</h1>
               )}
 
               {slide.slogan && (
