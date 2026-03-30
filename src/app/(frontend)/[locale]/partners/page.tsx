@@ -242,7 +242,7 @@ function PartnerGrid({ partners, visitLabel }: { partners: Partner[]; visitLabel
       <Row gutter={[24, 24]} justify={'start'}>
         {partners.map((partner) => (
           <Col xs={24} md={6} key={partner.id}>
-            <BaseWrapper className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 flex flex-col items-center text-center hover:shadow-md transition-shadow">
+            <BaseWrapper className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 flex flex-col items-center text-center hover:shadow-md transition-shadow h-full">
               <div className="h-60 w-full flex items-center justify-center mb-4 overflow-hidden">
                 {partner.logo && typeof partner.logo === 'object' ? (
                   <Media resource={partner.logo} className="max-h-60 max-w-full object-contain" />
