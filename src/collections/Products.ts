@@ -34,6 +34,15 @@ export const Products: CollectionConfig = {
       label: 'Product Name',
     },
     {
+      name: 'identifier',
+      type: 'text',
+      label: 'Identifier',
+      admin: {
+        description: 'Custom product identifier or SKU (e.g. AGR-001).',
+        position: 'sidebar',
+      },
+    },
+    {
       type: 'tabs',
       tabs: [
         {
