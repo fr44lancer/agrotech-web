@@ -81,6 +81,10 @@ export const HeroSliderBlock: Block = {
         description: 'Milliseconds between slide transitions.',
         position: 'sidebar',
         condition: (_, { autoplay } = {}) => !!autoplay,
+        custom: {
+          imageURL: '/previews/layouts/pageHeader.png',
+          imageAltText: 'Hero Slider block',
+        },
       },
     },
   ],

@@ -28,6 +28,10 @@ export const PageHeroBlock: Block = {
       label: 'Description',
       admin: {
         description: 'Optional additional paragraph below the subtitle.',
+        custom: {
+          imageURL: '/previews/layouts/pageHeader.png',
+          imageAltText: 'Hero Slider block',
+        },
       },
     },
   ],

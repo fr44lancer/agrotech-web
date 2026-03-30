@@ -2,6 +2,8 @@ import type { Block } from 'payload'
 
 export const WhatWeOfferBlock: Block = {
   slug: 'whatWeOfferBlock',
+
+  imageURL: '/admin/previews/layouts/pageHeader.png',
   interfaceName: 'WhatWeOfferBlock',
   labels: {
     singular: 'What We Offer Section',
