@@ -9,6 +9,7 @@ export const WhatWeOfferBlock: Block = {
     singular: 'What We Offer Section',
     plural: 'What We Offer Sections',
   },
+  admin: { group: 'Special' },
   fields: [
     {
       name: 'heading',

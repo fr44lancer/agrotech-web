@@ -3,10 +3,12 @@ import type { Block } from 'payload'
 export const PageHeroBlock: Block = {
   slug: 'pageHeroBlock',
   interfaceName: 'PageHeroBlock',
+  imageURL: '/admin/previews/layouts/pageHeader.png',
   labels: {
     singular: 'Page Header',
     plural: 'Page Headers',
   },
+  admin: { group: 'Common' },
   fields: [
     {
       name: 'title',
@@ -26,13 +28,6 @@ export const PageHeroBlock: Block = {
       type: 'textarea',
       localized: true,
       label: 'Description',
-      admin: {
-        description: 'Optional additional paragraph below the subtitle.',
-        custom: {
-          imageURL: '/previews/layouts/pageHeader.png',
-          imageAltText: 'Hero Slider block',
-        },
-      },
     },
   ],
 }

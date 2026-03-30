@@ -193,8 +193,8 @@ export const HeroSliderBlockComponent: React.FC<Props> = ({
                         {...newTabProps}
                         className={
                           isOutline
-                            ? 'border-2 border-white text-white px-8 py-3 rounded-md font-semibold hover:bg-white hover:text-teal-700 transition'
-                            : 'bg-white text-teal-700 px-8 py-3 rounded-md font-semibold hover:bg-green-50 transition'
+                            ? 'border-2 border-white text-white px-8 py-3 rounded-md font-semibold hover:bg-white hover:text-teal-800 transition'
+                            : 'bg-white text-teal-800 px-8 py-3 rounded-md font-semibold hover:bg-green-50 transition'
                         }
                       >
                         {link.label}

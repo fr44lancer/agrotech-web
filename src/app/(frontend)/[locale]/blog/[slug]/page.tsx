@@ -108,7 +108,7 @@ export default async function BlogPostPage({ params: paramsPromise }: Args) {
         <div className="relative container mx-auto px-6  py-6 md:py-10">
           <Link
             href={`/${locale}/blog`}
-            className="inline-flex items-center gap-1.5 text-teal-200 hover:text-white text-sm font-medium mb-8 transition"
+            className="inline-flex items-center gap-1.5 text-gray-200 hover:text-white text-sm font-medium mb-8 transition"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
@@ -138,7 +138,7 @@ export default async function BlogPostPage({ params: paramsPromise }: Args) {
             {post.title as string}
           </h1>
 
-          {dateStr && <p className="text-teal-200 text-sm">{dateStr}</p>}
+          {dateStr && <p className="text-gray-200 text-sm">{dateStr}</p>}
         </div>
       </div>
 
@@ -155,7 +155,7 @@ export default async function BlogPostPage({ params: paramsPromise }: Args) {
                 {tags.map((tag: any) => (
                   <span
                     key={tag.id}
-                    className="px-3 py-1 bg-teal-50 text-teal-700 text-sm rounded-full border border-teal-100"
+                    className="px-3 py-1 bg-teal-50 text-teal-800 text-sm rounded-full border border-teal-100"
                   >
                     #{tag.title}
                   </span>
@@ -188,7 +188,7 @@ export default async function BlogPostPage({ params: paramsPromise }: Args) {
                         </div>
                       )}
                       <div className="p-4">
-                        <h3 className="text-sm font-semibold text-gray-800 line-clamp-2 group-hover:text-teal-700 transition-colors">
+                        <h3 className="text-sm font-semibold text-gray-800 line-clamp-2 group-hover:text-teal-800 transition-colors">
                           {p.title}
                         </h3>
                         <span className="mt-2 inline-flex items-center gap-1 text-teal-600 text-xs font-medium">

@@ -71,7 +71,10 @@ export default async function ProductDetailPage({ params: paramsPromise }: Args)
       <div className="bg-gray-50 border-b border-gray-100 py-4">
         <div className="container mx-auto px-6 max-w-7xl">
           <nav className="flex items-center gap-2 text-sm text-gray-500 flex-wrap">
-            <Link href={`/${locale}/products`} className="hover:text-teal-950 transition">
+            <Link
+              href={`/${locale}/products`}
+              className="text-teal-950 hover:text-teal-950 transition"
+            >
               Products
             </Link>
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -79,7 +82,7 @@ export default async function ProductDetailPage({ params: paramsPromise }: Args)
             </svg>
             <Link
               href={`/${locale}/products/${categorySlug}`}
-              className="hover:text-teal-950 transition"
+              className="text-teal-950 hover:text-teal-950 transition"
             >
               {category.title}
             </Link>
@@ -104,7 +107,7 @@ export default async function ProductDetailPage({ params: paramsPromise }: Args)
             <div>
               {/* Status & category badges */}
               <div className="flex flex-wrap items-center gap-2 mb-4">
-                <span className="bg-teal-50 text-teal-700 text-xs font-semibold px-3 py-1 rounded-full border border-teal-100">
+                <span className="bg-teal-50 text-teal-800 text-xs font-semibold px-3 py-1 rounded-full border border-teal-100">
                   {category.title}
                 </span>
                 {badge && (
@@ -148,7 +151,7 @@ export default async function ProductDetailPage({ params: paramsPromise }: Args)
                     {features.map((f: any, i: number) => (
                       <li key={i} className="flex items-start gap-3 text-gray-700">
                         <svg
-                          className="w-5 h-5 text-teal-500 mt-0.5 shrink-0"
+                          className="w-5 h-5 text-teal-800 mt-0.5 shrink-0"
                           fill="none"
                           stroke="currentColor"
                           viewBox="0 0 24 24"
@@ -216,7 +219,7 @@ export default async function ProductDetailPage({ params: paramsPromise }: Args)
                               d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"
                             />
                           </svg>
-                          <span className="flex-grow font-medium text-gray-700 group-hover:text-teal-700">
+                          <span className="flex-grow font-medium text-gray-700 group-hover:text-teal-800">
                             {doc.label}
                           </span>
                           <span className="text-xs text-teal-950 font-semibold">

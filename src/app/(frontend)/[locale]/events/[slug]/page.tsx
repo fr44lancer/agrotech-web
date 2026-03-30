@@ -119,7 +119,7 @@ export default async function EventPage({ params: paramsPromise }: Args) {
           {/* Back link */}
           <Link
             href={`/${locale}/events`}
-            className="inline-flex items-center gap-1.5 text-teal-200 hover:text-white text-sm font-medium mb-8 transition"
+            className="inline-flex items-center gap-1.5 text-gray-200 hover:text-white text-sm font-medium mb-8 transition"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path

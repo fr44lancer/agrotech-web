@@ -36,7 +36,7 @@ export const CorporateBondsBlockComponent: React.FC<CorporateBondsBlockProps> = 
                 <Row gutter={[40, 24]}>
                   {stats.map((stat, i) => (
                     <Col xs={24} md={8} key={stat.id ?? i}>
-                      <BaseWrapper className={'bg-gray-400/70 p-6 rounded-lg'}>
+                      <BaseWrapper className={'bg-gray-400/70 p-6 rounded-lg h-full'}>
                         <p className="text-white">{stat.label}</p>
                         <p className="text-2xl font-bold">{stat.value}</p>
                       </BaseWrapper>
@@ -47,7 +47,7 @@ export const CorporateBondsBlockComponent: React.FC<CorporateBondsBlockProps> = 
               {ctaUrl && (
                 <Link
                   href={ctaUrl}
-                  className="inline-block mt-6 bg-white text-teal-700 px-6 py-3 rounded-md font-semibold hover:bg-green-50 transition"
+                  className="inline-block mt-6 bg-white text-teal-800 px-6 py-3 rounded-md font-semibold hover:bg-green-50 transition"
                 >
                   {ctaLabel || 'Learn More'}
                 </Link>
@@ -60,7 +60,6 @@ export const CorporateBondsBlockComponent: React.FC<CorporateBondsBlockProps> = 
             {benefits && benefits.length > 0 && (
               <Row justify={'center'} className="mt-12">
                 <Col xs={24} md={8}>
-                  <h3 className="text-xl font-bold text-gray-800 mb-6">Why Invest</h3>
                   <ul className="space-y-4">
                     {benefits.map((benefit, i) => (
                       <li key={benefit.id ?? i} className="flex items-start gap-3">

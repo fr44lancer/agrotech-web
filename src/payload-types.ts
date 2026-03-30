@@ -452,14 +452,23 @@ export interface Page {
     media?: (string | null) | Media;
   };
   layout: (
+    | AccentCardGridBlock
     | ArticleBlock
-    | HeroSliderBlock
-    | PageHeroBlock
-    | ValuesBlock
-    | CultureBlock
-    | WhatWeOfferBlock
-    | FinancialReportingBlock
+    | ChecklistCardsBlock
     | CorporateBondsBlock
+    | CultureBlock
+    | FeatureGroupGridBlock
+    | FileDownloadsBlock
+    | FinancialReportingBlock
+    | HeroSliderBlock
+    | IconCardsBlock
+    | MapEmbedBlock
+    | PageHeroBlock
+    | ProductCategoriesBlock
+    | ServicesBlock
+    | StatsHighlightBlock
+    | ValuesBlock
+    | WhatWeOfferBlock
     | WhyWorkBlock
   )[];
   meta?: {
@@ -557,7 +566,12 @@ export interface ArticleBlock {
     };
     [k: string]: unknown;
   } | null;
+  mediaType?: ('image' | 'video') | null;
   image?: (string | null) | Media;
+  /**
+   * Paste the YouTube video URL (e.g. https://www.youtube.com/watch?v=...)
+   */
+  youtubeUrl?: string | null;
   imageAlignment?: ('left' | 'right') | null;
   imageColPercent?: ('25' | '33' | '40' | '50') | null;
   id?: string | null;
@@ -683,9 +697,6 @@ export interface CorporateBondsBlock {
 export interface PageHeroBlock {
   title: string;
   subtitle?: string | null;
-  /**
-   * Optional additional paragraph below the subtitle.
-   */
   description?: string | null;
   id?: string | null;
   blockName?: string | null;
@@ -700,7 +711,7 @@ export interface WhyWorkBlock {
   subheading?: string | null;
   items?:
     | {
-        icon?: ('lightning' | 'globe' | 'people' | 'star' | 'leaf' | 'chart' | 'shield' | 'heart') | null;
+        icon?: string | null;
         title: string;
         description?: string | null;
         id?: string | null;
@@ -853,6 +864,101 @@ export interface Career {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AccentCardGridBlock".
+ */
+export interface AccentCardGridBlock {
+  heading?: string | null;
+  subheading?: string | null;
+  columns: '1' | '2' | '3';
+  background?: ('white' | 'gray') | null;
+  items?:
+    | {
+        title: string;
+        description?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'accentCardGridBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ChecklistCardsBlock".
+ */
+export interface ChecklistCardsBlock {
+  heading?: string | null;
+  subheading?: string | null;
+  columns: '1' | '2' | '3';
+  background?: ('white' | 'gray') | null;
+  items?:
+    | {
+        icon?: string | null;
+        title: string;
+        description?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'checklistCardsBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FeatureGroupGridBlock".
+ */
+export interface FeatureGroupGridBlock {
+  heading?: string | null;
+  subheading?: string | null;
+  columns: '1' | '2' | '3';
+  background?: ('white' | 'gray') | null;
+  groups?:
+    | {
+        title: string;
+        items?:
+          | {
+              text: string;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'featureGroupGridBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FileDownloadsBlock".
+ */
+export interface FileDownloadsBlock {
+  heading?: string | null;
+  subheading?: string | null;
+  columns: '1' | '2' | '3';
+  /**
+   * Add 1–3 columns. Number should match the "Number of Columns" setting above.
+   */
+  columnList?:
+    | {
+        title?: string | null;
+        items?:
+          | {
+              label: string;
+              file?: (string | null) | Media;
+              url?: string | null;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'fileDownloadsBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "HeroSliderBlock".
  */
 export interface HeroSliderBlock {
@@ -929,6 +1035,105 @@ export interface HeroSliderBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "IconCardsBlock".
+ */
+export interface IconCardsBlock {
+  heading?: string | null;
+  subheading?: string | null;
+  columns: '1' | '2' | '3' | '4';
+  background?: ('white' | 'gray') | null;
+  iconColor?: ('teal' | 'darkteal' | 'green' | 'gray') | null;
+  items?:
+    | {
+        icon?: string | null;
+        title: string;
+        description?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'iconCardsBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "MapEmbedBlock".
+ */
+export interface MapEmbedBlock {
+  /**
+   * Paste the iframe src URL from Yandex Maps (Share → Embed → copy only the src="..." value).
+   */
+  embedUrl: string;
+  /**
+   * Map height in pixels.
+   */
+  height?: number | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'mapEmbedBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ProductCategoriesBlock".
+ */
+export interface ProductCategoriesBlock {
+  heading?: string | null;
+  subheading?: string | null;
+  learnMoreLabel?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'productCategoriesBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ServicesBlock".
+ */
+export interface ServicesBlock {
+  heading?: string | null;
+  subheading?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'servicesBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "StatsHighlightBlock".
+ */
+export interface StatsHighlightBlock {
+  heading?: string | null;
+  subheading?: string | null;
+  /**
+   * Bold title shown inside the gradient card
+   */
+  highlightTitle?: string | null;
+  /**
+   * Key figures shown as boxes inside the highlight card (e.g. "Annual Rate" / "4.5%")
+   */
+  stats?:
+    | {
+        label: string;
+        value: string;
+        id?: string | null;
+      }[]
+    | null;
+  statsColumns?: ('1' | '2' | '3') | null;
+  ctaLabel?: string | null;
+  ctaUrl?: string | null;
+  /**
+   * Checklist shown below the highlight card
+   */
+  benefits?:
+    | {
+        text: string;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'statsHighlightBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "events".
  */
 export interface Event {
@@ -996,10 +1201,7 @@ export interface Service {
   id: string;
   title: string;
   description: string;
-  /**
-   * Provide the raw SVG string for the icon
-   */
-  iconSvg: string;
+  icon?: string | null;
   categories?: (string | ServiceCategory)[] | null;
   updatedAt: string;
   createdAt: string;
@@ -1566,14 +1768,23 @@ export interface PagesSelect<T extends boolean = true> {
   layout?:
     | T
     | {
+        accentCardGridBlock?: T | AccentCardGridBlockSelect<T>;
         articleBlock?: T | ArticleBlockSelect<T>;
-        heroSliderBlock?: T | HeroSliderBlockSelect<T>;
-        pageHeroBlock?: T | PageHeroBlockSelect<T>;
-        valuesBlock?: T | ValuesBlockSelect<T>;
-        cultureBlock?: T | CultureBlockSelect<T>;
-        whatWeOfferBlock?: T | WhatWeOfferBlockSelect<T>;
-        financialReportingBlock?: T | FinancialReportingBlockSelect<T>;
+        checklistCardsBlock?: T | ChecklistCardsBlockSelect<T>;
         corporateBondsBlock?: T | CorporateBondsBlockSelect<T>;
+        cultureBlock?: T | CultureBlockSelect<T>;
+        featureGroupGridBlock?: T | FeatureGroupGridBlockSelect<T>;
+        fileDownloadsBlock?: T | FileDownloadsBlockSelect<T>;
+        financialReportingBlock?: T | FinancialReportingBlockSelect<T>;
+        heroSliderBlock?: T | HeroSliderBlockSelect<T>;
+        iconCardsBlock?: T | IconCardsBlockSelect<T>;
+        mapEmbedBlock?: T | MapEmbedBlockSelect<T>;
+        pageHeroBlock?: T | PageHeroBlockSelect<T>;
+        productCategoriesBlock?: T | ProductCategoriesBlockSelect<T>;
+        servicesBlock?: T | ServicesBlockSelect<T>;
+        statsHighlightBlock?: T | StatsHighlightBlockSelect<T>;
+        valuesBlock?: T | ValuesBlockSelect<T>;
+        whatWeOfferBlock?: T | WhatWeOfferBlockSelect<T>;
         whyWorkBlock?: T | WhyWorkBlockSelect<T>;
       };
   meta?:
@@ -1592,15 +1803,179 @@ export interface PagesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AccentCardGridBlock_select".
+ */
+export interface AccentCardGridBlockSelect<T extends boolean = true> {
+  heading?: T;
+  subheading?: T;
+  columns?: T;
+  background?: T;
+  items?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "ArticleBlock_select".
  */
 export interface ArticleBlockSelect<T extends boolean = true> {
   title?: T;
   titleType?: T;
   content?: T;
+  mediaType?: T;
   image?: T;
+  youtubeUrl?: T;
   imageAlignment?: T;
   imageColPercent?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ChecklistCardsBlock_select".
+ */
+export interface ChecklistCardsBlockSelect<T extends boolean = true> {
+  heading?: T;
+  subheading?: T;
+  columns?: T;
+  background?: T;
+  items?:
+    | T
+    | {
+        icon?: T;
+        title?: T;
+        description?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CorporateBondsBlock_select".
+ */
+export interface CorporateBondsBlockSelect<T extends boolean = true> {
+  heading?: T;
+  subheading?: T;
+  productName?: T;
+  stats?:
+    | T
+    | {
+        label?: T;
+        value?: T;
+        id?: T;
+      };
+  benefits?:
+    | T
+    | {
+        text?: T;
+        id?: T;
+      };
+  ctaLabel?: T;
+  ctaUrl?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CultureBlock_select".
+ */
+export interface CultureBlockSelect<T extends boolean = true> {
+  heading?: T;
+  subheading?: T;
+  items?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FeatureGroupGridBlock_select".
+ */
+export interface FeatureGroupGridBlockSelect<T extends boolean = true> {
+  heading?: T;
+  subheading?: T;
+  columns?: T;
+  background?: T;
+  groups?:
+    | T
+    | {
+        title?: T;
+        items?:
+          | T
+          | {
+              text?: T;
+              id?: T;
+            };
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FileDownloadsBlock_select".
+ */
+export interface FileDownloadsBlockSelect<T extends boolean = true> {
+  heading?: T;
+  subheading?: T;
+  columns?: T;
+  columnList?:
+    | T
+    | {
+        title?: T;
+        items?:
+          | T
+          | {
+              label?: T;
+              file?: T;
+              url?: T;
+              id?: T;
+            };
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FinancialReportingBlock_select".
+ */
+export interface FinancialReportingBlockSelect<T extends boolean = true> {
+  heading?: T;
+  subheading?: T;
+  annualReports?:
+    | T
+    | {
+        year?: T;
+        file?: T;
+        id?: T;
+      };
+  quarterlyResults?:
+    | T
+    | {
+        quarter?: T;
+        file?: T;
+        url?: T;
+        id?: T;
+      };
+  investorRelations?:
+    | T
+    | {
+        text?: T;
+        url?: T;
+      };
   id?: T;
   blockName?: T;
 }
@@ -1645,6 +2020,37 @@ export interface HeroSliderBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "IconCardsBlock_select".
+ */
+export interface IconCardsBlockSelect<T extends boolean = true> {
+  heading?: T;
+  subheading?: T;
+  columns?: T;
+  background?: T;
+  iconColor?: T;
+  items?:
+    | T
+    | {
+        icon?: T;
+        title?: T;
+        description?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "MapEmbedBlock_select".
+ */
+export interface MapEmbedBlockSelect<T extends boolean = true> {
+  embedUrl?: T;
+  height?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "PageHeroBlock_select".
  */
 export interface PageHeroBlockSelect<T extends boolean = true> {
@@ -1656,9 +2062,20 @@ export interface PageHeroBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ValuesBlock_select".
+ * via the `definition` "ProductCategoriesBlock_select".
  */
-export interface ValuesBlockSelect<T extends boolean = true> {
+export interface ProductCategoriesBlockSelect<T extends boolean = true> {
+  heading?: T;
+  subheading?: T;
+  learnMoreLabel?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ServicesBlock_select".
+ */
+export interface ServicesBlockSelect<T extends boolean = true> {
   heading?: T;
   subheading?: T;
   id?: T;
@@ -1666,18 +2083,38 @@ export interface ValuesBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CultureBlock_select".
+ * via the `definition` "StatsHighlightBlock_select".
  */
-export interface CultureBlockSelect<T extends boolean = true> {
+export interface StatsHighlightBlockSelect<T extends boolean = true> {
   heading?: T;
   subheading?: T;
-  items?:
+  highlightTitle?: T;
+  stats?:
     | T
     | {
-        title?: T;
-        description?: T;
+        label?: T;
+        value?: T;
         id?: T;
       };
+  statsColumns?: T;
+  ctaLabel?: T;
+  ctaUrl?: T;
+  benefits?:
+    | T
+    | {
+        text?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ValuesBlock_select".
+ */
+export interface ValuesBlockSelect<T extends boolean = true> {
+  heading?: T;
+  subheading?: T;
   id?: T;
   blockName?: T;
 }
@@ -1700,63 +2137,6 @@ export interface WhatWeOfferBlockSelect<T extends boolean = true> {
             };
         id?: T;
       };
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "FinancialReportingBlock_select".
- */
-export interface FinancialReportingBlockSelect<T extends boolean = true> {
-  heading?: T;
-  subheading?: T;
-  annualReports?:
-    | T
-    | {
-        year?: T;
-        file?: T;
-        id?: T;
-      };
-  quarterlyResults?:
-    | T
-    | {
-        quarter?: T;
-        file?: T;
-        url?: T;
-        id?: T;
-      };
-  investorRelations?:
-    | T
-    | {
-        text?: T;
-        url?: T;
-      };
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CorporateBondsBlock_select".
- */
-export interface CorporateBondsBlockSelect<T extends boolean = true> {
-  heading?: T;
-  subheading?: T;
-  productName?: T;
-  stats?:
-    | T
-    | {
-        label?: T;
-        value?: T;
-        id?: T;
-      };
-  benefits?:
-    | T
-    | {
-        text?: T;
-        id?: T;
-      };
-  ctaLabel?: T;
-  ctaUrl?: T;
   id?: T;
   blockName?: T;
 }
@@ -1918,7 +2298,7 @@ export interface ProductsSelect<T extends boolean = true> {
 export interface ServicesSelect<T extends boolean = true> {
   title?: T;
   description?: T;
-  iconSvg?: T;
+  icon?: T;
   categories?: T;
   updatedAt?: T;
   createdAt?: T;

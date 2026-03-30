@@ -67,7 +67,7 @@ export default async function Page({ params: paramsPromise }: Args) {
       <div className="container mx-auto px-6 max-w-5xl">
         <Link
           href={`/${locale}/careers`}
-          className="text-teal-950 hover:text-teal-700 font-semibold mb-8 inline-flex items-center gap-1"
+          className="text-teal-950 hover:text-teal-800 font-semibold mb-8 inline-flex items-center gap-1"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
@@ -87,7 +87,7 @@ export default async function Page({ params: paramsPromise }: Args) {
 
             <div className="flex flex-wrap gap-3 mb-8 pb-8 border-b border-gray-100">
               {career.department && (
-                <span className="inline-flex items-center gap-1.5 bg-teal-50 text-teal-700 px-3 py-1 rounded-full text-sm font-medium">
+                <span className="inline-flex items-center gap-1.5 bg-teal-50 text-teal-800 px-3 py-1 rounded-full text-sm font-medium">
                   <svg
                     className="w-3.5 h-3.5"
                     fill="none"

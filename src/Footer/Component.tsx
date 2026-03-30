@@ -54,7 +54,7 @@ export async function Footer({ locale = 'hy' }: { locale?: string }) {
                 {contact?.address && (
                   <li className="flex items-start gap-2.5 text-gray-300">
                     <svg
-                      className="w-4 h-4 text-teal-400 mt-0.5 shrink-0"
+                      className="w-4 h-4 text-white mt-0.5 shrink-0"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -78,7 +78,7 @@ export async function Footer({ locale = 'hy' }: { locale?: string }) {
                 {contact?.phone && (
                   <li className="flex items-center gap-2.5 text-gray-300">
                     <svg
-                      className="w-4 h-4 text-teal-400 shrink-0"
+                      className="w-4 h-4 text-white shrink-0"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -96,7 +96,7 @@ export async function Footer({ locale = 'hy' }: { locale?: string }) {
                 {contact?.email && (
                   <li className="flex items-center gap-2.5 text-gray-300">
                     <svg
-                      className="w-4 h-4 text-teal-400 shrink-0"
+                      className="w-4 h-4 text-white shrink-0"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"

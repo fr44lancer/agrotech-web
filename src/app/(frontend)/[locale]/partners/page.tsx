@@ -140,7 +140,7 @@ export default async function Page({ params: paramsPromise }: Args) {
             <div className="space-y-14">
               {categoryGroups.map(({ category, partners }) => (
                 <div key={category.id}>
-                  <h3 className="text-xl font-bold text-teal-700 mb-6 pb-2 border-b border-teal-100">
+                  <h3 className="text-xl font-bold text-teal-800 mb-6 pb-2 border-b border-teal-100">
                     {category.title}
                   </h3>
                   <PartnerGrid partners={partners} visitLabel={t.visitWebsite} />
@@ -149,7 +149,7 @@ export default async function Page({ params: paramsPromise }: Args) {
               {uncategorized.length > 0 && (
                 <div>
                   {categoryGroups.length > 0 && (
-                    <h3 className="text-xl font-bold text-teal-700 mb-6 pb-2 border-b border-teal-100">
+                    <h3 className="text-xl font-bold text-teal-800 mb-6 pb-2 border-b border-teal-100">
                       {t.otherPartners}
                     </h3>
                   )}
@@ -195,7 +195,7 @@ export default async function Page({ params: paramsPromise }: Args) {
           <p className="text-green-50 text-lg mb-8">{t.becomeText}</p>
           <Link
             href={`/${locale}/contacts`}
-            className="bg-white text-teal-700 px-8 py-3 rounded-md font-semibold hover:bg-green-50 transition"
+            className="bg-white text-teal-800 px-8 py-3 rounded-md font-semibold hover:bg-green-50 transition"
           >
             {t.contactBtn}
           </Link>
@@ -259,7 +259,7 @@ function PartnerGrid({ partners, visitLabel }: { partners: Partner[]; visitLabel
                   href={partner.websiteUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-auto text-teal-950 font-semibold hover:text-teal-700 w-full rounded border border-teal-600 py-2 text-sm transition hover:bg-teal-50"
+                  className="mt-auto text-teal-950 font-semibold hover:text-teal-800 w-full rounded border border-teal-600 py-2 text-sm transition hover:bg-teal-50"
                 >
                   {visitLabel}
                 </a>

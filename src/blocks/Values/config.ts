@@ -7,6 +7,7 @@ export const ValuesBlock: Block = {
     singular: 'Our Values Section',
     plural: 'Our Values Sections',
   },
+  admin: { group: 'Special' },
   fields: [
     {
       name: 'heading',

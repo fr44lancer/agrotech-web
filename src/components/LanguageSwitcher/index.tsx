@@ -11,7 +11,13 @@ type Locale = 'en' | 'hy' | 'ru'
 // ── SVG flags (inline, work on all platforms / servers) ──────────────────────
 
 const FlagEN = () => (
-  <svg width="20" height="14" viewBox="0 0 20 14" xmlns="http://www.w3.org/2000/svg" className="rounded-sm shrink-0">
+  <svg
+    width="20"
+    height="14"
+    viewBox="0 0 20 14"
+    xmlns="http://www.w3.org/2000/svg"
+    className="rounded-sm shrink-0"
+  >
     <rect width="20" height="14" fill="#012169" />
     {/* White saltire */}
     <line x1="0" y1="0" x2="20" y2="14" stroke="#fff" strokeWidth="3.2" />
@@ -29,7 +35,13 @@ const FlagEN = () => (
 )
 
 const FlagAM = () => (
-  <svg width="20" height="14" viewBox="0 0 20 14" xmlns="http://www.w3.org/2000/svg" className="rounded-sm shrink-0">
+  <svg
+    width="20"
+    height="14"
+    viewBox="0 0 20 14"
+    xmlns="http://www.w3.org/2000/svg"
+    className="rounded-sm shrink-0"
+  >
     <rect width="20" height="4.67" y="0" fill="#D90012" />
     <rect width="20" height="4.67" y="4.67" fill="#0033A0" />
     <rect width="20" height="4.67" y="9.33" fill="#F2A800" />
@@ -37,7 +49,13 @@ const FlagAM = () => (
 )
 
 const FlagRU = () => (
-  <svg width="20" height="14" viewBox="0 0 20 14" xmlns="http://www.w3.org/2000/svg" className="rounded-sm shrink-0">
+  <svg
+    width="20"
+    height="14"
+    viewBox="0 0 20 14"
+    xmlns="http://www.w3.org/2000/svg"
+    className="rounded-sm shrink-0"
+  >
     <rect width="20" height="4.67" y="0" fill="#fff" />
     <rect width="20" height="4.67" y="4.67" fill="#1C3578" />
     <rect width="20" height="4.67" y="9.33" fill="#E4181C" />
@@ -93,7 +111,9 @@ export const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
   const items: MenuProps['items'] = locales.map((locale) => ({
     key: locale.code,
     label: (
-      <span className={`flex items-center gap-2 ${currentLocale === locale.code ? 'font-semibold text-teal-700' : ''}`}>
+      <span
+        className={`flex items-center gap-2 ${currentLocale === locale.code ? 'font-semibold text-teal-800' : ''}`}
+      >
         {flags[locale.code]}
         {locale.label}
       </span>
@@ -106,13 +126,24 @@ export const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
   if (minimal) {
     return (
       <Dropdown menu={{ items, onClick: handleMenuClick }} trigger={['click']}>
-        <button className="flex items-center gap-1.5 text-gray-700 hover:text-teal-700 transition-colors focus:outline-none px-1 py-1">
+        <button className="flex items-center gap-1.5 text-gray-700 hover:text-teal-800 transition-colors focus:outline-none px-1 py-1">
           {showFlag && (
             <span className="leading-none">{flags[(currentLocale as Locale) ?? 'hy']}</span>
           )}
           <span className="text-sm font-medium">{currentLabel}</span>
-          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" />
+          <svg
+            className="w-3 h-3"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            aria-hidden
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2.5"
+              d="M19 9l-7 7-7-7"
+            />
           </svg>
         </button>
       </Dropdown>

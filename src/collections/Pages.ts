@@ -20,6 +20,15 @@ import { PageHeroBlock } from '@/blocks/PageHero/config'
 import { WhyWorkBlock } from '@/blocks/WhyWork/config'
 import { ArticleBlock } from '@/blocks/Article/config'
 import { HeroSliderBlock } from '@/blocks/HeroSlider/config'
+import { MapEmbedBlock } from '@/blocks/MapEmbed/config'
+import { ProductCategoriesBlock } from '@/blocks/ProductCategories/config'
+import { ServicesBlock } from '@/blocks/Services/config'
+import { FileDownloadsBlock } from '@/blocks/FileDownloads/config'
+import { AccentCardGridBlock } from '@/blocks/AccentCardGrid/config'
+import { ChecklistCardsBlock } from '@/blocks/ChecklistCards/config'
+import { FeatureGroupGridBlock } from '@/blocks/FeatureGroupGrid/config'
+import { StatsHighlightBlock } from '@/blocks/StatsHighlight/config'
+import { IconCardsBlock } from '@/blocks/IconCards/config'
 import { populatePublishedAt } from '@/hooks/populatePublishedAt'
 import { revalidateDelete, revalidatePage } from '@/hooks/revalidatePage'
 import { hero } from '@/components/heros/config'
@@ -76,14 +85,23 @@ export const Pages: CollectionConfig = {
               name: 'layout',
               type: 'blocks',
               blocks: [
+                AccentCardGridBlock,
                 ArticleBlock,
-                HeroSliderBlock,
-                PageHeroBlock,
-                ValuesBlock,
-                CultureBlock,
-                WhatWeOfferBlock,
-                FinancialReportingBlock,
+                ChecklistCardsBlock,
                 CorporateBondsBlock,
+                CultureBlock,
+                FeatureGroupGridBlock,
+                FileDownloadsBlock,
+                FinancialReportingBlock,
+                HeroSliderBlock,
+                IconCardsBlock,
+                MapEmbedBlock,
+                PageHeroBlock,
+                ProductCategoriesBlock,
+                ServicesBlock,
+                StatsHighlightBlock,
+                ValuesBlock,
+                WhatWeOfferBlock,
                 WhyWorkBlock,
               ],
               required: true,

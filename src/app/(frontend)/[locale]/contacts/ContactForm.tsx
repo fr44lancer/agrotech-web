@@ -65,7 +65,7 @@ export default function ContactForm({ labels }: { labels: Labels }) {
               />
             </svg>
           </div>
-          <p className="text-teal-700 font-semibold text-lg">{labels.successMsg}</p>
+          <p className="text-teal-800 font-semibold text-lg">{labels.successMsg}</p>
         </div>
       ) : (
         <Form form={form} layout="vertical" onFinish={handleFinish} disabled={status === 'sending'}>

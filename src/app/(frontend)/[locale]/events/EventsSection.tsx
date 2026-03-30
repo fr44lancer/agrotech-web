@@ -218,9 +218,6 @@ function UpcomingCard({ event, locale, t }: { event: EventDoc; locale: string; t
         {/* Content */}
         <div className="p-6 flex flex-col flex-1">
           <div className="flex flex-wrap items-center gap-2 mb-3">
-            <span className="bg-teal-800 text-white text-xs font-semibold px-3 py-1 rounded-full">
-              {t.eventLabel}
-            </span>
             {cats.map((c: any) => (
               <span
                 key={c.id}
@@ -344,7 +341,7 @@ function PastCard({ event, locale, t }: { event: EventDoc; locale: string; t: T 
 
       {/* Content */}
       <div className="p-5 flex flex-col flex-grow">
-        <h3 className="text-base font-bold text-gray-800 mb-2 leading-snug group-hover:text-teal-700 transition-colors line-clamp-2">
+        <h3 className="text-base font-bold text-gray-800 mb-2 leading-snug group-hover:text-teal-800 transition-colors line-clamp-2">
           {event.title}
         </h3>
         {event.description && (

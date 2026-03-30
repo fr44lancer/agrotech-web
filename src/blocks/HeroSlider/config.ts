@@ -4,10 +4,12 @@ import { linkGroup } from '@/fields/linkGroup'
 export const HeroSliderBlock: Block = {
   slug: 'heroSliderBlock',
   interfaceName: 'HeroSliderBlock',
+  imageURL: '/admin/previews/layouts/pageHeader.png',
   labels: {
     singular: 'Hero Slider',
     plural: 'Hero Sliders',
   },
+  admin: { group: 'Common' },
   fields: [
     {
       name: 'slides',
