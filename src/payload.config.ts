@@ -28,12 +28,12 @@ import { ContactLocations } from '@/collections/ContactLocations'
 import { ContactSubmissions } from '@/collections/ContactSubmissions'
 import { CareerApplications } from '@/collections/CareerApplications'
 import { Tags } from '@/collections/Tags'
-
 import { ProductCategories } from '@/collections/ProductCategories'
 import { EventCategories } from '@/collections/EventCategories'
 import { CareerCategories } from '@/collections/CareerCategories'
 import { PartnerCategories } from '@/collections/PartnerCategories'
 import { ServiceCategories } from '@/collections/ServiceCategories'
+import { Brands } from './collections/Brands'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -73,6 +73,7 @@ export default buildConfig({
     ContactLocations,
     ContactSubmissions,
     CareerApplications,
+    Brands,
   ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',

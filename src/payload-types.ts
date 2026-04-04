@@ -90,6 +90,7 @@ export interface Config {
     contactLocations: ContactLocation;
     contactSubmissions: ContactSubmission;
     careerApplications: CareerApplication;
+    brands: Brand;
     'payload-kv': PayloadKv;
     'payload-jobs': PayloadJob;
     'payload-folders': FolderInterface;
@@ -126,6 +127,7 @@ export interface Config {
     contactLocations: ContactLocationsSelect<false> | ContactLocationsSelect<true>;
     contactSubmissions: ContactSubmissionsSelect<false> | ContactSubmissionsSelect<true>;
     careerApplications: CareerApplicationsSelect<false> | CareerApplicationsSelect<true>;
+    brands: BrandsSelect<false> | BrandsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
     'payload-folders': PayloadFoldersSelect<false> | PayloadFoldersSelect<true>;
@@ -809,6 +811,28 @@ export interface Product {
    */
   featured?: boolean | null;
   categories?: (string | ProductCategory)[] | null;
+  brand?: (string | Brand)[] | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "brands".
+ */
+export interface Brand {
+  id: string;
+  /**
+   * Brand name
+   */
+  title: string;
+  logo: string | Media;
+  description?: string | null;
+  websiteUrl?: string | null;
   /**
    * When enabled, the slug will auto-generate from the title field on save and autosave.
    */
@@ -1562,6 +1586,10 @@ export interface PayloadLockedDocument {
         value: string | CareerApplication;
       } | null)
     | ({
+        relationTo: 'brands';
+        value: string | Brand;
+      } | null)
+    | ({
         relationTo: 'payload-folders';
         value: string | FolderInterface;
       } | null);
@@ -2286,6 +2314,7 @@ export interface ProductsSelect<T extends boolean = true> {
   status?: T;
   featured?: T;
   categories?: T;
+  brand?: T;
   generateSlug?: T;
   slug?: T;
   updatedAt?: T;
@@ -2421,6 +2450,20 @@ export interface CareerApplicationsSelect<T extends boolean = true> {
   email?: T;
   phone?: T;
   message?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "brands_select".
+ */
+export interface BrandsSelect<T extends boolean = true> {
+  title?: T;
+  logo?: T;
+  description?: T;
+  websiteUrl?: T;
+  generateSlug?: T;
+  slug?: T;
   updatedAt?: T;
   createdAt?: T;
 }

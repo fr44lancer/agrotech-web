@@ -9,6 +9,7 @@ import {
   OverviewField,
   PreviewField,
 } from '@payloadcms/plugin-seo/fields'
+import { relationship } from 'payload/shared'
 
 export const Products: CollectionConfig = {
   slug: 'products',
@@ -211,6 +212,15 @@ export const Products: CollectionConfig = {
       name: 'categories',
       type: 'relationship',
       relationTo: 'productCategories',
+      hasMany: true,
+      admin: {
+        position: 'sidebar',
+      },
+    },
+    {
+      name: 'brand',
+      type: 'relationship',
+      relationTo: 'brands',
       hasMany: true,
       admin: {
         position: 'sidebar',
