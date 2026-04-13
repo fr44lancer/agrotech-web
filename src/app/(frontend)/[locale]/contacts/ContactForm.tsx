@@ -164,7 +164,7 @@ export default function ContactForm({ labels }: { labels: Labels }) {
                   </svg>
                 ) : undefined
               }
-              iconPosition="end"
+              iconPlacement="end"
               style={{ backgroundColor: '#0d9488', borderColor: '#0d9488', height: 52 }}
             >
               {status === 'sending' ? labels.sending : labels.send}
