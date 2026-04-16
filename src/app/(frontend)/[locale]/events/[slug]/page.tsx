@@ -112,7 +112,7 @@ export default async function EventPage({ params: paramsPromise }: Args) {
           </div>
         )}
         {!imageUrl && (
-          <div className="absolute inset-0 bg-gradient-to-br from-teal-800 to-green-900 opacity-90" />
+          <div className="absolute inset-0 bg-gradient-to-r from-teal-600 to-green-600 opacity-90" />
         )}
 
         <div className="relative container mx-auto px-6 max-w-6xl py-16 md:py-20">

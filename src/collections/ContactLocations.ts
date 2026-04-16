@@ -80,12 +80,38 @@ export const ContactLocations: CollectionConfig = {
       label: 'Email',
     },
     {
-      name: 'mapUrl',
-      type: 'text',
-      label: 'Google Maps URL',
+      name: 'maps',
+      type: 'array',
+      label: 'Map info',
       admin: {
-        description: 'Link to Google Maps for the "View on Map" button.',
+        description: 'For "View on Map" button in contacts page.',
       },
+      fields: [
+        {
+          name: 'mapType',
+          type: 'select',
+          required: true,
+          defaultValue: 'yandex',
+          label: 'Map Type',
+          options: [
+            { label: 'Yandex', value: 'yandex' },
+            { label: 'Google', value: 'google' },
+          ]
+        },
+        {
+          name: 'mapurl',
+          type: 'text',
+          required: true,
+          label: 'Url address'
+        },
+        {
+          name: 'labelText',
+          type: 'text',
+          label: "'View on Map' label",
+          defaultValue: 'Open on Map',
+          localized: true
+        },
+      ],
     },
   ],
 }

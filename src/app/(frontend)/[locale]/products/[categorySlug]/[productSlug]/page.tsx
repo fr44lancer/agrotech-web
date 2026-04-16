@@ -43,7 +43,7 @@ export default async function ProductDetailPage({ params: paramsPromise }: Args)
   const category = categoryReq.docs[0]
   const product = productReq.docs[0]
   if (!category || !product) return notFound()
-
+  console.log(product)
   const t = {
     inquire: tr.products?.inquire ?? 'Inquire About This Product',
     features: tr.products?.featuresHeading ?? 'Key Features',
@@ -53,6 +53,8 @@ export default async function ProductDetailPage({ params: paramsPromise }: Args)
     comingSoon: tr.products?.comingSoon ?? 'Coming Soon',
     discontinued: tr.products?.discontinued ?? 'Discontinued',
     featured: tr.products?.featured ?? 'Featured',
+    allproducts: tr.products?.allProducts??'All Products',
+    brand: tr.products?.brand ?? 'Brand'
   }
 
   const statusBadgeMap: Record<string, { key: 'comingSoon' | 'discontinued'; cls: string }> = {
@@ -64,6 +66,7 @@ export default async function ProductDetailPage({ params: paramsPromise }: Args)
   const features = (product.features ?? []) as any[]
   const specifications = (product.specifications ?? []) as any[]
   const documents = (product.documents ?? []) as any[]
+  const brand = (product.brand ?? []) as any[]
 
   return (
     <div className="w-full bg-white min-h-screen">
@@ -75,7 +78,7 @@ export default async function ProductDetailPage({ params: paramsPromise }: Args)
               href={`/${locale}/products`}
               className="text-teal-950 hover:text-teal-950 transition"
             >
-              Products
+              {t.allproducts}
             </Link>
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
@@ -126,14 +129,23 @@ export default async function ProductDetailPage({ params: paramsPromise }: Args)
                 {product.title}
               </h1>
 
-              {(product as any).identifier && (
-                <p className="text-sm text-gray-600  mb-4">{(product as any).identifier}</p>
-              )}
-
               {product.shortDescription && (
-                <p className="text-lg text-gray-500 mb-8 leading-relaxed">
+                <p className="text-lg text-gray-500 my-6 leading-relaxed">
                   {product.shortDescription}
                 </p>
+              )}
+
+              { brand.length > 0 && (
+                <div className="mb-8 border-b border-gray-100">
+                  <table className="w-full text-md">
+                    <tbody>
+                        <tr className='bg-gray-50'>
+                          <td className="py-2.5 px-2 font-medium w-2/5 rounded-l">{t.brand}</td>
+                          <td className="py-2.5 pl-5 text-gray-900 rounded-r">{brand[0].title}</td>
+                        </tr>
+                    </tbody>
+                  </table>
+                </div>
               )}
 
               {/* Full description */}

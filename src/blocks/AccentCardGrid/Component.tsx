@@ -3,6 +3,8 @@ import { Row, Col } from 'antd'
 import type { AccentCardGridBlock as Props } from '@/payload-types'
 
 const ACCENT_COLORS = ['#0d9488', '#16a34a', '#0f766e', '#15803d', '#0891b2', '#059669']
+const ACCENT_COLOR = '#15803d'
+const border = 'border-green-600'
 
 const COL_SPAN: Record<string, number> = { '1': 24, '2': 12, '3': 8 }
 
@@ -45,8 +47,9 @@ export const AccentCardGridBlockComponent: React.FC<Props> = ({
           {(items ?? []).map((item, i) => (
             <Col key={item.id ?? i} xs={24} sm={colSpan}>
               <div
-                className={`${cardBg} rounded-lg p-6 h-full`}
-                style={{ borderLeft: `4px solid ${ACCENT_COLORS[i % ACCENT_COLORS.length]}` }}
+                className={`${cardBg} rounded-lg p-6 h-full border-l-4 ${border}`}
+                //style={{ borderLeft: `4px solid ${ACCENT_COLORS[i % ACCENT_COLORS.length]}` }}
+                //style={{ borderLeft: `4px solid ${ACCENT_COLOR}` }}
               >
                 <h3 className="text-xl font-bold text-gray-800 mb-2">{item.title}</h3>
                 {item.description && (

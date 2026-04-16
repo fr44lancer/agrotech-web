@@ -33,7 +33,7 @@ export const StatsHighlightBlockComponent: React.FC<Props> = ({
 
         {/* Highlight card */}
         {(highlightTitle || ((stats ?? []).length > 0) || ctaUrl) && (
-          <div className="bg-gradient-to-br from-teal-800 to-gray-200 rounded-xl p-8 text-white mb-10">
+          <div className="bg-gradient-to-br from-teal-600 to-green-600 rounded-xl p-8 text-white mb-10">
             {highlightTitle && <h3 className="text-2xl font-bold mb-6">{highlightTitle}</h3>}
             {(stats ?? []).length > 0 && (
               <Row gutter={[40, 24]}>

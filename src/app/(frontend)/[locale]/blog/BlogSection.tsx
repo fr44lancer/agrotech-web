@@ -180,7 +180,7 @@ function PostCard({ post, locale, readMore }: { post: Post; locale: string; read
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           />
         ) : (
-          <div className="w-full h-full bg-gradient-to-br from-teal-50 to-green-100 flex items-center justify-center">
+          <div className="w-full h-full bg-gradient-to-br from-teal-600 to-green-600 flex items-center justify-center">
             <svg
               className="w-12 h-12 text-gray-200"
               fill="none"

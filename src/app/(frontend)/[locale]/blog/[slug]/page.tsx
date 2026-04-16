@@ -102,7 +102,7 @@ export default async function BlogPostPage({ params: paramsPromise }: Args) {
           </div>
         )}
         {!imageUrl && (
-          <div className="absolute inset-0 bg-gradient-to-br from-teal-800 to-green-900 opacity-90" />
+          <div className="absolute inset-0 bg-gradient-to-br from-teal-800 to-gray-200 opacity-90" />
         )}
 
         <div className="relative container mx-auto px-6  py-6 md:py-10">

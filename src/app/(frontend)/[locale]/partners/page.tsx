@@ -30,6 +30,7 @@ const accentColors = [
   'border-teal-700',
   'border-green-700',
 ]
+const accentColor = 'border-green-600'
 
 export const dynamic = 'force-dynamic'
 
@@ -175,7 +176,8 @@ export default async function Page({ params: paramsPromise }: Args) {
               {benefits.map((benefit, i) => (
                 <div
                   key={benefit.id}
-                  className={`bg-gray-50 rounded-lg p-6 border-l-4 ${accentColors[i % accentColors.length]}`}
+                 // className={`bg-gray-50 rounded-lg p-6 border-l-4 ${accentColors[i % accentColors.length]}`}
+                  className={`bg-gray-50 rounded-lg p-6 border-l-4 ${accentColor}`}
                 >
                   <h3 className="text-xl font-bold text-gray-800 mb-2">{benefit.title}</h3>
                   {benefit.description && (
@@ -189,7 +191,7 @@ export default async function Page({ params: paramsPromise }: Args) {
       )}
 
       {/* Become a Partner CTA */}
-      <section className="py-16 bg-gradient-to-r from-teal-600 to-green-700 text-white">
+      <section className="py-16 bg-gradient-to-r from-teal-600 to-green-600 text-white">
         <div className="container mx-auto px-6 max-w-3xl text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">{t.becomeTitle}</h2>
           <p className="text-green-50 text-lg mb-8">{t.becomeText}</p>

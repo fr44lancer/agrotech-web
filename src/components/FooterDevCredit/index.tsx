@@ -62,8 +62,8 @@ export function FooterDevCredit() {
       <span className="text-gray-600 group-hover:text-teal-800 transition-colors duration-200 font-mono text-xs">
         Made by
       </span>
-      <span className="font-mono tracking-tight text-xs">
-        {display.split('').map((ch, i) => (
+      <span className="font-mono tracking-tight text-xs text-teal-800">
+        {locked === 0 ? TARGET : display.split('').map((ch, i) => (
           <span
             key={i}
             className={i < locked ? 'text-teal-800' : 'text-gray-600 group-hover:text-gray-400'}

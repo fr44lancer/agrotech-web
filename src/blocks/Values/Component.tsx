@@ -19,6 +19,8 @@ const borderColors = [
   'border-green-700',
 ]
 
+const borderColor = 'border-green-600'
+
 export async function ValuesBlockComponent({ heading, subheading, locale = 'hy' }: Props) {
   const payload = await getPayload({ config: configPromise })
 
@@ -45,7 +47,7 @@ export async function ValuesBlockComponent({ heading, subheading, locale = 'hy' 
           {values.map((value: CompanyValue, i: number) => (
             <div
               key={value.id}
-              className={`bg-gray-50 rounded-lg p-6 border-l-4 ${borderColors[i % borderColors.length]}`}
+              className={`bg-gray-50 rounded-lg p-6 border-l-4 ${borderColor}`}
             >
               <h3 className="text-xl font-bold text-gray-800 mb-2">{value.title}</h3>
               {value.description && <p className="text-gray-600 leading-relaxed">{value.description}</p>}

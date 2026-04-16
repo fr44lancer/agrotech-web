@@ -1337,9 +1337,16 @@ export interface ContactLocation {
     | null;
   email?: string | null;
   /**
-   * Link to Google Maps for the "View on Map" button.
+   * For "View on Map" button in contacts page.
    */
-  mapUrl?: string | null;
+  maps?:
+    | {
+        mapType: 'yandex' | 'google';
+        mapurl: string;
+        labelText?: string | null;
+        id?: string | null;
+      }[]
+    | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -2421,7 +2428,14 @@ export interface ContactLocationsSelect<T extends boolean = true> {
         id?: T;
       };
   email?: T;
-  mapUrl?: T;
+  maps?:
+    | T
+    | {
+        mapType?: T;
+        mapurl?: T;
+        labelText?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }
@@ -2637,6 +2651,10 @@ export interface Footer {
   contact?: {
     columnLabel?: string | null;
     address?: string | null;
+    /**
+     * Paste the iframe src URL from Yandex Maps (Share → Embed → copy only the src="..." value).
+     */
+    addressUrl?: string | null;
     phone?: string | null;
     email?: string | null;
   };
@@ -2687,6 +2705,7 @@ export interface Footer {
     | {
         platform: 'facebook' | 'instagram' | 'linkedin' | 'youtube' | 'twitter' | 'telegram' | 'whatsapp';
         url: string;
+        icon: string;
         id?: string | null;
       }[]
     | null;
@@ -2819,6 +2838,7 @@ export interface SiteTranslation {
   };
   products?: {
     allCategories?: string | null;
+    allProducts?: string | null;
     viewProducts?: string | null;
     contactBtn?: string | null;
     noProducts?: string | null;
@@ -2831,6 +2851,7 @@ export interface SiteTranslation {
     documentsHeading?: string | null;
     download?: string | null;
     inquire?: string | null;
+    brand?: string | null;
   };
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -2884,6 +2905,7 @@ export interface FooterSelect<T extends boolean = true> {
     | {
         columnLabel?: T;
         address?: T;
+        addressUrl?: T;
         phone?: T;
         email?: T;
       };
@@ -2911,6 +2933,7 @@ export interface FooterSelect<T extends boolean = true> {
     | {
         platform?: T;
         url?: T;
+        icon?: T;
         id?: T;
       };
   copyrightSuffix?: T;
@@ -3045,6 +3068,7 @@ export interface SiteTranslationsSelect<T extends boolean = true> {
     | T
     | {
         allCategories?: T;
+        allProducts?: T;
         viewProducts?: T;
         contactBtn?: T;
         noProducts?: T;
@@ -3057,6 +3081,7 @@ export interface SiteTranslationsSelect<T extends boolean = true> {
         documentsHeading?: T;
         download?: T;
         inquire?: T;
+        brand?: T;
       };
   updatedAt?: T;
   createdAt?: T;
