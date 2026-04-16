@@ -43,8 +43,8 @@ export default async function ProductDetailPage({ params: paramsPromise }: Args)
   const category = categoryReq.docs[0]
   const product = productReq.docs[0]
   if (!category || !product) return notFound()
-  console.log(product)
-  const t = {
+
+    const t = {
     inquire: tr.products?.inquire ?? 'Inquire About This Product',
     features: tr.products?.featuresHeading ?? 'Key Features',
     specs: tr.products?.specsHeading ?? 'Specifications',
