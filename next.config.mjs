@@ -29,6 +29,10 @@ const nextConfig = {
         hostname: 'agrotech.elvs.dev',
       },
       {
+        protocol: 'https',
+        hostname: '*.vercel.app',
+      },
+      {
         protocol: 'http',
         hostname: 'localhost',
         port: '3000',
