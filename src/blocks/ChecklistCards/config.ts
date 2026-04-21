@@ -48,6 +48,7 @@ export const ChecklistCardsBlock: Block = {
       name: 'items',
       type: 'array',
       label: 'Items',
+      localized: true,
       minRows: 1,
       fields: [
         {
@@ -65,13 +66,11 @@ export const ChecklistCardsBlock: Block = {
           name: 'title',
           type: 'text',
           required: true,
-          localized: true,
           label: 'Title',
         },
         {
           name: 'description',
           type: 'textarea',
-          localized: true,
           label: 'Description',
         },
       ],

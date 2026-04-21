@@ -15,6 +15,7 @@ export const HeroSliderBlock: Block = {
       name: 'slides',
       type: 'array',
       label: 'Slides',
+      localized: true,
       minRows: 1,
       maxRows: 5,
       admin: {
@@ -35,19 +36,16 @@ export const HeroSliderBlock: Block = {
           name: 'title',
           type: 'text',
           label: 'Title',
-          localized: true,
         },
         {
           name: 'slogan',
           type: 'text',
           label: 'Slogan / Subtitle',
-          localized: true,
         },
         {
           name: 'features',
           type: 'array',
           label: 'Features',
-          localized: true,
           admin: {
             description: 'Bullet-point features shown below the slogan.',
             initCollapsed: true,
