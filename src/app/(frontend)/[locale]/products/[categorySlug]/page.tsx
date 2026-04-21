@@ -14,6 +14,13 @@ type Args = {
   }>
 }
 
+function str(value: any, locale: string): string {
+  if (!value) return ''
+  if (typeof value === 'string') return value
+  if (typeof value === 'object' && !Array.isArray(value)) return value[locale] ?? value['hy'] ?? Object.values(value)[0] ?? ''
+  return String(value)
+}
+
 export default async function CategoryProductsPage({ params: paramsPromise }: Args) {
   const { locale = 'hy', categorySlug } = await paramsPromise
   if (!categorySlug) return notFound()
@@ -61,9 +68,9 @@ export default async function CategoryProductsPage({ params: paramsPromise }: Ar
       {/* Category hero */}
       <section className="bg-gradient-to-r from-teal-700 to-gray-200 text-white py-16">
         <div className="container mx-auto px-6 max-w-7xl">
-          <h1 className="text-4xl md:text-5xl font-bold mb-3">{category.title}</h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-3">{str(category.title, locale)}</h1>
           {(category as any).description && (
-            <p className="text-xl text-green-50">{(category as any).description}</p>
+            <p className="text-xl text-green-50">{str((category as any).description, locale)}</p>
           )}
         </div>
       </section>
@@ -98,7 +105,7 @@ export default async function CategoryProductsPage({ params: paramsPromise }: Ar
                     : 'bg-white text-gray-600 border border-gray-200 hover:border-teal-400'
                 }`}
               >
-                {cat.title}
+                {str(cat.title, locale)}
               </Link>
             ))}
           </div>
@@ -122,7 +129,7 @@ export default async function CategoryProductsPage({ params: paramsPromise }: Ar
                       {imageUrl ? (
                         <img
                           src={imageUrl}
-                          alt={product.title}
+                          alt={str(product.title, locale)}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         />
                       ) : (
@@ -162,11 +169,11 @@ export default async function CategoryProductsPage({ params: paramsPromise }: Ar
                     {/* Content */}
                     <div className="p-5 flex flex-col flex-grow">
                       <h3 className="text-lg font-bold text-gray-800 mb-2 group-hover:text-teal-950 transition-colors leading-snug">
-                        {product.title}
+                        {str(product.title, locale)}
                       </h3>
                       {product.shortDescription && (
                         <p className="text-sm text-gray-500 line-clamp-2 flex-grow">
-                          {product.shortDescription}
+                          {str(product.shortDescription, locale)}
                         </p>
                       )}
                       <div className="flex items-center gap-1 text-teal-950 text-sm font-semibold mt-4">

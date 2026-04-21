@@ -9,6 +9,13 @@ type Props = {
   locale?: string
 }
 
+function str(value: any, locale: string): string {
+  if (!value) return ''
+  if (typeof value === 'string') return value
+  if (typeof value === 'object') return value[locale] ?? value['hy'] ?? Object.values(value)[0] ?? ''
+  return String(value)
+}
+
 export async function ServicesBlockComponent({ heading, subheading, locale = 'hy' }: Props) {
   const payload = await getPayload({ config: configPromise })
   const { docs: services } = await payload.find({
@@ -23,10 +30,10 @@ export async function ServicesBlockComponent({ heading, subheading, locale = 'hy
         {(heading || subheading) && (
           <div className="text-center mb-16">
             {heading && (
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">{heading}</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">{str(heading, locale)}</h2>
             )}
             {subheading && (
-              <p className="text-gray-600 text-lg max-w-3xl mx-auto">{subheading}</p>
+              <p className="text-gray-600 text-lg max-w-3xl mx-auto">{str(subheading, locale)}</p>
             )}
           </div>
         )}

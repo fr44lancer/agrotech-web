@@ -17,6 +17,13 @@ type Args = {
   }>
 }
 
+function str(value: any, locale: string): string {
+  if (!value) return ''
+  if (typeof value === 'string') return value
+  if (typeof value === 'object' && !Array.isArray(value)) return value[locale] ?? value['hy'] ?? Object.values(value)[0] ?? ''
+  return String(value)
+}
+
 export default async function ProductsPage({
   params: paramsPromise,
   searchParams: searchParamsPromise,
@@ -133,11 +140,11 @@ export default async function ProductsPage({
 
                   <div className="p-6 flex flex-col flex-1">
                     <h3 className="text-2xl font-bold text-gray-800 mb-2 group-hover:text-teal-950 transition-colors">
-                      {category.title}
+                      {str(category.title, locale)}
                     </h3>
                     {category.description && (
                       <p className="text-gray-500 text-sm line-clamp-2 flex-1">
-                        {category.description}
+                        {str(category.description, locale)}
                       </p>
                     )}
                     <div className="flex items-center text-teal-950 font-medium opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 mt-4">

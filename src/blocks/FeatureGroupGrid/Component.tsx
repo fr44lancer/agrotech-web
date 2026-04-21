@@ -1,6 +1,15 @@
 import React from 'react'
 import { Row, Col } from 'antd'
-import type { FeatureGroupGridBlock as Props } from '@/payload-types'
+import type { FeatureGroupGridBlock } from '@/payload-types'
+
+type Props = FeatureGroupGridBlock & { locale?: string }
+
+function str(value: any, locale: string): string {
+  if (!value) return ''
+  if (typeof value === 'string') return value
+  if (typeof value === 'object') return value[locale] ?? value['hy'] ?? Object.values(value)[0] ?? ''
+  return String(value)
+}
 
 const COL_SPAN: Record<string, number> = { '1': 24, '2': 12, '3': 8 }
 
@@ -20,6 +29,7 @@ export const FeatureGroupGridBlockComponent: React.FC<Props> = ({
   columns = '2',
   background = 'white',
   groups,
+  locale = 'hy',
 }) => {
   const colSpan = COL_SPAN[columns ?? '2'] ?? 12
   const sectionBg = SECTION_BG[background ?? 'white'] ?? 'bg-white'
@@ -31,10 +41,10 @@ export const FeatureGroupGridBlockComponent: React.FC<Props> = ({
         {(heading || subheading) && (
           <div className="text-center mb-12">
             {heading && (
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">{heading}</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">{str(heading, locale)}</h2>
             )}
             {subheading && (
-              <p className="text-gray-600 text-lg max-w-2xl mx-auto">{subheading}</p>
+              <p className="text-gray-600 text-lg max-w-2xl mx-auto">{str(subheading, locale)}</p>
             )}
           </div>
         )}
@@ -46,7 +56,7 @@ export const FeatureGroupGridBlockComponent: React.FC<Props> = ({
                 className={`${cardBg} rounded-lg p-6 border border-gray-100 h-full w-full`}
               >
                 <h3 className="text-xl font-bold text-gray-800 mb-4 pb-3 border-b border-teal-900">
-                  {group.title}
+                  {str(group.title, locale)}
                 </h3>
                 {group.items && group.items.length > 0 && (
                   <ul className="space-y-2">
@@ -63,7 +73,7 @@ export const FeatureGroupGridBlockComponent: React.FC<Props> = ({
                             clipRule="evenodd"
                           />
                         </svg>
-                        <span className="text-gray-600">{item.text}</span>
+                        <span className="text-gray-600">{str(item.text, locale)}</span>
                       </li>
                     ))}
                   </ul>

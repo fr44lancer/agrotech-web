@@ -3,10 +3,20 @@ import type { WhatWeOfferBlock as WhatWeOfferBlockProps } from '@/payload-types'
 import { Col, Row } from 'antd'
 import BaseWrapper from '@/components/ui/Containers/BaseContainer'
 
-export const WhatWeOfferBlockComponent: React.FC<WhatWeOfferBlockProps> = ({
+type Props = WhatWeOfferBlockProps & { locale?: string }
+
+function str(value: any, locale: string): string {
+  if (!value) return ''
+  if (typeof value === 'string') return value
+  if (typeof value === 'object') return value[locale] ?? value['hy'] ?? Object.values(value)[0] ?? ''
+  return String(value)
+}
+
+export const WhatWeOfferBlockComponent: React.FC<Props> = ({
   heading,
   subheading,
   categories,
+  locale = 'hy',
 }) => {
   return (
     <section className="py-16 bg-white">
@@ -14,9 +24,9 @@ export const WhatWeOfferBlockComponent: React.FC<WhatWeOfferBlockProps> = ({
         {(heading || subheading) && (
           <div className="text-center mb-12">
             {heading && (
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">{heading}</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">{str(heading, locale)}</h2>
             )}
-            {subheading && <p className="text-gray-600 text-lg max-w-2xl mx-auto">{subheading}</p>}
+            {subheading && <p className="text-gray-600 text-lg max-w-2xl mx-auto">{str(subheading, locale)}</p>}
           </div>
         )}
 
@@ -26,7 +36,7 @@ export const WhatWeOfferBlockComponent: React.FC<WhatWeOfferBlockProps> = ({
               <Col xs={24} md={12} key={cat.id ?? i}>
                 <BaseWrapper className="bg-gray-50 rounded-lg p-6 border border-gray-100 h-full">
                   <h3 className="text-xl font-bold text-gray-800 mb-4 pb-3 border-b border-teal-900">
-                    {cat.title}
+                    {str(cat.title, locale)}
                   </h3>
                   {cat.items && cat.items.length > 0 && (
                     <ul className="space-y-2">
@@ -43,7 +53,7 @@ export const WhatWeOfferBlockComponent: React.FC<WhatWeOfferBlockProps> = ({
                               clipRule="evenodd"
                             />
                           </svg>
-                          <span className="text-gray-600">{item.text}</span>
+                          <span className="text-gray-600">{str(item.text, locale)}</span>
                         </li>
                       ))}
                     </ul>

@@ -1,7 +1,15 @@
 'use client'
 import React from 'react'
+import { useParams } from 'next/navigation'
 import { Row, Col } from 'antd'
 import type { FileDownloadsBlock as FileDownloadsBlockProps } from '@/payload-types'
+
+function str(value: any, locale: string): string {
+  if (!value) return ''
+  if (typeof value === 'string') return value
+  if (typeof value === 'object') return value[locale] ?? value['hy'] ?? Object.values(value)[0] ?? ''
+  return String(value)
+}
 
 const COL_SPAN: Record<string, number> = {
   '1': 24,
@@ -67,6 +75,8 @@ export const FileDownloadsBlockComponent: React.FC<FileDownloadsBlockProps> = ({
   columns = '2',
   columnList,
 }) => {
+  const params = useParams()
+  const locale = (params?.locale as string) || 'hy'
   const colSpan = COL_SPAN[columns ?? '2'] ?? 12
 
   return (
@@ -75,10 +85,10 @@ export const FileDownloadsBlockComponent: React.FC<FileDownloadsBlockProps> = ({
         {(heading || subheading) && (
           <div className="text-center mb-12">
             {heading && (
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">{heading}</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">{str(heading, locale)}</h2>
             )}
             {subheading && (
-              <p className="text-gray-600 text-lg max-w-2xl mx-auto">{subheading}</p>
+              <p className="text-gray-600 text-lg max-w-2xl mx-auto">{str(subheading, locale)}</p>
             )}
           </div>
         )}
@@ -91,7 +101,7 @@ export const FileDownloadsBlockComponent: React.FC<FileDownloadsBlockProps> = ({
                 <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100 flex flex-col w-full">
                   {col.title && (
                     <h3 className="text-xl font-bold text-gray-800 mb-4 pb-3 border-b border-gray-100">
-                      {col.title}
+                      {str(col.title, locale)}
                     </h3>
                   )}
                   <div className="flex flex-col gap-3 flex-1">
@@ -107,7 +117,7 @@ export const FileDownloadsBlockComponent: React.FC<FileDownloadsBlockProps> = ({
                           key={item.id ?? itemIdx}
                           className="flex items-center justify-between gap-4 py-2 border-b border-gray-50 last:border-0"
                         >
-                          <span className="text-gray-700 text-sm leading-snug">{item.label}</span>
+                          <span className="text-gray-700 text-sm leading-snug">{str(item.label, locale)}</span>
                           {resolvedUrl && <FileActions url={resolvedUrl} />}
                         </div>
                       )

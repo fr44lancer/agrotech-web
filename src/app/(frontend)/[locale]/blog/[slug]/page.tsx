@@ -13,6 +13,13 @@ type Args = {
   params: Promise<{ slug: string; locale?: string }>
 }
 
+function str(value: any, locale: string): string {
+  if (!value) return ''
+  if (typeof value === 'string') return value
+  if (typeof value === 'object' && !Array.isArray(value)) return value[locale] ?? value['hy'] ?? Object.values(value)[0] ?? ''
+  return String(value)
+}
+
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
   const posts = await payload.find({
@@ -128,14 +135,14 @@ export default async function BlogPostPage({ params: paramsPromise }: Args) {
                   key={c.id}
                   className="bg-white/20 text-white text-xs font-medium px-3 py-1 rounded-full backdrop-blur-sm"
                 >
-                  {c.title}
+                  {str(c.title, locale)}
                 </span>
               ))}
             </div>
           )}
 
           <h1 className="text-3xl md:text-5xl font-bold mb-5 leading-tight max-w-3xl">
-            {post.title as string}
+            {str(post.title, locale)}
           </h1>
 
           {dateStr && <p className="text-gray-200 text-sm">{dateStr}</p>}
@@ -157,7 +164,7 @@ export default async function BlogPostPage({ params: paramsPromise }: Args) {
                     key={tag.id}
                     className="px-3 py-1 bg-teal-50 text-teal-800 text-sm rounded-full border border-teal-100"
                   >
-                    #{tag.title}
+                    #{str(tag.title, locale)}
                   </span>
                 ))}
               </div>
@@ -182,14 +189,14 @@ export default async function BlogPostPage({ params: paramsPromise }: Args) {
                         <div className="h-36 overflow-hidden">
                           <img
                             src={relImg}
-                            alt={p.title}
+                            alt={str(p.title, locale)}
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                           />
                         </div>
                       )}
                       <div className="p-4">
                         <h3 className="text-sm font-semibold text-gray-800 line-clamp-2 group-hover:text-teal-800 transition-colors">
-                          {p.title}
+                          {str(p.title, locale)}
                         </h3>
                         <span className="mt-2 inline-flex items-center gap-1 text-teal-600 text-xs font-medium">
                           {t.readMore} →

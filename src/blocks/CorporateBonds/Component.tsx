@@ -1,8 +1,17 @@
 import React from 'react'
 import Link from 'next/link'
-import type { CorporateBondsBlock as CorporateBondsBlockProps } from '@/payload-types'
+import type { CorporateBondsBlock } from '@/payload-types'
 import { Col, Row } from 'antd'
 import BaseWrapper from '@/components/ui/Containers/BaseContainer'
+
+type CorporateBondsBlockProps = CorporateBondsBlock & { locale?: string }
+
+function str(value: any, locale: string): string {
+  if (!value) return ''
+  if (typeof value === 'string') return value
+  if (typeof value === 'object') return value[locale] ?? value['hy'] ?? Object.values(value)[0] ?? ''
+  return String(value)
+}
 
 export const CorporateBondsBlockComponent: React.FC<CorporateBondsBlockProps> = ({
   heading,
@@ -12,6 +21,7 @@ export const CorporateBondsBlockComponent: React.FC<CorporateBondsBlockProps> = 
   benefits,
   ctaLabel,
   ctaUrl,
+  locale = 'hy',
 }) => {
   return (
     <section className="py-16 bg-white">
@@ -20,10 +30,10 @@ export const CorporateBondsBlockComponent: React.FC<CorporateBondsBlockProps> = 
           {(heading || subheading) && (
             <Col xs={24} className="text-center mb-12">
               {heading && (
-                <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">{heading}</h2>
+                <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">{str(heading, locale)}</h2>
               )}
               {subheading && (
-                <p className="text-gray-600 text-lg max-w-2xl mx-auto">{subheading}</p>
+                <p className="text-gray-600 text-lg max-w-2xl mx-auto">{str(subheading, locale)}</p>
               )}
             </Col>
           )}
@@ -31,14 +41,14 @@ export const CorporateBondsBlockComponent: React.FC<CorporateBondsBlockProps> = 
           <Col xs={24}>
             {/* Product details */}
             <div className="bg-gradient-to-br from-teal-800 to-gray-200 rounded-xl p-8 text-white">
-              {productName && <h3 className="text-2xl font-bold mb-6">{productName}</h3>}
+              {productName && <h3 className="text-2xl font-bold mb-6">{str(productName, locale)}</h3>}
               {stats && stats.length > 0 && (
                 <Row gutter={[40, 24]}>
                   {stats.map((stat, i) => (
                     <Col xs={24} md={8} key={stat.id ?? i}>
                       <BaseWrapper className={'bg-gray-400/70 p-6 rounded-lg h-full'}>
-                        <p className="text-white">{stat.label}</p>
-                        <p className="text-2xl font-bold">{stat.value}</p>
+                        <p className="text-white">{str(stat.label, locale)}</p>
+                        <p className="text-2xl font-bold">{str(stat.value, locale)}</p>
                       </BaseWrapper>
                     </Col>
                   ))}
@@ -49,7 +59,7 @@ export const CorporateBondsBlockComponent: React.FC<CorporateBondsBlockProps> = 
                   href={ctaUrl}
                   className="inline-block mt-6 bg-white text-teal-800 px-6 py-3 rounded-md font-semibold hover:bg-green-50 transition"
                 >
-                  {ctaLabel || 'Learn More'}
+                  {str(ctaLabel, locale) || 'Learn More'}
                 </Link>
               )}
             </div>
@@ -76,7 +86,7 @@ export const CorporateBondsBlockComponent: React.FC<CorporateBondsBlockProps> = 
                             />
                           </svg>
                         </div>
-                        <span className="text-gray-700 leading-relaxed">{benefit.text}</span>
+                        <span className="text-gray-700 leading-relaxed">{str(benefit.text, locale)}</span>
                       </li>
                     ))}
                   </ul>

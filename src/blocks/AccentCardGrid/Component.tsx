@@ -1,6 +1,15 @@
 import React from 'react'
 import { Row, Col } from 'antd'
-import type { AccentCardGridBlock as Props } from '@/payload-types'
+import type { AccentCardGridBlock } from '@/payload-types'
+
+type Props = AccentCardGridBlock & { locale?: string }
+
+function str(value: any, locale: string): string {
+  if (!value) return ''
+  if (typeof value === 'string') return value
+  if (typeof value === 'object') return value[locale] ?? value['hy'] ?? Object.values(value)[0] ?? ''
+  return String(value)
+}
 
 const ACCENT_COLORS = ['#0d9488', '#16a34a', '#0f766e', '#15803d', '#0891b2', '#059669']
 const ACCENT_COLOR = '#15803d'
@@ -24,6 +33,7 @@ export const AccentCardGridBlockComponent: React.FC<Props> = ({
   columns = '3',
   background = 'white',
   items,
+  locale = 'hy',
 }) => {
   const colSpan = COL_SPAN[columns ?? '3'] ?? 8
   const sectionBg = SECTION_BG[background ?? 'white'] ?? 'bg-white'
@@ -35,10 +45,10 @@ export const AccentCardGridBlockComponent: React.FC<Props> = ({
         {(heading || subheading) && (
           <div className="text-center mb-12">
             {heading && (
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">{heading}</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">{str(heading, locale)}</h2>
             )}
             {subheading && (
-              <p className="text-gray-600 text-lg max-w-2xl mx-auto">{subheading}</p>
+              <p className="text-gray-600 text-lg max-w-2xl mx-auto">{str(subheading, locale)}</p>
             )}
           </div>
         )}
@@ -51,9 +61,9 @@ export const AccentCardGridBlockComponent: React.FC<Props> = ({
                 //style={{ borderLeft: `4px solid ${ACCENT_COLORS[i % ACCENT_COLORS.length]}` }}
                 //style={{ borderLeft: `4px solid ${ACCENT_COLOR}` }}
               >
-                <h3 className="text-xl font-bold text-gray-800 mb-2">{item.title}</h3>
+                <h3 className="text-xl font-bold text-gray-800 mb-2">{str(item.title, locale)}</h3>
                 {item.description && (
-                  <p className="text-gray-600 leading-relaxed">{item.description}</p>
+                  <p className="text-gray-600 leading-relaxed">{str(item.description, locale)}</p>
                 )}
               </div>
             </Col>

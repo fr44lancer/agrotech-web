@@ -11,14 +11,21 @@ import { getIconComponent } from '@/components/IconPicker/AllIcons'
 import { ICON_COMPONENTS } from '@/components/IconPicker/iconComponents'
 import Icon from '@ant-design/icons'
 
+function str(value: any, locale: string): string {
+  if (!value) return ''
+  if (typeof value === 'string') return value
+  if (typeof value === 'object' && !Array.isArray(value)) return value[locale] ?? value['hy'] ?? Object.values(value)[0] ?? ''
+  return String(value)
+}
+
 export async function Footer({ locale = 'hy' }: { locale?: string }) {
   const footerData: Footer = await getCachedGlobal('footer', 1, locale)()
 
-  const companyName = footerData?.companyName || 'AGROTECH LLC'
-  const companyTagline = footerData?.companyTagline || ''
+  const companyName = str(footerData?.companyName, locale) || 'AGROTECH LLC'
+  const companyTagline = str(footerData?.companyTagline, locale) || ''
   const contact = footerData?.contact
   const navColumns = footerData?.navColumns || []
-  const copyrightSuffix =  (footerData as any)?.copyrightSuffix || `${companyName}.All rights reserved.`
+  const copyrightSuffix = str((footerData as any)?.copyrightSuffix, locale) || `${companyName}. All rights reserved.`
   const copyrightText = `© ${new Date().getFullYear()} ${copyrightSuffix}`
   const socialLinks = footerData?.socialLinks
 
@@ -52,7 +59,7 @@ export async function Footer({ locale = 'hy' }: { locale?: string }) {
           {(contact?.columnLabel || contact?.address || contact?.phone || contact?.email) && (
             <Col xs={24} md={6}>
               {contact.columnLabel && (
-                <h4 className="font-semibold text-white mb-4">{contact.columnLabel}</h4>
+                <h4 className="font-semibold text-white mb-4">{str(contact.columnLabel, locale)}</h4>
               )}
               <ul className="space-y-3 text-sm mb-4">
                 {contact?.address && (
@@ -82,8 +89,8 @@ export async function Footer({ locale = 'hy' }: { locale?: string }) {
                       target='_blank'
                       className="text-gray-300 hover:text-white transition inline-block text-sm"
                       >
-                        <span >
-                          {contact.address}
+                        <span>
+                          {str(contact.address, locale)}
                         </span>
                     </a>
                     )}
@@ -105,10 +112,10 @@ export async function Footer({ locale = 'hy' }: { locale?: string }) {
                       />
                     </svg>
                       <a
-                        href={`tel:${contact.phone}`}
+                        href={`tel:${str(contact.phone, locale)}`}
                         className="text-gray-300 hover:text-white transition inline-block text-sm"
                       >
-                        {contact.phone}
+                        {str(contact.phone, locale)}
                       </a>                      
                   </li>
                 )}
@@ -127,7 +134,7 @@ export async function Footer({ locale = 'hy' }: { locale?: string }) {
                         d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
                       />
                     </svg>
-                    <p className="hover:text-white transition">{contact.email}</p>
+                    <p className="hover:text-white transition">{str(contact.email, locale)}</p>
                   </li>
                 )}
               </ul>

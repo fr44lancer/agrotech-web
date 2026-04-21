@@ -14,14 +14,29 @@ const heroes: Record<string, React.FC<any>> = {
   mediumImpact: MediumImpactHero,
 }
 
-export const RenderHero: React.FC<Page['hero']> = (props) => {
-  const { type } = props || {}
+/** Resolve a Payload locale object {hy, en, ru} to the requested locale's value. */
+function resolveLocale<T>(value: T, locale: string): T {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return value
+  const v = value as Record<string, unknown>
+  if ('hy' in v || 'en' in v || 'ru' in v) {
+    return (v[locale] ?? v['hy'] ?? v['en'] ?? v['ru'] ?? null) as T
+  }
+  return value
+}
+
+type RenderHeroProps = Page['hero'] & { locale?: string }
+
+export const RenderHero: React.FC<RenderHeroProps> = (props) => {
+  const { locale = 'hy', ...rest } = props || {}
+  const type = resolveLocale(rest.type, locale)
 
   if (!type || type === 'none') return null
 
   const HeroToRender = heroes[type]
-
   if (!HeroToRender) return null
 
-  return <HeroToRender {...props} />
+  // Resolve richText locale object before passing to the hero component
+  const richText = resolveLocale((rest as any).richText, locale)
+
+  return <HeroToRender {...rest} richText={richText} />
 }
