@@ -48,13 +48,13 @@ export const FeatureGroupGridBlock: Block = {
       name: 'groups',
       type: 'array',
       label: 'Groups',
+      localized: true,
       minRows: 1,
       fields: [
         {
           name: 'title',
           type: 'text',
           required: true,
-          localized: true,
           label: 'Group Title',
         },
         {
@@ -67,7 +67,6 @@ export const FeatureGroupGridBlock: Block = {
               name: 'text',
               type: 'text',
               required: true,
-              localized: true,
               label: 'Item Text',
             },
           ],

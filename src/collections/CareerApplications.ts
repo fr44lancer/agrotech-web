@@ -12,6 +12,8 @@ export const CareerApplications: CollectionConfig = {
     useAsTitle: 'name',
     defaultColumns: ['name', 'email', 'career', 'createdAt'],
     description: 'Applications submitted via the Apply Now form.',
+    listSearchableFields: ['name', 'email','career','phone','message'],
+
   },
   access: {
     create: () => true,

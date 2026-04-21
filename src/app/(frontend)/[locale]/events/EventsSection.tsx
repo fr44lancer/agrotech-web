@@ -184,7 +184,7 @@ function UpcomingCard({ event, locale, t }: { event: EventDoc; locale: string; t
     <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-md transition-shadow">
       <div className="flex flex-col md:flex-row">
         {/* Image */}
-        <div className="relative md:w-72 lg:w-80 shrink-0 h-52 md:h-auto bg-gradient-to-br from-teal-600 to-green-700 overflow-hidden">
+        <div className="relative md:w-72 lg:w-80 shrink-0 h-52 md:h-auto bg-gradient-to-br from-teal-700 to-green-200 overflow-hidden">
           {imageUrl ? (
             <img src={imageUrl} alt={event.title} className="w-full h-full object-cover" />
           ) : (

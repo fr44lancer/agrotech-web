@@ -48,19 +48,18 @@ export const AccentCardGridBlock: Block = {
       name: 'items',
       type: 'array',
       label: 'Cards',
+      localized: true,
       minRows: 1,
       fields: [
         {
           name: 'title',
           type: 'text',
           required: true,
-          localized: true,
           label: 'Title',
         },
         {
           name: 'description',
           type: 'textarea',
-          localized: true,
           label: 'Description',
         },
       ],

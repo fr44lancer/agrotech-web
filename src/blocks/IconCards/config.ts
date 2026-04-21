@@ -61,6 +61,7 @@ export const IconCardsBlock: Block = {
       name: 'items',
       type: 'array',
       label: 'Cards',
+      localized: true,
       minRows: 1,
       fields: [
         {
@@ -78,13 +79,11 @@ export const IconCardsBlock: Block = {
           name: 'title',
           type: 'text',
           required: true,
-          localized: true,
           label: 'Title',
         },
         {
           name: 'description',
           type: 'text',
-          localized: true,
           label: 'Description',
         },
       ],

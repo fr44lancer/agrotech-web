@@ -90,6 +90,7 @@ export interface Config {
     contactLocations: ContactLocation;
     contactSubmissions: ContactSubmission;
     careerApplications: CareerApplication;
+    brands: Brand;
     'payload-kv': PayloadKv;
     'payload-jobs': PayloadJob;
     'payload-folders': FolderInterface;
@@ -126,6 +127,7 @@ export interface Config {
     contactLocations: ContactLocationsSelect<false> | ContactLocationsSelect<true>;
     contactSubmissions: ContactSubmissionsSelect<false> | ContactSubmissionsSelect<true>;
     careerApplications: CareerApplicationsSelect<false> | CareerApplicationsSelect<true>;
+    brands: BrandsSelect<false> | BrandsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
     'payload-folders': PayloadFoldersSelect<false> | PayloadFoldersSelect<true>;
@@ -809,6 +811,28 @@ export interface Product {
    */
   featured?: boolean | null;
   categories?: (string | ProductCategory)[] | null;
+  brand?: (string | Brand)[] | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "brands".
+ */
+export interface Brand {
+  id: string;
+  /**
+   * Brand name
+   */
+  title: string;
+  logo: string | Media;
+  description?: string | null;
+  websiteUrl?: string | null;
   /**
    * When enabled, the slug will auto-generate from the title field on save and autosave.
    */
@@ -1313,9 +1337,16 @@ export interface ContactLocation {
     | null;
   email?: string | null;
   /**
-   * Link to Google Maps for the "View on Map" button.
+   * For "View on Map" button in contacts page.
    */
-  mapUrl?: string | null;
+  maps?:
+    | {
+        mapType: 'yandex' | 'google';
+        mapurl: string;
+        labelText?: string | null;
+        id?: string | null;
+      }[]
+    | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1560,6 +1591,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'careerApplications';
         value: string | CareerApplication;
+      } | null)
+    | ({
+        relationTo: 'brands';
+        value: string | Brand;
       } | null)
     | ({
         relationTo: 'payload-folders';
@@ -2286,6 +2321,7 @@ export interface ProductsSelect<T extends boolean = true> {
   status?: T;
   featured?: T;
   categories?: T;
+  brand?: T;
   generateSlug?: T;
   slug?: T;
   updatedAt?: T;
@@ -2392,7 +2428,14 @@ export interface ContactLocationsSelect<T extends boolean = true> {
         id?: T;
       };
   email?: T;
-  mapUrl?: T;
+  maps?:
+    | T
+    | {
+        mapType?: T;
+        mapurl?: T;
+        labelText?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }
@@ -2421,6 +2464,20 @@ export interface CareerApplicationsSelect<T extends boolean = true> {
   email?: T;
   phone?: T;
   message?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "brands_select".
+ */
+export interface BrandsSelect<T extends boolean = true> {
+  title?: T;
+  logo?: T;
+  description?: T;
+  websiteUrl?: T;
+  generateSlug?: T;
+  slug?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -2594,6 +2651,10 @@ export interface Footer {
   contact?: {
     columnLabel?: string | null;
     address?: string | null;
+    /**
+     * Paste the iframe src URL from Yandex Maps (Share → Embed → copy only the src="..." value).
+     */
+    addressUrl?: string | null;
     phone?: string | null;
     email?: string | null;
   };
@@ -2644,6 +2705,7 @@ export interface Footer {
     | {
         platform: 'facebook' | 'instagram' | 'linkedin' | 'youtube' | 'twitter' | 'telegram' | 'whatsapp';
         url: string;
+        icon: string;
         id?: string | null;
       }[]
     | null;
@@ -2776,6 +2838,7 @@ export interface SiteTranslation {
   };
   products?: {
     allCategories?: string | null;
+    allProducts?: string | null;
     viewProducts?: string | null;
     contactBtn?: string | null;
     noProducts?: string | null;
@@ -2788,6 +2851,7 @@ export interface SiteTranslation {
     documentsHeading?: string | null;
     download?: string | null;
     inquire?: string | null;
+    brand?: string | null;
   };
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -2841,6 +2905,7 @@ export interface FooterSelect<T extends boolean = true> {
     | {
         columnLabel?: T;
         address?: T;
+        addressUrl?: T;
         phone?: T;
         email?: T;
       };
@@ -2868,6 +2933,7 @@ export interface FooterSelect<T extends boolean = true> {
     | {
         platform?: T;
         url?: T;
+        icon?: T;
         id?: T;
       };
   copyrightSuffix?: T;
@@ -3002,6 +3068,7 @@ export interface SiteTranslationsSelect<T extends boolean = true> {
     | T
     | {
         allCategories?: T;
+        allProducts?: T;
         viewProducts?: T;
         contactBtn?: T;
         noProducts?: T;
@@ -3014,6 +3081,7 @@ export interface SiteTranslationsSelect<T extends boolean = true> {
         documentsHeading?: T;
         download?: T;
         inquire?: T;
+        brand?: T;
       };
   updatedAt?: T;
   createdAt?: T;

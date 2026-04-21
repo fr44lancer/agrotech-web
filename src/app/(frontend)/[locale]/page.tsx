@@ -37,7 +37,7 @@ export default async function Page({ params: paramsPromise }: Args) {
   return (
     <div className="w-full">
       {draft && <LivePreviewListener />}
-      <RenderHero {...hero} />
+      <RenderHero {...hero} locale={locale} />
       <RenderBlocks blocks={layout} locale={locale} />
     </div>
   )

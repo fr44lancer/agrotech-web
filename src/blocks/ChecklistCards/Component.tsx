@@ -1,7 +1,16 @@
 import React from 'react'
 import { Row, Col } from 'antd'
-import type { ChecklistCardsBlock as Props } from '@/payload-types'
+import type { ChecklistCardsBlock } from '@/payload-types'
 import { IconRenderer } from '@/components/IconPicker/IconRenderer'
+
+type Props = ChecklistCardsBlock & { locale?: string }
+
+function str(value: any, locale: string): string {
+  if (!value) return ''
+  if (typeof value === 'string') return value
+  if (typeof value === 'object') return value[locale] ?? value['hy'] ?? Object.values(value)[0] ?? ''
+  return String(value)
+}
 
 const COL_SPAN: Record<string, number> = { '1': 24, '2': 12, '3': 8 }
 
@@ -21,6 +30,7 @@ export const ChecklistCardsBlockComponent: React.FC<Props> = ({
   columns = '2',
   background = 'gray',
   items,
+  locale = 'hy',
 }) => {
   const colSpan = COL_SPAN[columns ?? '2'] ?? 12
   const sectionBg = SECTION_BG[background ?? 'gray'] ?? 'bg-gray-50'
@@ -32,10 +42,10 @@ export const ChecklistCardsBlockComponent: React.FC<Props> = ({
         {(heading || subheading) && (
           <div className="text-center mb-12">
             {heading && (
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">{heading}</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">{str(heading, locale)}</h2>
             )}
             {subheading && (
-              <p className="text-gray-600 text-lg max-w-2xl mx-auto">{subheading}</p>
+              <p className="text-gray-600 text-lg max-w-2xl mx-auto">{str(subheading, locale)}</p>
             )}
           </div>
         )}
@@ -53,9 +63,9 @@ export const ChecklistCardsBlockComponent: React.FC<Props> = ({
                   />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-gray-800 mb-2">{item.title}</h3>
+                  <h3 className="text-xl font-bold text-gray-800 mb-2">{str(item.title, locale)}</h3>
                   {item.description && (
-                    <p className="text-gray-600 leading-relaxed">{item.description}</p>
+                    <p className="text-gray-600 leading-relaxed">{str(item.description, locale)}</p>
                   )}
                 </div>
               </div>

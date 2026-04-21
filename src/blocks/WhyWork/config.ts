@@ -25,6 +25,7 @@ export const WhyWorkBlock: Block = {
       name: 'items',
       type: 'array',
       label: 'Reasons',
+      localized: true,
       minRows: 1,
       fields: [
         {
@@ -42,13 +43,11 @@ export const WhyWorkBlock: Block = {
           name: 'title',
           type: 'text',
           required: true,
-          localized: true,
           label: 'Title',
         },
         {
           name: 'description',
           type: 'text',
-          localized: true,
           label: 'Description',
         },
       ],

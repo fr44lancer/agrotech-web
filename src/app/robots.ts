@@ -1,0 +1,16 @@
+import type { MetadataRoute } from 'next'
+import { getServerSideURL } from '@/utilities/getURL'
+
+export default function robots(): MetadataRoute.Robots {
+  const url: string = getServerSideURL()
+
+  return {
+    rules: [{
+      userAgent: '*',
+      allow: '/',
+      disallow: '/admin',
+    }], 
+    host:  `${url}`,
+    sitemap: `${url}/sitemap.xml`,
+  }
+}

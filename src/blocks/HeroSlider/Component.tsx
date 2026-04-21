@@ -36,6 +36,14 @@ type Props = {
   autoplayInterval?: number | null
 }
 
+/** Safely coerce a potentially-unresolved locale object to a string. */
+function str(value: any, locale: string): string {
+  if (!value) return ''
+  if (typeof value === 'string') return value
+  if (typeof value === 'object') return value[locale] ?? value['hy'] ?? Object.values(value)[0] ?? ''
+  return String(value)
+}
+
 function resolveHref(link: SlideLink['link'], locale: string): string {
   if (
     link.type === 'reference' &&
@@ -150,11 +158,11 @@ export const HeroSliderBlockComponent: React.FC<Props> = ({
           <div className="container mx-auto px-6 py-16 md:py-32 relative z-10 w-full min-h-[560px] flex items-center">
             <div className="max-w-7xl">
               {slide.title && (
-                <h1 className="text-2xl md:text-5xl font-bold mb-8 max-w-5xl">{slide.title}</h1>
+                <h1 className="text-2xl md:text-5xl font-bold mb-8 max-w-5xl">{str(slide.title, locale)}</h1>
               )}
 
               {slide.slogan && (
-                <p className="text-xl md:text-2xl mb-6 text-green-50">{slide.slogan}</p>
+                <p className="text-xl md:text-2xl mb-6 text-green-50">{str(slide.slogan, locale)}</p>
               )}
 
               {slide.features && slide.features.length > 0 && (
@@ -172,7 +180,7 @@ export const HeroSliderBlockComponent: React.FC<Props> = ({
                           clipRule="evenodd"
                         />
                       </svg>
-                      <span className="text-lg md:text-xl">{feature.text}</span>
+                      <span className="text-lg md:text-xl">{str(feature.text, locale)}</span>
                     </div>
                   ))}
                 </div>
@@ -197,7 +205,7 @@ export const HeroSliderBlockComponent: React.FC<Props> = ({
                             : 'bg-white text-teal-800 px-8 py-3 rounded-md font-semibold hover:bg-green-50 transition'
                         }
                       >
-                        {link.label}
+                        {str(link.label, locale)}
                       </Link>
                     )
                   })}
@@ -214,7 +222,7 @@ export const HeroSliderBlockComponent: React.FC<Props> = ({
           <button
             onClick={prev}
             aria-label="Previous slide"
-            className="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-black/30 hover:bg-black/50 flex items-center justify-center text-white transition backdrop-blur-sm"
+            className="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-7 xl:w-11 h-7 xl:h-11 rounded-full bg-black/30 hover:bg-black/50 flex items-center justify-center text-white transition backdrop-blur-sm"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
@@ -229,7 +237,7 @@ export const HeroSliderBlockComponent: React.FC<Props> = ({
           <button
             onClick={next}
             aria-label="Next slide"
-            className="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-11 h-11 rounded-full bg-black/30 hover:bg-black/50 flex items-center justify-center text-white transition backdrop-blur-sm"
+            className="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-7 xl:w-11 h-7 xl:h-11 rounded-full bg-black/30 hover:bg-black/50 flex items-center justify-center text-white transition backdrop-blur-sm"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />

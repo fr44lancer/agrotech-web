@@ -166,11 +166,11 @@ export default async function ContactsPage({ params: paramsPromise }: Args) {
           </div>
         </section>
       )}
-      <BaseWrapper className={'container m-auto'}>
+      <BaseWrapper className={'container m-auto bg-gray-50'}>
         <Row align={'middle'}>
           <Col xs={24} md={12}>
             {/* ── Contact form ──────────────────────────────────────────────── */}
-            <section className="py-16 bg-gray-50">
+            <section className="py-1 bg-gray-50">
               <div className="container mx-auto px-6 max-w-4xl">
                 <ContactForm
                   labels={{
@@ -193,7 +193,7 @@ export default async function ContactsPage({ params: paramsPromise }: Args) {
             </section>
           </Col>
           <Col xs={24} md={12}>
-            <section className=" py-12">
+            <section className="">
               <div className="container mx-auto px-6">
                 <Row gutter={[24, 24]}>
                   {/* Address */}
@@ -337,23 +337,28 @@ function LocationGrid({
               )}
             </div>
 
-            {location.mapUrl && (
-              <a
-                href={location.mapUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-5 flex items-center gap-2 text-teal-800 text-sm font-semibold hover:underline"
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"
-                  />
-                </svg>
-                {viewOnMapLabel}
-              </a>
+            {location.maps && location.maps.length > 0 && (
+              <div className="flex items-center gap-3">
+                {location.maps.map((data, i) => (
+                  <a
+                    key={i}
+                    href={data.mapurl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-5 flex items-center gap-2 text-teal-800 text-sm font-semibold hover:underline"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"
+                      />
+                    </svg>
+                    {data.labelText??viewOnMapLabel}
+                  </a>
+                ))}
+              </div>
             )}
           </div>
         </Col>

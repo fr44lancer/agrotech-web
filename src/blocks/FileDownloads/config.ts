@@ -38,6 +38,7 @@ export const FileDownloadsBlock: Block = {
       name: 'columnList',
       type: 'array',
       label: 'Columns',
+      localized: true,
       minRows: 1,
       maxRows: 3,
       admin: {
@@ -47,7 +48,6 @@ export const FileDownloadsBlock: Block = {
         {
           name: 'title',
           type: 'text',
-          localized: true,
           label: 'Column Title (optional)',
         },
         {
@@ -60,7 +60,6 @@ export const FileDownloadsBlock: Block = {
               name: 'label',
               type: 'text',
               required: true,
-              localized: true,
               label: 'Label',
             },
             {

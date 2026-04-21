@@ -22,6 +22,13 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
   return generateMeta({ doc: page })
 }
 
+function str(value: any, locale: string): string {
+  if (!value) return ''
+  if (typeof value === 'string') return value
+  if (typeof value === 'object' && !Array.isArray(value)) return value[locale] ?? value['hy'] ?? Object.values(value)[0] ?? ''
+  return String(value)
+}
+
 const accentColors = [
   'border-teal-600',
   'border-green-600',
@@ -30,6 +37,7 @@ const accentColors = [
   'border-teal-700',
   'border-green-700',
 ]
+const accentColor = 'border-green-600'
 
 export const dynamic = 'force-dynamic'
 
@@ -141,9 +149,9 @@ export default async function Page({ params: paramsPromise }: Args) {
               {categoryGroups.map(({ category, partners }) => (
                 <div key={category.id}>
                   <h3 className="text-xl font-bold text-teal-800 mb-6 pb-2 border-b border-teal-100">
-                    {category.title}
+                    {str(category.title, locale)}
                   </h3>
-                  <PartnerGrid partners={partners} visitLabel={t.visitWebsite} />
+                  <PartnerGrid partners={partners} visitLabel={t.visitWebsite} locale={locale} />
                 </div>
               ))}
               {uncategorized.length > 0 && (
@@ -153,7 +161,7 @@ export default async function Page({ params: paramsPromise }: Args) {
                       {t.otherPartners}
                     </h3>
                   )}
-                  <PartnerGrid partners={uncategorized} visitLabel={t.visitWebsite} />
+                  <PartnerGrid partners={uncategorized} visitLabel={t.visitWebsite} locale={locale} />
                 </div>
               )}
             </div>
@@ -175,11 +183,12 @@ export default async function Page({ params: paramsPromise }: Args) {
               {benefits.map((benefit, i) => (
                 <div
                   key={benefit.id}
-                  className={`bg-gray-50 rounded-lg p-6 border-l-4 ${accentColors[i % accentColors.length]}`}
+                 // className={`bg-gray-50 rounded-lg p-6 border-l-4 ${accentColors[i % accentColors.length]}`}
+                  className={`bg-gray-50 rounded-lg p-6 border-l-4 ${accentColor}`}
                 >
-                  <h3 className="text-xl font-bold text-gray-800 mb-2">{benefit.title}</h3>
+                  <h3 className="text-xl font-bold text-gray-800 mb-2">{str(benefit.title, locale)}</h3>
                   {benefit.description && (
-                    <p className="text-gray-600 leading-relaxed">{benefit.description}</p>
+                    <p className="text-gray-600 leading-relaxed">{str(benefit.description, locale)}</p>
                   )}
                 </div>
               ))}
@@ -189,7 +198,7 @@ export default async function Page({ params: paramsPromise }: Args) {
       )}
 
       {/* Become a Partner CTA */}
-      <section className="py-16 bg-gradient-to-r from-teal-600 to-green-700 text-white">
+      <section className="py-16 bg-gradient-to-r from-teal-600 to-green-600 text-white">
         <div className="container mx-auto px-6 max-w-3xl text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">{t.becomeTitle}</h2>
           <p className="text-green-50 text-lg mb-8">{t.becomeText}</p>
@@ -218,12 +227,12 @@ export default async function Page({ params: paramsPromise }: Args) {
                   className="bg-white rounded-lg p-8 shadow-sm border border-gray-100 flex flex-col"
                 >
                   <p className="text-gray-600 leading-relaxed mb-6 flex-grow italic">
-                    {testimonial.quote}
+                    {str(testimonial.quote, locale)}
                   </p>
                   <div className="border-t border-gray-100 pt-4">
-                    <p className="font-bold text-gray-800">{testimonial.authorName}</p>
+                    <p className="font-bold text-gray-800">{str(testimonial.authorName, locale)}</p>
                     {testimonial.authorTitle && (
-                      <p className="text-sm text-teal-950">{testimonial.authorTitle}</p>
+                      <p className="text-sm text-teal-950">{str(testimonial.authorTitle, locale)}</p>
                     )}
                   </div>
                 </div>
@@ -236,7 +245,7 @@ export default async function Page({ params: paramsPromise }: Args) {
   )
 }
 
-function PartnerGrid({ partners, visitLabel }: { partners: Partner[]; visitLabel: string }) {
+function PartnerGrid({ partners, visitLabel, locale = 'hy' }: { partners: Partner[]; visitLabel: string; locale?: string }) {
   return (
     <BaseWrapper>
       <Row gutter={[24, 24]} justify={'start'}>
@@ -247,12 +256,12 @@ function PartnerGrid({ partners, visitLabel }: { partners: Partner[]; visitLabel
                 {partner.logo && typeof partner.logo === 'object' ? (
                   <Media resource={partner.logo} className="max-h-60 max-w-full object-contain" />
                 ) : (
-                  <div className="text-gray-400 font-bold text-2xl">{partner.title}</div>
+                  <div className="text-gray-400 font-bold text-2xl">{str(partner.title, locale)}</div>
                 )}
               </div>
-              <h3 className="text-lg font-bold text-gray-800 mb-2">{partner.title}</h3>
+              <h3 className="text-lg font-bold text-gray-800 mb-2">{str(partner.title, locale)}</h3>
               {partner.description && (
-                <p className="text-gray-600 text-sm mb-4 flex-grow">{partner.description}</p>
+                <p className="text-gray-600 text-sm mb-4 flex-grow">{str(partner.description, locale)}</p>
               )}
               {partner.websiteUrl && (
                 <a
