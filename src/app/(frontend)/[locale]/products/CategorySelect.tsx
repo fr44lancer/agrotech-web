@@ -34,7 +34,7 @@ export default function CategorySelect({
       onChange={handleChange}
       options={options}
       className="w-full"
-      size="large"
+      size="medium"
     />
   )
 }
