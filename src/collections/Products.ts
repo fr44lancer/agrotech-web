@@ -44,6 +44,15 @@ export const Products: CollectionConfig = {
       },
     },
     {
+      name: 'identifier_secondary',
+      type: 'text',
+      label: 'Identifier 2',
+      admin: {
+        description: 'Custom product identifier 2',
+        position: 'sidebar',
+      },
+    },
+    {
       type: 'tabs',
       tabs: [
         {
@@ -100,7 +109,6 @@ export const Products: CollectionConfig = {
                 {
                   name: 'text',
                   type: 'text',
-                  required: true,
                   localized: true,
                   label: 'Feature',
                 },
@@ -118,14 +126,12 @@ export const Products: CollectionConfig = {
                 {
                   name: 'label',
                   type: 'text',
-                  required: true,
                   localized: true,
                   label: 'Label',
                 },
                 {
                   name: 'value',
                   type: 'text',
-                  required: true,
                   localized: true,
                   label: 'Value',
                 },
@@ -143,7 +149,6 @@ export const Products: CollectionConfig = {
                 {
                   name: 'label',
                   type: 'text',
-                  required: true,
                   localized: true,
                   label: 'Label',
                   admin: {
@@ -154,7 +159,6 @@ export const Products: CollectionConfig = {
                   name: 'file',
                   type: 'upload',
                   relationTo: 'media',
-                  required: true,
                   label: 'File',
                 },
               ],

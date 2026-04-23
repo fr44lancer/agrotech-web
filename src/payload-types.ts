@@ -737,6 +737,10 @@ export interface Product {
    */
   identifier?: string | null;
   /**
+   * Custom product identifier 2
+   */
+  identifier_secondary?: string | null;
+  /**
    * One-line summary shown on catalog cards.
    */
   shortDescription?: string | null;
@@ -770,7 +774,7 @@ export interface Product {
    */
   features?:
     | {
-        text: string;
+        text?: string | null;
         id?: string | null;
       }[]
     | null;
@@ -779,8 +783,8 @@ export interface Product {
    */
   specifications?:
     | {
-        label: string;
-        value: string;
+        label?: string | null;
+        value?: string | null;
         id?: string | null;
       }[]
     | null;
@@ -792,8 +796,8 @@ export interface Product {
         /**
          * e.g. "Product Datasheet" or "Safety Data Sheet"
          */
-        label: string;
-        file: string | Media;
+        label?: string | null;
+        file?: (string | null) | Media;
         id?: string | null;
       }[]
     | null;
@@ -830,7 +834,7 @@ export interface Brand {
    * Brand name
    */
   title: string;
-  logo: string | Media;
+  logo?: (string | null) | Media;
   description?: string | null;
   websiteUrl?: string | null;
   /**
@@ -2282,6 +2286,7 @@ export interface EventRegistrationsSelect<T extends boolean = true> {
 export interface ProductsSelect<T extends boolean = true> {
   title?: T;
   identifier?: T;
+  identifier_secondary?: T;
   shortDescription?: T;
   description?: T;
   images?:
