@@ -23,7 +23,7 @@ export const Products: CollectionConfig = {
     useAsTitle: 'title',
     defaultColumns: ['title', 'status', 'featured', 'identifier','updatedAt'],
     description: 'Product catalog entries. Not a shop — no pricing.',
-    listSearchableFields: ['title', 'slug','identifier'],
+    listSearchableFields: ['title', 'slug','identifier','identifier_secondary'],
   },
   fields: [
     // ── Core ──────────────────────────────────────────────────────────────────
