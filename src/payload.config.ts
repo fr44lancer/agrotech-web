@@ -34,6 +34,8 @@ import { CareerCategories } from '@/collections/CareerCategories'
 import { PartnerCategories } from '@/collections/PartnerCategories'
 import { ServiceCategories } from '@/collections/ServiceCategories'
 import { Brands } from './collections/Brands'
+import { Units } from './collections/Units'
+import { PackagingTypes } from './collections/PackagingTypes'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -74,6 +76,8 @@ export default buildConfig({
     ContactSubmissions,
     CareerApplications,
     Brands,
+    Units,
+    PackagingTypes,
   ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',

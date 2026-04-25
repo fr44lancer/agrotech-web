@@ -60,8 +60,9 @@ export default async function ProductDetailPage({ params: paramsPromise }: Args)
     comingSoon: tr.products?.comingSoon ?? 'Coming Soon',
     discontinued: tr.products?.discontinued ?? 'Discontinued',
     featured: tr.products?.featured ?? 'Featured',
-    allproducts: tr.products?.allProducts??'All Products',
-    brand: tr.products?.brand ?? 'Brand'
+    allproducts: tr.products?.allProducts ?? 'All Products',
+    brand: str(tr.products?.brand, locale) || 'Brand',
+    packaging: str((tr.products as any)?.packaging, locale) || 'Packaging',
   }
 
   const statusBadgeMap: Record<string, { key: 'comingSoon' | 'discontinued'; cls: string }> = {
@@ -74,6 +75,20 @@ export default async function ProductDetailPage({ params: paramsPromise }: Args)
   const specifications = (product.specifications ?? []) as any[]
   const documents = (product.documents ?? []) as any[]
   const brand = (product.brand ?? []) as any[]
+  const unit = ((product as any).unit as any) ?? null
+  const amount: number | null = ((product as any).amount as number) ?? null
+  const packagingType = ((product as any).packagingType as any) ?? null
+
+  // Compose "25 kg, bag" — each part is optional
+  const unitLabel = unit ? str(unit.name, locale) : ''
+  const packagingLabel = packagingType ? str(packagingType.name, locale) : ''
+  const packagingComposition = [
+    amount != null ? `${amount}${unitLabel ? ' ' + unitLabel : ''}` : unitLabel || null,
+    packagingLabel || null,
+  ]
+    .filter(Boolean)
+    .join(', ')
+  const hasPackaging = Boolean(packagingComposition)
 
   // Resolve richText locale object — Payload may return {hy, en, ru} instead of resolved content
   const rawDescription = product.description as any
@@ -153,14 +168,22 @@ export default async function ProductDetailPage({ params: paramsPromise }: Args)
                 </p>
               )}
 
-              { brand.length > 0 && (
+              {(brand.length > 0 || hasPackaging) && (
                 <div className="mb-8 border-b border-gray-100">
                   <table className="w-full text-md">
                     <tbody>
-                        <tr className='bg-gray-50'>
+                      {brand.length > 0 && (
+                        <tr className="bg-gray-50">
                           <td className="py-2.5 px-2 font-medium w-2/5 rounded-l">{t.brand}</td>
                           <td className="py-2.5 pl-5 text-gray-900 rounded-r">{str(brand[0].title, locale)}</td>
                         </tr>
+                      )}
+                      {hasPackaging && (
+                        <tr className={brand.length > 0 ? 'bg-white' : 'bg-gray-50'}>
+                          <td className="py-2.5 px-2 font-medium w-2/5 rounded-l">{t.packaging}</td>
+                          <td className="py-2.5 pl-5 text-gray-900 rounded-r">{packagingComposition}</td>
+                        </tr>
+                      )}
                     </tbody>
                   </table>
                 </div>

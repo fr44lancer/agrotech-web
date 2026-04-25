@@ -7,6 +7,7 @@ import { RenderBlocks } from '@/blocks/RenderBlocks'
 import { getSiteTranslations } from '@/utilities/getSiteTranslations'
 import { generateMeta } from '@/utilities/generateMeta'
 import CategorySelect from './CategorySelect'
+import BrandSelect from './BrandSelect'
 
 type Args = {
   params: Promise<{
@@ -14,6 +15,7 @@ type Args = {
   }>
   searchParams: Promise<{
     category?: string
+    brand?: string
   }>
 }
 
@@ -31,41 +33,50 @@ export default async function ProductsPage({
   const { locale = 'hy' } = await paramsPromise
   const searchParams = await searchParamsPromise
   const categorySlug = searchParams?.category
+  const brandSlug = searchParams?.brand
   const payload = await getPayload({ config: configPromise })
 
-  const [categoriesData, page, tr] = await Promise.all([
-    payload.find({
-      collection: 'productCategories',
-      locale: locale as any,
-      limit: 100,
-    }),
+  const [categoriesData, brandsData, page, tr] = await Promise.all([
+    payload.find({ collection: 'productCategories', locale: locale as any, limit: 100 }),
+    payload.find({ collection: 'brands', locale: locale as any, limit: 100 }),
     queryPageBySlug({ slug: 'products', locale }),
     getSiteTranslations(locale),
   ])
 
-  let productsData
-  if (categorySlug) {
-    const category = categoriesData.docs.find((c: any) => c.slug === categorySlug)
-    productsData = await payload.find({
-      collection: 'products',
-      locale: locale as any,
-      limit: 100,
-      where: category ? { categories: { contains: category.id } } : undefined,
-    })
-  } else {
-    productsData = await payload.find({
-      collection: 'products',
-      locale: locale as any,
-      limit: 100,
-    })
+  // When a brand is selected, find which categories have products from that brand
+  let brandCategoryIds: Set<string> | null = null
+  if (brandSlug) {
+    const selectedBrand = brandsData.docs.find((b: any) => b.slug === brandSlug)
+    if (selectedBrand) {
+      const brandProducts = await payload.find({
+        collection: 'products',
+        locale: locale as any,
+        depth: 0,
+        where: { brand: { contains: selectedBrand.id } },
+        limit: 500,
+      })
+      brandCategoryIds = new Set(
+        brandProducts.docs.flatMap((p: any) =>
+          (Array.isArray(p.categories) ? p.categories : []).map((c: any) =>
+            typeof c === 'object' ? c.id : c,
+          ),
+        ),
+      )
+    }
   }
 
   const t = {
     all: tr.products?.allCategories ?? 'All Categories',
+    allBrands: str((tr.products as any)?.allBrands, locale) || 'All Brands',
     viewProducts: tr.products?.viewProducts ?? 'View Products',
     contactBtn: tr.products?.contactBtn ?? 'Contact Sales Team',
   }
-  const products = productsData.docs
+
+  const availableBrands = brandsData.docs.map((b: any) => ({
+    id: b.id,
+    title: str(b.title, locale),
+    slug: b.slug,
+  }))
   const heroBlocks = (page?.layout ?? []).filter((b) => b.blockType === 'pageHeroBlock')
 
   return (
@@ -74,14 +85,21 @@ export default async function ProductsPage({
 
       <section className="py-16 bg-gray-50 min-h-[50vh]">
         <div className="container mx-auto px-6 w-full max-w-7xl">
-          {/* Mobile: dropdown */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 mb-8 gap-8 justify-left">
-              <CategorySelect
-                categories={categoriesData.docs.map((c: any) => ({ id: c.id, title: c.title, slug: c.slug }))}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 mb-8 gap-4">
+            <CategorySelect
+              categories={categoriesData.docs.map((c: any) => ({ id: c.id, title: c.title, slug: c.slug }))}
+              locale={locale}
+              currentSlug={categorySlug}
+              allLabel={t.all}
+            />
+            {availableBrands.length > 0 && (
+              <BrandSelect
+                brands={availableBrands}
                 locale={locale}
-                currentSlug={categorySlug}
-                allLabel={t.all}
+                currentSlug={brandSlug}
+                allLabel={t.allBrands}
               />
+            )}
           </div>
 
           {/* Desktop: pills */}
@@ -105,7 +123,11 @@ export default async function ProductsPage({
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {categoriesData.docs
-              .filter((c: any) => !categorySlug || c.slug === categorySlug)
+              .filter((c: any) => {
+                if (categorySlug && c.slug !== categorySlug) return false
+                if (brandCategoryIds && !brandCategoryIds.has(c.id)) return false
+                return true
+              })
               .map((category: any) => (
                 <a
                   href={`/${locale}/products/${category.slug}`}

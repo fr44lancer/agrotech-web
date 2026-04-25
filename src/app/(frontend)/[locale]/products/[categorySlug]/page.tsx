@@ -6,11 +6,15 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { getSiteTranslations } from '@/utilities/getSiteTranslations'
 import CategorySelect from '../CategorySelect'
+import BrandSelect from '../BrandSelect'
 
 type Args = {
   params: Promise<{
     locale?: string
     categorySlug?: string
+  }>
+  searchParams: Promise<{
+    brand?: string
   }>
 }
 
@@ -21,8 +25,12 @@ function str(value: any, locale: string): string {
   return String(value)
 }
 
-export default async function CategoryProductsPage({ params: paramsPromise }: Args) {
+export default async function CategoryProductsPage({
+  params: paramsPromise,
+  searchParams: searchParamsPromise,
+}: Args) {
   const { locale = 'hy', categorySlug } = await paramsPromise
+  const { brand: brandSlug } = await searchParamsPromise
   if (!categorySlug) return notFound()
 
   const payload = await getPayload({ config: configPromise })
@@ -45,6 +53,7 @@ export default async function CategoryProductsPage({ params: paramsPromise }: Ar
   const category = categoryReq.docs[0]
   if (!category) return notFound()
 
+  // Fetch all products in category (depth:1 populates brand objects)
   const productsReq = await payload.find({
     collection: 'products',
     locale: locale as any,
@@ -53,15 +62,35 @@ export default async function CategoryProductsPage({ params: paramsPromise }: Ar
     limit: 100,
   })
 
+  // Extract unique brands present in this category's products
+  const brandMap = new Map<string, { id: string; title: string; slug: string }>()
+  for (const product of productsReq.docs) {
+    for (const b of ((product.brand ?? []) as any[])) {
+      if (b && typeof b === 'object' && b.id && b.slug) {
+        brandMap.set(b.id, { id: b.id, title: str(b.title, locale), slug: b.slug })
+      }
+    }
+  }
+  const availableBrands = Array.from(brandMap.values())
+
+  // Filter products by brand if selected
+  const products = brandSlug
+    ? productsReq.docs.filter((p: any) =>
+        ((p.brand ?? []) as any[]).some(
+          (b: any) => typeof b === 'object' && b.slug === brandSlug,
+        ),
+      )
+    : productsReq.docs
+
   const t = {
     all: tr.products?.allCategories ?? 'All Categories',
+    allBrands: str((tr.products as any)?.allBrands, locale) || 'All Brands',
     noProducts: tr.products?.noProducts ?? 'No products in this category yet.',
     viewDetails: tr.products?.viewDetails ?? 'View Details',
     featured: tr.products?.featured ?? 'Featured',
     comingSoon: tr.products?.comingSoon ?? 'Coming Soon',
     discontinued: tr.products?.discontinued ?? 'Discontinued',
   }
-  const products = productsReq.docs
 
   return (
     <div className="w-full">
@@ -77,14 +106,22 @@ export default async function CategoryProductsPage({ params: paramsPromise }: Ar
 
       <section className="py-12 bg-gray-50 min-h-[50vh]">
         <div className="container mx-auto px-6 max-w-7xl">
-          {/* Mobile: dropdown */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 mb-8 gap-8 justify-left">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 mb-8 gap-4 justify-left">
             <CategorySelect
               categories={allCategoriesReq.docs.map((c: any) => ({ id: c.id, title: c.title, slug: c.slug }))}
               locale={locale}
               currentSlug={categorySlug}
               allLabel={t.all}
             />
+            {availableBrands.length > 0 && (
+              <BrandSelect
+                brands={availableBrands}
+                locale={locale}
+                categorySlug={categorySlug}
+                currentSlug={brandSlug}
+                allLabel={t.allBrands}
+              />
+            )}
           </div>
 
           {/* Desktop: pills */}

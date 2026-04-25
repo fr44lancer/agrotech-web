@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react'
 import Link from 'next/link'
+import { Select } from 'antd'
 
 type Category = {
   id: string
@@ -48,32 +49,19 @@ export default function CareersSection({ careers, categories, locale, t }: Props
       <div className="container mx-auto px-6 max-w-7xl">
         <h2 className="text-3xl font-bold text-gray-800 mb-8">{t.openPositions}</h2>
 
-        {/* Category filter tabs */}
+        {/* Category filter */}
         {categories.length > 0 && (
-          <div className="flex flex-wrap gap-2 mb-8">
-            <button
-              onClick={() => setActiveCategory(null)}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition ${
-                activeCategory === null
-                  ? 'bg-teal-600 text-white'
-                  : 'bg-white text-gray-600 border border-gray-200 hover:border-teal-400'
-              }`}
-            >
-              {t.allCategories}
-            </button>
-            {categories.map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => setActiveCategory(cat.id)}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition ${
-                  activeCategory === cat.id
-                    ? 'bg-teal-600 text-white'
-                    : 'bg-white text-gray-600 border border-gray-200 hover:border-teal-400'
-                }`}
-              >
-                {cat.title}
-              </button>
-            ))}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+            <Select
+              value={activeCategory ?? ''}
+              onChange={(val) => setActiveCategory(val || null)}
+              options={[
+                { value: '', label: t.allCategories },
+                ...categories.map((c) => ({ value: c.id, label: c.title })),
+              ]}
+              className="w-full"
+              size="middle"
+            />
           </div>
         )}
 

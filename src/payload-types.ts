@@ -91,6 +91,8 @@ export interface Config {
     contactSubmissions: ContactSubmission;
     careerApplications: CareerApplication;
     brands: Brand;
+    units: Unit;
+    packagingTypes: PackagingType;
     'payload-kv': PayloadKv;
     'payload-jobs': PayloadJob;
     'payload-folders': FolderInterface;
@@ -128,6 +130,8 @@ export interface Config {
     contactSubmissions: ContactSubmissionsSelect<false> | ContactSubmissionsSelect<true>;
     careerApplications: CareerApplicationsSelect<false> | CareerApplicationsSelect<true>;
     brands: BrandsSelect<false> | BrandsSelect<true>;
+    units: UnitsSelect<false> | UnitsSelect<true>;
+    packagingTypes: PackagingTypesSelect<false> | PackagingTypesSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
     'payload-folders': PayloadFoldersSelect<false> | PayloadFoldersSelect<true>;
@@ -817,6 +821,18 @@ export interface Product {
   categories?: (string | ProductCategory)[] | null;
   brand?: (string | Brand)[] | null;
   /**
+   * Measurement unit (e.g. kg, liter).
+   */
+  unit?: (string | null) | Unit;
+  /**
+   * Quantity per package (e.g. 25 for "25 kg").
+   */
+  amount?: number | null;
+  /**
+   * Packaging form (e.g. bag, container, bottle).
+   */
+  packagingType?: (string | null) | PackagingType;
+  /**
    * When enabled, the slug will auto-generate from the title field on save and autosave.
    */
   generateSlug?: boolean | null;
@@ -842,6 +858,36 @@ export interface Brand {
    */
   generateSlug?: boolean | null;
   slug: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Measurement units for products (e.g. kg, meter, liter).
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "units".
+ */
+export interface Unit {
+  id: string;
+  /**
+   * Full name (e.g. "Kilogram", "Meter", "Liter").
+   */
+  name: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Packaging types for products (e.g. bag, container, bottle).
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "packagingTypes".
+ */
+export interface PackagingType {
+  id: string;
+  /**
+   * e.g. "Bag", "Container", "Bottle", "Box".
+   */
+  name: string;
   updatedAt: string;
   createdAt: string;
 }
@@ -1601,6 +1647,14 @@ export interface PayloadLockedDocument {
         value: string | Brand;
       } | null)
     | ({
+        relationTo: 'units';
+        value: string | Unit;
+      } | null)
+    | ({
+        relationTo: 'packagingTypes';
+        value: string | PackagingType;
+      } | null)
+    | ({
         relationTo: 'payload-folders';
         value: string | FolderInterface;
       } | null);
@@ -2327,6 +2381,9 @@ export interface ProductsSelect<T extends boolean = true> {
   featured?: T;
   categories?: T;
   brand?: T;
+  unit?: T;
+  amount?: T;
+  packagingType?: T;
   generateSlug?: T;
   slug?: T;
   updatedAt?: T;
@@ -2483,6 +2540,24 @@ export interface BrandsSelect<T extends boolean = true> {
   websiteUrl?: T;
   generateSlug?: T;
   slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "units_select".
+ */
+export interface UnitsSelect<T extends boolean = true> {
+  name?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "packagingTypes_select".
+ */
+export interface PackagingTypesSelect<T extends boolean = true> {
+  name?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -2843,6 +2918,7 @@ export interface SiteTranslation {
   };
   products?: {
     allCategories?: string | null;
+    allBrands?: string | null;
     allProducts?: string | null;
     viewProducts?: string | null;
     contactBtn?: string | null;
@@ -2857,6 +2933,7 @@ export interface SiteTranslation {
     download?: string | null;
     inquire?: string | null;
     brand?: string | null;
+    packaging?: string | null;
   };
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -3073,6 +3150,7 @@ export interface SiteTranslationsSelect<T extends boolean = true> {
     | T
     | {
         allCategories?: T;
+        allBrands?: T;
         allProducts?: T;
         viewProducts?: T;
         contactBtn?: T;
@@ -3087,6 +3165,7 @@ export interface SiteTranslationsSelect<T extends boolean = true> {
         download?: T;
         inquire?: T;
         brand?: T;
+        packaging?: T;
       };
   updatedAt?: T;
   createdAt?: T;
