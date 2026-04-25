@@ -15,6 +15,13 @@ type Args = {
   }>
 }
 
+function str(value: any, locale: string): string {
+  if (!value) return ''
+  if (typeof value === 'string') return value
+  if (typeof value === 'object' && !Array.isArray(value)) return value[locale] ?? value['hy'] ?? Object.values(value)[0] ?? ''
+  return String(value)
+}
+
 export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
   const { slug, locale = 'hy' } = await paramsPromise
   const payload = await getPayload({ config: configPromise })
@@ -62,12 +69,23 @@ export default async function Page({ params: paramsPromise }: Args) {
 
   if (!career) return <div className="p-8 text-center text-gray-500">Not Found</div>
 
+  // Resolve richText locale object — Payload may return {hy, en, ru} instead of resolved content
+  const rawDescription = career.description as any
+  const careerDescription =
+    rawDescription &&
+    typeof rawDescription === 'object' &&
+    !Array.isArray(rawDescription) &&
+    ('hy' in rawDescription || 'en' in rawDescription || 'ru' in rawDescription) &&
+    !('root' in rawDescription)
+      ? (rawDescription[locale] ?? rawDescription['hy'] ?? rawDescription['en'] ?? rawDescription['ru'] ?? null)
+      : rawDescription
+
   return (
     <div className="w-full bg-gray-50 min-h-screen py-16">
       <div className="container mx-auto px-6 max-w-5xl">
         <Link
           href={`/${locale}/careers`}
-          className="text-teal-950 hover:text-teal-700 font-semibold mb-8 inline-flex items-center gap-1"
+          className="text-teal-950 hover:text-teal-800 font-semibold mb-8 inline-flex items-center gap-1"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
@@ -83,11 +101,11 @@ export default async function Page({ params: paramsPromise }: Args) {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-4">
           {/* Main content */}
           <div className="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-100 p-8">
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-6">{career.title}</h1>
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-6">{str(career.title, locale)}</h1>
 
             <div className="flex flex-wrap gap-3 mb-8 pb-8 border-b border-gray-100">
               {career.department && (
-                <span className="inline-flex items-center gap-1.5 bg-teal-50 text-teal-700 px-3 py-1 rounded-full text-sm font-medium">
+                <span className="inline-flex items-center gap-1.5 bg-teal-50 text-teal-800 px-3 py-1 rounded-full text-sm font-medium">
                   <svg
                     className="w-3.5 h-3.5"
                     fill="none"
@@ -101,7 +119,7 @@ export default async function Page({ params: paramsPromise }: Args) {
                       d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
                     />
                   </svg>
-                  {career.department}
+                  {str(career.department, locale)}
                 </span>
               )}
               {career.location && (
@@ -125,7 +143,7 @@ export default async function Page({ params: paramsPromise }: Args) {
                       d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
                     />
                   </svg>
-                  {career.location}
+                  {str(career.location, locale)}
                 </span>
               )}
               {career.type && (
@@ -143,13 +161,13 @@ export default async function Page({ params: paramsPromise }: Args) {
                       d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
                     />
                   </svg>
-                  {career.type}
+                  {str(career.type, locale)}
                 </span>
               )}
             </div>
 
             <div className="prose prose-teal max-w-none text-gray-700">
-              <RichText data={career.description} enableGutter={false} />
+              <RichText data={careerDescription} enableGutter={false} />
             </div>
           </div>
 

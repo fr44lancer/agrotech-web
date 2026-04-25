@@ -4,15 +4,18 @@ import { linkGroup } from '@/fields/linkGroup'
 export const HeroSliderBlock: Block = {
   slug: 'heroSliderBlock',
   interfaceName: 'HeroSliderBlock',
+  imageURL: '/admin/previews/layouts/pageHeader.png',
   labels: {
     singular: 'Hero Slider',
     plural: 'Hero Sliders',
   },
+  admin: { group: 'Common' },
   fields: [
     {
       name: 'slides',
       type: 'array',
       label: 'Slides',
+      localized: true,
       minRows: 1,
       maxRows: 5,
       admin: {
@@ -33,19 +36,16 @@ export const HeroSliderBlock: Block = {
           name: 'title',
           type: 'text',
           label: 'Title',
-          localized: true,
         },
         {
           name: 'slogan',
           type: 'text',
           label: 'Slogan / Subtitle',
-          localized: true,
         },
         {
           name: 'features',
           type: 'array',
           label: 'Features',
-          localized: true,
           admin: {
             description: 'Bullet-point features shown below the slogan.',
             initCollapsed: true,
@@ -81,6 +81,10 @@ export const HeroSliderBlock: Block = {
         description: 'Milliseconds between slide transitions.',
         position: 'sidebar',
         condition: (_, { autoplay } = {}) => !!autoplay,
+        custom: {
+          imageURL: '/previews/layouts/pageHeader.png',
+          imageAltText: 'Hero Slider block',
+        },
       },
     },
   ],

@@ -43,6 +43,13 @@ const FileActions = ({ url, downloadLabel, viewLabel }: { url: string; downloadL
   </div>
 )
 
+function str(value: any, locale: string): string {
+  if (!value) return ''
+  if (typeof value === 'string') return value
+  if (typeof value === 'object') return value[locale] ?? value['hy'] ?? Object.values(value)[0] ?? ''
+  return String(value)
+}
+
 export const FinancialReportingBlockComponent: React.FC<
   FinancialReportingBlockProps & { locale?: string }
 > = async ({
@@ -67,9 +74,9 @@ export const FinancialReportingBlockComponent: React.FC<
         {(heading || subheading) && (
           <div className="text-center mb-12">
             {heading && (
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">{heading}</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">{str(heading, locale)}</h2>
             )}
-            {subheading && <p className="text-gray-600 text-lg max-w-2xl mx-auto">{subheading}</p>}
+            {subheading && <p className="text-gray-600 text-lg max-w-2xl mx-auto">{str(subheading, locale)}</p>}
           </div>
         )}
 
@@ -83,7 +90,7 @@ export const FinancialReportingBlockComponent: React.FC<
                   const fileUrl = typeof report.file === 'object' ? report.file?.url : null
                   return (
                     <div key={report.id ?? i} className="flex items-center justify-between">
-                      <span className="text-gray-700 font-medium">{report.year}</span>
+                      <span className="text-gray-700 font-medium">{str(report.year, locale)}</span>
                       {fileUrl && (
                         <FileActions url={fileUrl} downloadLabel={t.download} viewLabel={t.view} />
                       )}
@@ -108,7 +115,7 @@ export const FinancialReportingBlockComponent: React.FC<
 
                   return (
                     <div key={result.id ?? i} className="flex items-center justify-between">
-                      <span className="text-gray-700 font-medium">{result.quarter}</span>
+                      <span className="text-gray-700 font-medium">{str(result.quarter, locale)}</span>
                       {fileUrl ? (
                         <FileActions url={fileUrl} downloadLabel={t.download} viewLabel={t.view} />
                       ) : linkUrl ? (
@@ -131,13 +138,13 @@ export const FinancialReportingBlockComponent: React.FC<
         </div>
 
         {/* Investor Relations */}
-        {investorRelations?.url && (
+        {investorRelations?.url && str(investorRelations.url, locale) && (
           <div className="mt-8 text-center">
             <Link
-              href={investorRelations.url}
+              href={str(investorRelations.url, locale)}
               className="inline-flex items-center gap-2 text-teal-950 font-semibold hover:underline"
             >
-              {investorRelations.text || 'Investor Relations'}
+              {str(investorRelations.text, locale) || 'Investor Relations'}
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
                   d="M17 8l4 4m0 0l-4 4m4-4H3" />

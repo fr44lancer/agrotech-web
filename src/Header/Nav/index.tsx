@@ -40,20 +40,15 @@ const DesktopNavItem: React.FC<{ item: NavItem; locale: string; pathname: string
   const hasChildren = children && children.length > 0
 
   const href = resolveHref(item.link, locale)
-  const childHrefs = hasChildren
-    ? children!.map((c) => resolveHref((c as any).link, locale))
-    : []
-  const active =
-    isActivePath(href, pathname) || childHrefs.some((h) => isActivePath(h, pathname))
+  const childHrefs = hasChildren ? children!.map((c) => resolveHref((c as any).link, locale)) : []
+  const active = isActivePath(href, pathname) || childHrefs.some((h) => isActivePath(h, pathname))
 
   const linkClass = `font-medium transition-colors px-2 py-1 ${
-    active ? 'text-teal-700' : 'text-gray-900 hover:text-teal-700'
+    active ? 'text-teal-800' : 'text-gray-900 hover:text-teal-800'
   }`
 
   if (!hasChildren) {
-    return (
-      <CMSLink {...item.link} appearance="inline" locale={locale} className={linkClass} />
-    )
+    return <CMSLink {...item.link} appearance="inline" locale={locale} className={linkClass} />
   }
 
   return (
@@ -65,7 +60,7 @@ const DesktopNavItem: React.FC<{ item: NavItem; locale: string; pathname: string
       <div className="flex items-center gap-0.5">
         <CMSLink {...item.link} appearance="inline" locale={locale} className={linkClass} />
         <svg
-          className={`w-3.5 h-3.5 transition-transform duration-200 ${active ? 'text-teal-700' : 'text-gray-500'} ${open ? 'rotate-180' : ''}`}
+          className={`w-3.5 h-3.5 transition-transform duration-200 ${active ? 'text-teal-800' : 'text-gray-500'} ${open ? 'rotate-180' : ''}`}
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -89,8 +84,8 @@ const DesktopNavItem: React.FC<{ item: NavItem; locale: string; pathname: string
                 onClick={() => setOpen(false)}
                 className={`block px-4 py-2.5 text-sm font-medium transition-colors ${
                   childActive
-                    ? 'text-teal-700 bg-teal-50'
-                    : 'text-gray-700 hover:bg-teal-50 hover:text-teal-700'
+                    ? 'text-teal-800 bg-teal-50'
+                    : 'text-gray-700 hover:bg-teal-50 hover:text-teal-800'
                 }`}
               />
             )
@@ -116,7 +111,7 @@ const MobileNavItem: React.FC<{
   const active = isActivePath(href, pathname)
 
   const linkClass = `text-lg font-medium transition-colors ${
-    active ? 'text-teal-700' : 'text-gray-900 hover:text-teal-700'
+    active ? 'text-teal-800' : 'text-gray-900 hover:text-teal-800'
   }`
 
   if (!hasChildren) {
@@ -135,7 +130,7 @@ const MobileNavItem: React.FC<{
         </div>
         <button
           onClick={() => setExpanded((v) => !v)}
-          className="p-1 text-gray-500 hover:text-teal-700 focus:outline-none shrink-0"
+          className="p-1 text-gray-500 hover:text-teal-800 focus:outline-none shrink-0"
           aria-label="Toggle submenu"
         >
           <svg
@@ -145,7 +140,12 @@ const MobileNavItem: React.FC<{
             viewBox="0 0 24 24"
             aria-hidden
           >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2.5"
+              d="M19 9l-7 7-7-7"
+            />
           </svg>
         </button>
       </div>
@@ -162,7 +162,7 @@ const MobileNavItem: React.FC<{
                   appearance="inline"
                   locale={locale}
                   className={`block text-base font-medium transition-colors py-1 ${
-                    childActive ? 'text-teal-700' : 'text-gray-600 hover:text-teal-700'
+                    childActive ? 'text-teal-800' : 'text-gray-600 hover:text-teal-800'
                   }`}
                 />
               </div>

@@ -7,6 +7,7 @@ export const CultureBlock: Block = {
     singular: 'Corporate Culture Section',
     plural: 'Corporate Culture Sections',
   },
+  admin: { group: 'Special' },
   fields: [
     {
       name: 'heading',

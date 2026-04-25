@@ -45,7 +45,7 @@ export default function ContactForm({ labels }: { labels: Labels }) {
   }
 
   return (
-    <div className="bg-white p-8 md:p-10 rounded-2xl shadow-sm border border-gray-100">
+    <div className="p-8 md:p-10 rounded-2xl shadow-sm border border-gray-100">
       <h2 className="text-2xl font-bold text-gray-800 mb-8">{labels.formTitle}</h2>
 
       {status === 'success' ? (
@@ -65,7 +65,7 @@ export default function ContactForm({ labels }: { labels: Labels }) {
               />
             </svg>
           </div>
-          <p className="text-teal-700 font-semibold text-lg">{labels.successMsg}</p>
+          <p className="text-teal-800 font-semibold text-lg">{labels.successMsg}</p>
         </div>
       ) : (
         <Form form={form} layout="vertical" onFinish={handleFinish} disabled={status === 'sending'}>
@@ -164,7 +164,7 @@ export default function ContactForm({ labels }: { labels: Labels }) {
                   </svg>
                 ) : undefined
               }
-              iconPosition="end"
+              iconPlacement="end"
               style={{ backgroundColor: '#0d9488', borderColor: '#0d9488', height: 52 }}
             >
               {status === 'sending' ? labels.sending : labels.send}

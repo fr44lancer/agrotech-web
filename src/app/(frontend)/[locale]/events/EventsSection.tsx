@@ -149,13 +149,13 @@ export default function EventsSection({ events, categories, locale, t }: Props) 
         {/* Past events */}
         {showPast && pastFiltered.length > 0 && (
           <div>
-            <h2 className="text-2xl font-bold text-gray-700 mb-6 flex items-center gap-3">
-              <span className="w-1 h-7 bg-gray-400 rounded-full inline-block" />
+            <h2 className="text-2xl font-bold text-teal-800 mb-6 flex items-center gap-3">
+              <span className="w-1 h-7 bg-teal-600 rounded-full inline-block" />
               {t.pastTitle}
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="flex flex-col gap-6">
               {pastFiltered.map((event) => (
-                <PastCard key={event.id} event={event} locale={locale} t={t} />
+                <UpcomingCard key={event.id} event={event} locale={locale} t={t} />
               ))}
             </div>
           </div>
@@ -184,7 +184,7 @@ function UpcomingCard({ event, locale, t }: { event: EventDoc; locale: string; t
     <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-md transition-shadow">
       <div className="flex flex-col md:flex-row">
         {/* Image */}
-        <div className="relative md:w-72 lg:w-80 shrink-0 h-52 md:h-auto bg-gradient-to-br from-teal-600 to-green-700 overflow-hidden">
+        <div className="relative md:w-72 lg:w-80 shrink-0 h-52 md:h-auto bg-gradient-to-br from-teal-700 to-green-200 overflow-hidden">
           {imageUrl ? (
             <img src={imageUrl} alt={event.title} className="w-full h-full object-cover" />
           ) : (
@@ -218,9 +218,6 @@ function UpcomingCard({ event, locale, t }: { event: EventDoc; locale: string; t
         {/* Content */}
         <div className="p-6 flex flex-col flex-1">
           <div className="flex flex-wrap items-center gap-2 mb-3">
-            <span className="bg-teal-800 text-white text-xs font-semibold px-3 py-1 rounded-full">
-              {t.eventLabel}
-            </span>
             {cats.map((c: any) => (
               <span
                 key={c.id}
@@ -344,7 +341,7 @@ function PastCard({ event, locale, t }: { event: EventDoc; locale: string; t: T 
 
       {/* Content */}
       <div className="p-5 flex flex-col flex-grow">
-        <h3 className="text-base font-bold text-gray-800 mb-2 leading-snug group-hover:text-teal-700 transition-colors line-clamp-2">
+        <h3 className="text-base font-bold text-gray-800 mb-2 leading-snug group-hover:text-teal-800 transition-colors line-clamp-2">
           {event.title}
         </h3>
         {event.description && (

@@ -31,6 +31,13 @@ type HomeHeroProps = {
   links?: HeroLink[] | null
 }
 
+function str(value: any, locale: string): string {
+  if (!value) return ''
+  if (typeof value === 'string') return value
+  if (typeof value === 'object') return value[locale] ?? value['hy'] ?? Object.values(value)[0] ?? ''
+  return String(value)
+}
+
 function resolveHref(link: HeroLink['link'], locale: string): string {
   if (
     link.type === 'reference' &&
@@ -74,9 +81,9 @@ export const HomeHeroHero: React.FC<HomeHeroProps> = ({
       {/* Content */}
       <div className="container mx-auto px-6 py-16 md:py-32 relative z-10 w-full ">
         <div className="max-w-4xl">
-          {title && <h1 className="text-2xl md:text-5xl font-bold mb-8 max-w-2xl">{title}</h1>}
+          {title && <h1 className="text-2xl md:text-5xl font-bold mb-8 max-w-2xl">{str(title, locale)}</h1>}
 
-          {slogan && <p className="text-xl md:text-2xl mb-6 text-green-50">{slogan}</p>}
+          {slogan && <p className="text-xl md:text-2xl mb-6 text-green-50">{str(slogan, locale)}</p>}
 
           {features && features.length > 0 && (
             <div className="space-y-4 mb-8">
@@ -93,7 +100,7 @@ export const HomeHeroHero: React.FC<HomeHeroProps> = ({
                       clipRule="evenodd"
                     />
                   </svg>
-                  <span className="text-lg md:text-xl">{feature.text}</span>
+                  <span className="text-lg md:text-xl">{str(feature.text, locale)}</span>
                 </div>
               ))}
             </div>
@@ -114,11 +121,11 @@ export const HomeHeroHero: React.FC<HomeHeroProps> = ({
                     {...newTabProps}
                     className={
                       isOutline
-                        ? 'border-2 border-white text-white px-8 py-3 rounded-md font-semibold hover:bg-white hover:text-teal-700 transition'
-                        : 'bg-white text-teal-700 px-8 py-3 rounded-md font-semibold hover:bg-green-50 transition'
+                        ? 'border-2 border-white text-white px-8 py-3 rounded-md font-semibold hover:bg-white hover:text-teal-800 transition'
+                        : 'bg-white text-teal-800 px-8 py-3 rounded-md font-semibold hover:bg-green-50 transition'
                     }
                   >
-                    {link.label}
+                    {str(link.label, locale)}
                   </Link>
                 )
               })}

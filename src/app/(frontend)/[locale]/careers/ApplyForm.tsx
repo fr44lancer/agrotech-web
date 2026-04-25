@@ -56,7 +56,7 @@ export default function ApplyForm({ careerId, labels }: Props) {
 
   if (status === 'success') {
     return (
-      <div className="bg-teal-50 border border-teal-200 rounded-lg p-6 text-teal-800 text-center font-medium">
+      <div className="bg-teal-50 border border-white rounded-lg p-6 text-teal-800 text-center font-medium">
         {t.success}
       </div>
     )

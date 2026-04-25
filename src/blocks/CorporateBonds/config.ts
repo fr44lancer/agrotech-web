@@ -7,6 +7,7 @@ export const CorporateBondsBlock: Block = {
     singular: 'Corporate Bonds Section',
     plural: 'Corporate Bonds Sections',
   },
+  admin: { group: 'Special' },
   fields: [
     {
       name: 'heading',

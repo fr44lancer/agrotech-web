@@ -28,28 +28,40 @@ export const Footer: GlobalConfig = {
     {
       name: 'contact',
       type: 'group',
-      label: 'Footer Contact Info ',
+      label: 'Footer Contact Info',
       fields: [
         {
           name: 'columnLabel',
+          label: 'Footer Column Label',
           type: 'text',
           localized: true,
           defaultValue: 'Contact Us',
         },
         {
           name: 'address',
+          label: 'Address text',
           type: 'text',
           localized: true,
         },
         {
-          name: 'phone',
+          name: 'addressUrl',
+          label: 'Map Embed URL',
           type: 'text',
-          localized: true,
+          admin: {
+            description:
+              'Paste the iframe src URL from Yandex Maps (Share → Embed → copy only the src="..." value).',
+            }
+        },
+        {
+          name: 'phone',
+          label: 'Phone number',
+          type: 'text',
+          localized: false,
         },
         {
           name: 'email',
           type: 'email',
-          localized: true,
+          localized: false,
         },
       ],
     },
@@ -106,6 +118,18 @@ export const Footer: GlobalConfig = {
           name: 'url',
           type: 'text',
           required: true,
+        },
+        {
+          name: 'icon',
+          type: 'text',
+          label: 'Icon',
+          defaultValue: 'FacebookOutlined',
+          required: true,
+          admin: {
+            components: {
+              Field: '@/components/IconPicker/index#IconPickerField',
+            },
+          },
         },
       ],
     },

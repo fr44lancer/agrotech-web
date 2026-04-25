@@ -7,6 +7,7 @@ export const WhyWorkBlock: Block = {
     singular: 'Why Work Section',
     plural: 'Why Work Sections',
   },
+  admin: { group: 'Special' },
   fields: [
     {
       name: 'heading',
@@ -24,35 +25,29 @@ export const WhyWorkBlock: Block = {
       name: 'items',
       type: 'array',
       label: 'Reasons',
+      localized: true,
       minRows: 1,
       fields: [
         {
           name: 'icon',
-          type: 'select',
+          type: 'text',
           label: 'Icon',
-          defaultValue: 'lightning',
-          options: [
-            { label: 'Lightning / Innovation', value: 'lightning' },
-            { label: 'Globe / Global Impact', value: 'globe' },
-            { label: 'People / Team', value: 'people' },
-            { label: 'Star / Excellence', value: 'star' },
-            { label: 'Leaf / Sustainability', value: 'leaf' },
-            { label: 'Chart / Growth', value: 'chart' },
-            { label: 'Shield / Security', value: 'shield' },
-            { label: 'Heart / Culture', value: 'heart' },
-          ],
+          defaultValue: 'ThunderboltOutlined',
+          admin: {
+            components: {
+              Field: '@/components/IconPicker/index#IconPickerField',
+            },
+          },
         },
         {
           name: 'title',
           type: 'text',
           required: true,
-          localized: true,
           label: 'Title',
         },
         {
           name: 'description',
           type: 'text',
-          localized: true,
           label: 'Description',
         },
       ],

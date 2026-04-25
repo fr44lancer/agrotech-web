@@ -49,6 +49,13 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
   return generateMeta({ doc: event as any })
 }
 
+function str(value: any, locale: string): string {
+  if (!value) return ''
+  if (typeof value === 'string') return value
+  if (typeof value === 'object' && !Array.isArray(value)) return value[locale] ?? value['hy'] ?? Object.values(value)[0] ?? ''
+  return String(value)
+}
+
 export default async function EventPage({ params: paramsPromise }: Args) {
   const { isEnabled: draft } = await draftMode()
   const { slug, locale = 'hy' } = await paramsPromise
@@ -79,23 +86,34 @@ export default async function EventPage({ params: paramsPromise }: Args) {
   )
 
   const t = {
-    back: tr.events?.backToEvents ?? 'Back to Events',
-    registerTitle: tr.events?.registerTitle ?? 'Register for this Event',
-    registrationClosed: tr.events?.registrationClosed ?? 'Registration Closed',
+    back: str(tr.events?.backToEvents, locale) || 'Back to Events',
+    registerTitle: str(tr.events?.registerTitle, locale) || 'Register for this Event',
+    registrationClosed: str(tr.events?.registrationClosed, locale) || 'Registration Closed',
     registrationClosedMsg:
-      tr.events?.registrationClosedMsg ??
+      str(tr.events?.registrationClosedMsg, locale) ||
       'This event has already taken place. Registration is no longer available.',
-    firstName: tr.events?.firstName ?? 'First Name',
-    lastName: tr.events?.lastName ?? 'Last Name',
-    emailLabel: tr.events?.emailLabel ?? 'Email Address',
-    phoneLabel: tr.events?.phoneLabel ?? 'Phone Number',
-    registerNow: tr.events?.registerNow ?? 'Register Now',
-    registering: tr.events?.registering ?? 'Registering…',
-    registerSuccess: tr.events?.registerSuccess ?? "You've been registered! We'll see you there.",
-    registerError: tr.events?.registerError ?? 'Something went wrong. Please try again.',
+    firstName: str(tr.events?.firstName, locale) || 'First Name',
+    lastName: str(tr.events?.lastName, locale) || 'Last Name',
+    emailLabel: str(tr.events?.emailLabel, locale) || 'Email Address',
+    phoneLabel: str(tr.events?.phoneLabel, locale) || 'Phone Number',
+    registerNow: str(tr.events?.registerNow, locale) || 'Register Now',
+    registering: str(tr.events?.registering, locale) || 'Registering…',
+    registerSuccess: str(tr.events?.registerSuccess, locale) || "You've been registered! We'll see you there.",
+    registerError: str(tr.events?.registerError, locale) || 'Something went wrong. Please try again.',
   }
 
   const imageUrl = event.image && typeof event.image === 'object' ? (event.image as any).url : null
+
+  // Resolve richText locale object — Payload may return {hy, en, ru} instead of resolved content
+  const rawContent = event.content as any
+  const content =
+    rawContent &&
+    typeof rawContent === 'object' &&
+    !Array.isArray(rawContent) &&
+    ('hy' in rawContent || 'en' in rawContent || 'ru' in rawContent) &&
+    !('root' in rawContent)
+      ? (rawContent[locale] ?? rawContent['hy'] ?? rawContent['en'] ?? rawContent['ru'] ?? null)
+      : rawContent
 
   return (
     <div className="w-full bg-white min-h-screen">
@@ -105,21 +123,21 @@ export default async function EventPage({ params: paramsPromise }: Args) {
           <div className="absolute inset-0">
             <img
               src={imageUrl}
-              alt={event.title as string}
+              alt={str(event.title, locale)}
               className="w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-teal-900/70" />
           </div>
         )}
         {!imageUrl && (
-          <div className="absolute inset-0 bg-gradient-to-br from-teal-800 to-green-900 opacity-90" />
+          <div className="absolute inset-0 bg-gradient-to-r from-teal-600 to-green-600 opacity-90" />
         )}
 
         <div className="relative container mx-auto px-6 max-w-6xl py-16 md:py-20">
           {/* Back link */}
           <Link
             href={`/${locale}/events`}
-            className="inline-flex items-center gap-1.5 text-teal-200 hover:text-white text-sm font-medium mb-8 transition"
+            className="inline-flex items-center gap-1.5 text-gray-200 hover:text-white text-sm font-medium mb-8 transition"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
@@ -139,13 +157,13 @@ export default async function EventPage({ params: paramsPromise }: Args) {
                 key={c.id}
                 className="bg-white/20 text-white text-xs font-medium px-3 py-1 rounded-full backdrop-blur-sm"
               >
-                {c.title}
+                {str(c.title, locale)}
               </span>
             ))}
           </div>
 
           <h1 className="text-3xl md:text-5xl font-bold mb-6 leading-tight max-w-3xl">
-            {event.title as string}
+            {str(event.title, locale)}
           </h1>
 
           {/* Meta row */}
@@ -177,7 +195,7 @@ export default async function EventPage({ params: paramsPromise }: Args) {
                     d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
                   />
                 </svg>
-                {event.location as string}
+                {str(event.location, locale)}
               </span>
             )}
           </div>
@@ -192,12 +210,14 @@ export default async function EventPage({ params: paramsPromise }: Args) {
             <div className="lg:col-span-2">
               {event.description && (
                 <p className="text-lg text-gray-500 mb-8 leading-relaxed border-l-4 border-teal-400 pl-5">
-                  {event.description as string}
+                  {str(event.description, locale)}
                 </p>
               )}
-              <div className="prose prose-teal max-w-none text-gray-700">
-                <RichText data={event.content} enableGutter={false} />
-              </div>
+              {content && typeof content === 'object' && 'root' in content && (
+                <div className="prose prose-teal max-w-none text-gray-700">
+                  <RichText data={content} enableGutter={false} />
+                </div>
+              )}
             </div>
 
             {/* Sidebar */}

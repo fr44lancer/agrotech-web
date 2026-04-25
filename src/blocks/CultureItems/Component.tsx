@@ -1,16 +1,25 @@
 import React from 'react'
 import type { CultureBlock as CultureBlockProps } from '@/payload-types'
 
-export const CultureBlockComponent: React.FC<CultureBlockProps> = ({ heading, subheading, items }) => {
+type Props = CultureBlockProps & { locale?: string }
+
+function str(value: any, locale: string): string {
+  if (!value) return ''
+  if (typeof value === 'string') return value
+  if (typeof value === 'object') return value[locale] ?? value['hy'] ?? Object.values(value)[0] ?? ''
+  return String(value)
+}
+
+export const CultureBlockComponent: React.FC<Props> = ({ heading, subheading, items, locale = 'hy' }) => {
   return (
     <section className="py-16 bg-gray-50">
       <div className="container mx-auto px-6 max-w-7xl">
         {(heading || subheading) && (
           <div className="text-center mb-12">
             {heading && (
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">{heading}</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">{str(heading, locale)}</h2>
             )}
-            {subheading && <p className="text-gray-600 text-lg max-w-2xl mx-auto">{subheading}</p>}
+            {subheading && <p className="text-gray-600 text-lg max-w-2xl mx-auto">{str(subheading, locale)}</p>}
           </div>
         )}
 
@@ -25,8 +34,8 @@ export const CultureBlockComponent: React.FC<CultureBlockProps> = ({ heading, su
                     </svg>
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-gray-800 mb-2">{item.title}</h3>
-                    {item.description && <p className="text-gray-600 leading-relaxed">{item.description}</p>}
+                    <h3 className="text-xl font-bold text-gray-800 mb-2">{str(item.title, locale)}</h3>
+                    {item.description && <p className="text-gray-600 leading-relaxed">{str(item.description, locale)}</p>}
                   </div>
                 </div>
               </div>

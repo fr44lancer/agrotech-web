@@ -1,5 +1,6 @@
 'use client'
 
+import { Image } from 'antd';
 import React, { useState } from 'react'
 
 type ImageItem = {
@@ -31,7 +32,7 @@ export default function ProductGallery({ images }: { images: ImageItem[] }) {
     <div className="space-y-3">
       {/* Main image */}
       <div className="aspect-square rounded-2xl overflow-hidden bg-gray-100 border border-gray-100">
-        <img
+        <Image
           src={urls[active]!.url!}
           alt={urls[active]!.alt ?? ''}
           className="w-full h-full object-contain"

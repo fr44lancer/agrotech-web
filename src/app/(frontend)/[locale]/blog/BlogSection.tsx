@@ -88,7 +88,7 @@ export default function BlogSection({
                 className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
                   !categoryId
                     ? 'bg-teal-700 text-white'
-                    : 'bg-gray-100 text-gray-600 hover:bg-teal-50 hover:text-teal-700'
+                    : 'bg-gray-100 text-gray-600 hover:bg-teal-50 hover:text-teal-800'
                 }`}
               >
                 {t.allCategories}
@@ -100,7 +100,7 @@ export default function BlogSection({
                   className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
                     categoryId === cat.id
                       ? 'bg-teal-700 text-white'
-                      : 'bg-gray-100 text-gray-600 hover:bg-teal-50 hover:text-teal-700'
+                      : 'bg-gray-100 text-gray-600 hover:bg-teal-50 hover:text-teal-800'
                   }`}
                 >
                   {cat.title as string}
@@ -116,7 +116,7 @@ export default function BlogSection({
                 onClick={() => setTagId(null)}
                 className={`px-3 py-1 rounded-full text-xs font-medium transition-colors border ${
                   !tagId
-                    ? 'border-teal-600 bg-teal-50 text-teal-700'
+                    ? 'border-teal-600 bg-teal-50 text-teal-800'
                     : 'border-gray-200 text-gray-500 hover:border-teal-400 hover:text-teal-600'
                 }`}
               >
@@ -128,7 +128,7 @@ export default function BlogSection({
                   onClick={() => setTagId(tagId === tag.id ? null : tag.id)}
                   className={`px-3 py-1 rounded-full text-xs font-medium transition-colors border ${
                     tagId === tag.id
-                      ? 'border-teal-600 bg-teal-50 text-teal-700'
+                      ? 'border-teal-600 bg-teal-50 text-teal-800'
                       : 'border-gray-200 text-gray-500 hover:border-teal-400 hover:text-teal-600'
                   }`}
                 >
@@ -180,9 +180,9 @@ function PostCard({ post, locale, readMore }: { post: Post; locale: string; read
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           />
         ) : (
-          <div className="w-full h-full bg-gradient-to-br from-teal-50 to-green-100 flex items-center justify-center">
+          <div className="w-full h-full bg-gradient-to-br from-teal-600 to-green-600 flex items-center justify-center">
             <svg
-              className="w-12 h-12 text-teal-200"
+              className="w-12 h-12 text-gray-200"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -213,13 +213,13 @@ function PostCard({ post, locale, readMore }: { post: Post; locale: string; read
       {/* Body */}
       <div className="p-5 flex flex-col flex-1">
         {dateStr && <p className="text-xs text-gray-400 mb-2">{dateStr}</p>}
-        <h3 className="text-base font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-teal-700 transition-colors">
+        <h3 className="text-base font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-teal-800 transition-colors">
           {post.title as string}
         </h3>
         {post.excerpt && (
           <p className="text-sm text-gray-500 line-clamp-3 flex-1">{post.excerpt as string}</p>
         )}
-        <span className="mt-4 inline-flex items-center gap-1 text-teal-700 text-sm font-medium">
+        <span className="mt-4 inline-flex items-center gap-1 text-teal-800 text-sm font-medium">
           {readMore}
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />

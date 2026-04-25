@@ -21,8 +21,9 @@ export const Products: CollectionConfig = {
   admin: {
     group: 'Catalog',
     useAsTitle: 'title',
-    defaultColumns: ['title', 'status', 'featured', 'updatedAt'],
+    defaultColumns: ['title', 'status', 'featured', 'identifier','updatedAt'],
     description: 'Product catalog entries. Not a shop — no pricing.',
+    listSearchableFields: ['title', 'slug','identifier'],
   },
   fields: [
     // ── Core ──────────────────────────────────────────────────────────────────
@@ -32,6 +33,15 @@ export const Products: CollectionConfig = {
       required: true,
       localized: true,
       label: 'Product Name',
+    },
+    {
+      name: 'identifier',
+      type: 'text',
+      label: 'Identifier',
+      admin: {
+        description: 'Custom product identifier or SKU (e.g. AGR-001).',
+        position: 'sidebar',
+      },
     },
     {
       type: 'tabs',
@@ -202,6 +212,15 @@ export const Products: CollectionConfig = {
       name: 'categories',
       type: 'relationship',
       relationTo: 'productCategories',
+      hasMany: true,
+      admin: {
+        position: 'sidebar',
+      },
+    },
+    {
+      name: 'brand',
+      type: 'relationship',
+      relationTo: 'brands',
       hasMany: true,
       admin: {
         position: 'sidebar',

@@ -29,11 +29,14 @@ export const Services: CollectionConfig = {
       localized: true,
     },
     {
-      name: 'iconSvg',
-      type: 'textarea',
-      required: true,
+      name: 'icon',
+      type: 'text',
+      label: 'Icon',
+      defaultValue: 'ThunderboltOutlined',
       admin: {
-        description: 'Provide the raw SVG string for the icon',
+        components: {
+          Field: '@/components/IconPicker/index#IconPickerField',
+        },
       },
     },
     {

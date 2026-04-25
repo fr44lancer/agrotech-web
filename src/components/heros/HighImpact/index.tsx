@@ -9,8 +9,6 @@ import { Media } from '@/components/Media'
 import BaseWrapper from '@/components/ui/Containers/BaseContainer'
 
 export const HighImpactHero: React.FC<Page['hero']> = ({ links, media, richText }) => {
-  console.log('home media')
-  console.log(media)
   return (
     <BaseWrapper className="relative  text-white">
       <section className="relative  text-white">

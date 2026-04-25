@@ -7,6 +7,7 @@ export const FinancialReportingBlock: Block = {
     singular: 'Financial Reporting Section',
     plural: 'Financial Reporting Sections',
   },
+  admin: { group: 'Special' },
   fields: [
     {
       name: 'heading',

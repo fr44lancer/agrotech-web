@@ -57,7 +57,7 @@ export const ImageMedia: React.FC<MediaProps> = (props) => {
 
   let width: number | undefined
   let height: number | undefined
-  let alt = altFromProps
+  let alt = altFromProps  || ''
   let src: StaticImageData | string = srcFromProps || ''
 
   if (!src && resource && typeof resource === 'object') {
@@ -79,7 +79,7 @@ export const ImageMedia: React.FC<MediaProps> = (props) => {
   return (
     <picture className={cn(pictureClassName)}>
       <NextImage
-        alt={alt || ''}
+        alt={alt}
         className={cn(imgClassName)}
         fill={fill}
         height={!fill ? height : undefined}

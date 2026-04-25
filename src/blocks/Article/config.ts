@@ -14,6 +14,7 @@ export const ArticleBlock: Block = {
     singular: 'Article Block',
     plural: 'Article Blocks',
   },
+  admin: { group: 'Common' },
   fields: [
     {
       name: 'title',
@@ -48,9 +49,31 @@ export const ArticleBlock: Block = {
       }),
     },
     {
+      name: 'mediaType',
+      type: 'select',
+      label: 'Media Type',
+      defaultValue: 'image',
+      options: [
+        { label: 'Image', value: 'image' },
+        { label: 'YouTube Video', value: 'video' },
+      ],
+    },
+    {
       name: 'image',
       type: 'upload',
       relationTo: 'media',
+      admin: {
+        condition: (data, siblingData) => (siblingData?.mediaType ?? 'image') === 'image',
+      },
+    },
+    {
+      name: 'youtubeUrl',
+      type: 'text',
+      label: 'YouTube URL',
+      admin: {
+        description: 'Paste the YouTube video URL (e.g. https://www.youtube.com/watch?v=...)',
+        condition: (data, siblingData) => siblingData?.mediaType === 'video',
+      },
     },
     {
       type: 'row',
@@ -65,14 +88,15 @@ export const ArticleBlock: Block = {
           ],
           admin: {
             width: '50%',
-            condition: (data, siblingData) => Boolean(siblingData?.image),
+            condition: (data, siblingData) =>
+              Boolean(siblingData?.image) || Boolean(siblingData?.youtubeUrl),
           },
         },
         {
           name: 'imageColPercent',
           type: 'select',
           defaultValue: '40',
-          label: 'Image Width',
+          label: 'Media Width',
           options: [
             { label: '25%', value: '25' },
             { label: '33%', value: '33' },
@@ -81,7 +105,8 @@ export const ArticleBlock: Block = {
           ],
           admin: {
             width: '50%',
-            condition: (data, siblingData) => Boolean(siblingData?.image),
+            condition: (data, siblingData) =>
+              Boolean(siblingData?.image) || Boolean(siblingData?.youtubeUrl),
           },
         },
       ],
