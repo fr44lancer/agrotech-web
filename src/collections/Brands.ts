@@ -29,8 +29,7 @@ export const Brands: CollectionConfig = {
     {
       name: 'logo',
       type: 'upload',
-      relationTo: 'media',
-      required: true,
+      relationTo: 'media'
     },
     {
       name: 'description',
