@@ -169,6 +169,7 @@ export const SiteTranslations: GlobalConfig = {
       label: 'Products Pages',
       fields: [
         { name: 'allCategories', type: 'text', localized: true, defaultValue: 'All Categories' },
+        { name: 'allBrands', type: 'text', localized: true, defaultValue: 'All Brands' },
         { name: 'allProducts', type: 'text', localized: true, defaultValue: 'All Products' },
         { name: 'viewProducts', type: 'text', localized: true, defaultValue: 'View Products' },
         { name: 'contactBtn', type: 'text', localized: true, defaultValue: 'Contact Sales Team' },
@@ -183,6 +184,7 @@ export const SiteTranslations: GlobalConfig = {
         { name: 'download', type: 'text', localized: true, defaultValue: 'Download' },
         { name: 'inquire', type: 'text', localized: true, defaultValue: 'Inquire About This Product' },
         { name: 'brand', type: 'text', localized: true, defaultValue: 'Brand' },
+        { name: 'packaging', type: 'text', localized: true, defaultValue: 'Packaging' },
       ],
     },
   ],

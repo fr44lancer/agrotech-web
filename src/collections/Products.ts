@@ -230,6 +230,36 @@ export const Products: CollectionConfig = {
         position: 'sidebar',
       },
     },
+    {
+      name: 'unit',
+      type: 'relationship',
+      relationTo: 'units' as any,
+      hasMany: false,
+      admin: {
+        position: 'sidebar',
+        description: 'Measurement unit (e.g. kg, liter).',
+      },
+    },
+    {
+      name: 'amount',
+      type: 'number',
+      label: 'Amount',
+      admin: {
+        position: 'sidebar',
+        description: 'Quantity per package (e.g. 25 for "25 kg").',
+        step: 0.01,
+      },
+    },
+    {
+      name: 'packagingType',
+      type: 'relationship',
+      relationTo: 'packagingTypes' as any,
+      hasMany: false,
+      admin: {
+        position: 'sidebar',
+        description: 'Packaging form (e.g. bag, container, bottle).',
+      },
+    },
     slugField(),
   ],
 }

@@ -2,6 +2,7 @@
 
 import React, { useMemo, useState } from 'react'
 import Link from 'next/link'
+import { Select } from 'antd'
 
 type EventDoc = {
   id: string
@@ -92,32 +93,21 @@ export default function EventsSection({ events, categories, locale, t }: Props) 
           ))}
         </div>
 
-        {/* Category pills */}
+        {/* Category filter */}
         {categories.length > 0 && (
-          <div className="container mx-auto flex flex-wrap gap-2 pt-3 border-t border-gray-100">
-            <button
-              onClick={() => setCategoryId(null)}
-              className={`px-4 py-1.5 rounded-full text-xs font-medium transition border ${
-                categoryId === null
-                  ? 'bg-teal-600 text-white border-teal-600'
-                  : 'bg-white text-gray-500 border-gray-200 hover:border-teal-400'
-              }`}
-            >
-              {t.allCategories}
-            </button>
-            {categories.map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => setCategoryId(cat.id === categoryId ? null : cat.id)}
-                className={`px-4 py-1.5 rounded-full text-xs font-medium transition border ${
-                  categoryId === cat.id
-                    ? 'bg-teal-600 text-white border-teal-600'
-                    : 'bg-white text-gray-500 border-gray-200 hover:border-teal-400'
-                }`}
-              >
-                {cat.title}
-              </button>
-            ))}
+          <div className="container mx-auto pt-3 border-t border-gray-100">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <Select
+                value={categoryId ?? ''}
+                onChange={(val) => setCategoryId(val || null)}
+                options={[
+                  { value: '', label: t.allCategories },
+                  ...categories.map((c) => ({ value: c.id, label: c.title })),
+                ]}
+                className="w-full"
+                size="middle"
+              />
+            </div>
           </div>
         )}
       </div>

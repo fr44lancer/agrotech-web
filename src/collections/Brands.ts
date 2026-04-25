@@ -12,7 +12,7 @@ export const Brands: CollectionConfig = {
     update: authenticated,
   },
   admin: {
-    group: 'Brands',
+    group: 'Catalog',
     useAsTitle: 'title',
     defaultColumns: ['title', 'websiteUrl', 'updatedAt'],
   },
