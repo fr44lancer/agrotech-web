@@ -23,7 +23,7 @@ export const Products: CollectionConfig = {
     useAsTitle: 'title',
     defaultColumns: ['title', 'status', 'featured', 'identifier','updatedAt'],
     description: 'Product catalog entries. Not a shop — no pricing.',
-    listSearchableFields: ['title', 'slug','identifier'],
+    listSearchableFields: ['title', 'slug','identifier','identifier_secondary'],
   },
   fields: [
     // ── Core ──────────────────────────────────────────────────────────────────
@@ -40,6 +40,15 @@ export const Products: CollectionConfig = {
       label: 'Identifier',
       admin: {
         description: 'Custom product identifier or SKU (e.g. AGR-001).',
+        position: 'sidebar',
+      },
+    },
+    {
+      name: 'identifier_secondary',
+      type: 'text',
+      label: 'Identifier 2',
+      admin: {
+        description: 'Custom product identifier 2',
         position: 'sidebar',
       },
     },
@@ -100,7 +109,6 @@ export const Products: CollectionConfig = {
                 {
                   name: 'text',
                   type: 'text',
-                  required: true,
                   localized: true,
                   label: 'Feature',
                 },
@@ -118,14 +126,12 @@ export const Products: CollectionConfig = {
                 {
                   name: 'label',
                   type: 'text',
-                  required: true,
                   localized: true,
                   label: 'Label',
                 },
                 {
                   name: 'value',
                   type: 'text',
-                  required: true,
                   localized: true,
                   label: 'Value',
                 },
@@ -143,7 +149,6 @@ export const Products: CollectionConfig = {
                 {
                   name: 'label',
                   type: 'text',
-                  required: true,
                   localized: true,
                   label: 'Label',
                   admin: {
@@ -154,7 +159,6 @@ export const Products: CollectionConfig = {
                   name: 'file',
                   type: 'upload',
                   relationTo: 'media',
-                  required: true,
                   label: 'File',
                 },
               ],

@@ -78,7 +78,7 @@ export default async function CategoryProductsPage({ params: paramsPromise }: Ar
       <section className="py-12 bg-gray-50 min-h-[50vh]">
         <div className="container mx-auto px-6 max-w-7xl">
           {/* Mobile: dropdown */}
-          <div className="md:hidden mb-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 mb-8 gap-8 justify-left">
             <CategorySelect
               categories={allCategoriesReq.docs.map((c: any) => ({ id: c.id, title: c.title, slug: c.slug }))}
               locale={locale}
@@ -88,7 +88,7 @@ export default async function CategoryProductsPage({ params: paramsPromise }: Ar
           </div>
 
           {/* Desktop: pills */}
-          <div className="hidden md:flex flex-wrap gap-2 mb-10">
+          <div className="hidden flex-wrap gap-2 mb-10">
             <Link
               href={`/${locale}/products`}
               className="px-4 py-2 rounded-full text-sm font-medium bg-white text-gray-600 border border-gray-200 hover:border-teal-400 transition"

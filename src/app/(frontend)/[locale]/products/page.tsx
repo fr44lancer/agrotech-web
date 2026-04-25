@@ -75,13 +75,13 @@ export default async function ProductsPage({
       <section className="py-16 bg-gray-50 min-h-[50vh]">
         <div className="container mx-auto px-6 w-full max-w-7xl">
           {/* Mobile: dropdown */}
-          <div className=" mb-8">
-            <CategorySelect
-              categories={categoriesData.docs.map((c: any) => ({ id: c.id, title: c.title, slug: c.slug }))}
-              locale={locale}
-              currentSlug={categorySlug}
-              allLabel={t.all}
-            />
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 mb-8 gap-8 justify-left">
+              <CategorySelect
+                categories={categoriesData.docs.map((c: any) => ({ id: c.id, title: c.title, slug: c.slug }))}
+                locale={locale}
+                currentSlug={categorySlug}
+                allLabel={t.all}
+              />
           </div>
 
           {/* Desktop: pills */}
