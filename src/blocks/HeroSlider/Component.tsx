@@ -155,7 +155,7 @@ export const HeroSliderBlockComponent: React.FC<Props> = ({
           <div className="absolute inset-0 bg-gradient-to-r from-teal-900/90" />
 
           {/* Content */}
-          <div className="container mx-auto px-6 py-16 md:py-32 relative z-10 w-full min-h-[560px] flex items-center">
+          <div className="container mx-auto lg:px-14 px-6 py-16 md:py-32 relative z-10 w-full min-h-[560px] flex items-center">
             <div className="max-w-7xl">
               {slide.title && (
                 <h1 className="text-2xl md:text-5xl font-bold mb-8 max-w-5xl">{str(slide.title, locale)}</h1>
@@ -222,9 +222,9 @@ export const HeroSliderBlockComponent: React.FC<Props> = ({
           <button
             onClick={prev}
             aria-label="Previous slide"
-            className="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-7 xl:w-11 h-7 xl:h-11 rounded-full bg-black/30 hover:bg-black/50 flex items-center justify-center text-white transition backdrop-blur-sm"
+            className="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-7 xl:w-9 h-7 xl:h-9 rounded-full bg-black/30 hover:bg-black/50 flex items-center justify-center text-white transition backdrop-blur-sm"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -237,9 +237,9 @@ export const HeroSliderBlockComponent: React.FC<Props> = ({
           <button
             onClick={next}
             aria-label="Next slide"
-            className="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-7 xl:w-11 h-7 xl:h-11 rounded-full bg-black/30 hover:bg-black/50 flex items-center justify-center text-white transition backdrop-blur-sm"
+            className="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-7 xl:w-9 h-7 xl:h-9 rounded-full bg-black/30 hover:bg-black/50 flex items-center justify-center text-white transition backdrop-blur-sm"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
             </svg>
           </button>
