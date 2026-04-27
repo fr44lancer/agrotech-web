@@ -74,16 +74,16 @@ export default function EventsSection({ events, categories, locale, t }: Props) 
   ]
 
   return (
-    <div className="bg-gray-50">
+    <div className="bg-gray-50 container mx-auto">
       {/* Filter bar */}
-      <div className="bg-gray-100 border border-gray-100 shadow-sm p-5 mb-10">
+      <div className=" bg-gray-100 border border-gray-100 shadow-sm p-5 mb-10 flex flex-wrap">
         {/* Tab row */}
-        <div className="container mx-auto flex flex-wrap gap-2 mb-4">
+        <div className="flex flex-wrap gap-2 lg:pr-4">
           {tabBtns.map(({ key, label }) => (
             <button
               key={key}
               onClick={() => setTab(key)}
-              className={`px-5 py-2 rounded-full text-sm font-semibold transition ${
+              className={`lg:px-5 px-2 py-2 rounded-full text-sm font-semibold transition ${
                 tab === key
                   ? 'bg-teal-700 text-white shadow-sm'
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
@@ -96,8 +96,8 @@ export default function EventsSection({ events, categories, locale, t }: Props) 
 
         {/* Category filter */}
         {categories.length > 0 && (
-          <div className="container mx-auto pt-3 border-t border-gray-100">
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="border-t border-gray-100 md:px-3 pt-3 sm:pt-0">
+            <div className="gap-2">
               <Select
                 value={categoryId ?? ''}
                 onChange={(val) => setCategoryId(val || null)}
@@ -105,14 +105,14 @@ export default function EventsSection({ events, categories, locale, t }: Props) 
                   { value: '', label: t.allCategories },
                   ...categories.map((c) => ({ value: c.id, label: c.title })),
                 ]}
-                className="w-full"
+                className="w-full py-2 px-5"
                 size="middle"
               />
             </div>
           </div>
         )}
       </div>
-      <div className="container mx-auto px-6 ">
+      <div className="px-6 ">
         {/* No results */}
         {filtered.length === 0 && (
           <p className="text-center text-gray-400 py-20 text-lg">{t.noResults}</p>
