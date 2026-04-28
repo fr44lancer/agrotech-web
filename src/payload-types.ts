@@ -2934,6 +2934,7 @@ export interface SiteTranslation {
     inquire?: string | null;
     brand?: string | null;
     packaging?: string | null;
+    measureunit?: string | null;
   };
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -3166,6 +3167,7 @@ export interface SiteTranslationsSelect<T extends boolean = true> {
         inquire?: T;
         brand?: T;
         packaging?: T;
+        measureunit?: T;
       };
   updatedAt?: T;
   createdAt?: T;

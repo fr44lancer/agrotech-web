@@ -63,6 +63,7 @@ export default async function ProductDetailPage({ params: paramsPromise }: Args)
     allproducts: tr.products?.allProducts ?? 'All Products',
     brand: str(tr.products?.brand, locale) || 'Brand',
     packaging: str((tr.products as any)?.packaging, locale) || 'Packaging',
+    measureunit: tr.products?.measureunit ?? 'Unit of measurement'
   }
 
   const statusBadgeMap: Record<string, { key: 'comingSoon' | 'discontinued'; cls: string }> = {
@@ -85,9 +86,8 @@ export default async function ProductDetailPage({ params: paramsPromise }: Args)
   const packagingComposition = [
     amount != null ? `${amount}${unitLabel ? ' ' + unitLabel : ''}` : unitLabel || null,
     packagingLabel || null,
-  ]
-    .filter(Boolean)
-    .join(', ')
+  ].filter(Boolean).join(', ')
+
   const hasPackaging = Boolean(packagingComposition)
 
   // Resolve richText locale object — Payload may return {hy, en, ru} instead of resolved content
@@ -168,7 +168,7 @@ export default async function ProductDetailPage({ params: paramsPromise }: Args)
                 </p>
               )}
 
-              {(brand.length > 0 || hasPackaging) && (
+              {(brand.length > 0 || hasPackaging || unit) && (
                 <div className="mb-8 border-b border-gray-100">
                   <table className="w-full text-md">
                     <tbody>
@@ -178,8 +178,14 @@ export default async function ProductDetailPage({ params: paramsPromise }: Args)
                           <td className="py-2.5 pl-5 text-gray-900 rounded-r">{str(brand[0].title, locale)}</td>
                         </tr>
                       )}
+                       {unit && (
+                        <tr className="bg-white">
+                          <td className="py-2.5 px-2 font-medium w-2/5 rounded-l">{t.measureunit}</td>
+                          <td className="py-2.5 pl-5 text-gray-900 rounded-r">{unitLabel}</td>
+                        </tr>
+                      )}
                       {hasPackaging && (
-                        <tr className={brand.length > 0 ? 'bg-white' : 'bg-gray-50'}>
+                        <tr className={brand.length > 0 ? 'bg-gray-50' : 'bg-white'}>
                           <td className="py-2.5 px-2 font-medium w-2/5 rounded-l">{t.packaging}</td>
                           <td className="py-2.5 pl-5 text-gray-900 rounded-r">{packagingComposition}</td>
                         </tr>

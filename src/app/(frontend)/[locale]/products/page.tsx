@@ -169,7 +169,7 @@ export default async function ProductsPage({
                         {str(category.description, locale)}
                       </p>
                     )}
-                    <div className="flex items-center text-teal-950 font-medium opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 mt-4">
+                    <div className="flex items-center text-teal-950 font-medium lg:opacity-0 lg:-translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 mt-4">
                       <span>{t.viewProducts}</span>
                       <svg
                         className="w-5 h-5 ml-2"
