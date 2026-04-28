@@ -35,6 +35,9 @@ export default function CategorySelect({
       options={options}
       className="w-full"
       size="medium"
+      listHeight={280}
+      virtual={false}
+      getPopupContainer={triggerNode => triggerNode.parentElement}
     />
   )
 }

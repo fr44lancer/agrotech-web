@@ -78,12 +78,12 @@ export default function EventsSection({ events, categories, locale, t }: Props) 
       {/* Filter bar */}
       <div className=" bg-gray-100 border border-gray-100 shadow-sm p-5 mb-10 flex flex-wrap">
         {/* Tab row */}
-        <div className="flex flex-wrap gap-2 lg:pr-4">
+        <div className="flex flex-wrap gap-2 lg:pr-4 pb-3">
           {tabBtns.map(({ key, label }) => (
             <button
               key={key}
               onClick={() => setTab(key)}
-              className={`lg:px-5 px-2 py-2 rounded-full text-sm font-semibold transition ${
+              className={`px-2 sm:px-4 lg:px-5 py-2 rounded-full text-sm font-semibold transition ${
                 tab === key
                   ? 'bg-teal-700 text-white shadow-sm'
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
@@ -96,7 +96,7 @@ export default function EventsSection({ events, categories, locale, t }: Props) 
 
         {/* Category filter */}
         {categories.length > 0 && (
-          <div className="border-t border-gray-100 md:px-3 pt-3 sm:pt-0">
+          <div className="border-t border-gray-100 md:px-5 ">
             <div className="gap-2">
               <Select
                 value={categoryId ?? ''}
