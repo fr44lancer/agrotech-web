@@ -185,6 +185,7 @@ export const SiteTranslations: GlobalConfig = {
         { name: 'inquire', type: 'text', localized: true, defaultValue: 'Inquire About This Product' },
         { name: 'brand', type: 'text', localized: true, defaultValue: 'Brand' },
         { name: 'packaging', type: 'text', localized: true, defaultValue: 'Packaging' },
+        { name: 'measureunit',type: 'text', localized : true, defaultValue: 'Unit of measurement'}
       ],
     },
   ],
