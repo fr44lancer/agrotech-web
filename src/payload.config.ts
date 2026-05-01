@@ -47,8 +47,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
     livePreview: {
-      url: 'http://localhost:3000',
-      collections: ['pages'],
+      collections: ['pages', 'products', 'events', 'posts', 'careers', 'partners'],
     },
   },
   collections: [
@@ -95,7 +94,7 @@ export default buildConfig({
     fallback: true,
   },
   db: mongooseAdapter({
-    url: process.env.MONGODB_URL || '',
+    url: process.env.MONGODB_URI || '',
   }),
   globals: [Header, Footer, SiteTranslations],
   plugins: [
