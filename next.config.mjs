@@ -26,7 +26,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'agrotech.elvs.dev',
+        hostname: '*.elvs.dev',
       },
       {
         protocol: 'https',
