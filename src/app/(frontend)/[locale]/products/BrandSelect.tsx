@@ -38,8 +38,10 @@ export default function BrandSelect({
       value={currentSlug ?? ''}
       onChange={handleChange}
       options={options}
-      className="w-full"
-      size="middle"
+      className="w-full max-w-100"
+      size="medium"
+      listHeight={280}
+      virtual={false}
     />
   )
 }
