@@ -825,13 +825,22 @@ export interface Product {
    */
   unit?: (string | null) | Unit;
   /**
-   * Quantity per package (e.g. 25 for "25 kg").
+   * Package type, measurement, size.
    */
-  amount?: number | null;
-  /**
-   * Packaging form (e.g. bag, container, bottle).
-   */
-  packagingType?: (string | null) | PackagingType;
+  package?: {
+    /**
+     * Packaging form (e.g. bag, container, bottle).
+     */
+    packagingType?: (string | null) | PackagingType;
+    /**
+     * Quantity per package (e.g. 25 for "25 kg").
+     */
+    amount?: number | null;
+    /**
+     * Package measurement unit.
+     */
+    unit?: (string | null) | Unit;
+  };
   /**
    * When enabled, the slug will auto-generate from the title field on save and autosave.
    */
@@ -2382,8 +2391,13 @@ export interface ProductsSelect<T extends boolean = true> {
   categories?: T;
   brand?: T;
   unit?: T;
-  amount?: T;
-  packagingType?: T;
+  package?:
+    | T
+    | {
+        packagingType?: T;
+        amount?: T;
+        unit?: T;
+      };
   generateSlug?: T;
   slug?: T;
   updatedAt?: T;
