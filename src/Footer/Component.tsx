@@ -30,8 +30,8 @@ export async function Footer({ locale = 'hy' }: { locale?: string }) {
   const socialLinks = footerData?.socialLinks
 
   return (
-    <footer className="bg-gray-800 text-white mt-10">
-      <div className="container mx-auto px-6 max-w-7xl py-14">
+    <footer className="bg-gray-800 text-white mt-6 lg:mt-8">
+      <div className="container mx-auto px-6 max-w-7xl py-10 lg:py-12">
         <Row gutter={[40, 40]} justify="space-between">
           <Col xs={24} md={6}>
             <h3 className="text-xl font-bold mb-3">{companyName}</h3>

@@ -43,7 +43,7 @@ const DesktopNavItem: React.FC<{ item: NavItem; locale: string; pathname: string
   const childHrefs = hasChildren ? children!.map((c) => resolveHref((c as any).link, locale)) : []
   const active = isActivePath(href, pathname) || childHrefs.some((h) => isActivePath(h, pathname))
 
-  const linkClass = `font-medium transition-colors px-2 py-1 ${
+  const linkClass = `font-medium transition-colors px-2 py-1 text-nowrap ${
     active ? 'text-teal-800' : 'text-gray-900 hover:text-teal-800'
   }`
 
