@@ -124,7 +124,7 @@ export default async function Page({ params: paramsPromise }: Args) {
       <RenderBlocks blocks={heroBlocks} locale={locale} />
 
       {/* Growing Together */}
-      <section className="py-16 bg-white">
+      <section className="py-10 lg:py-16 bg-white">
         <div className="container mx-auto px-6 max-w-4xl text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-6">{t.growingTitle}</h2>
           <p className="text-gray-600 text-lg mb-4">{t.growingSub1}</p>
@@ -133,7 +133,7 @@ export default async function Page({ params: paramsPromise }: Args) {
       </section>
 
       {/* Strategic Partners — grouped by category */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-10 lg:py-16 bg-gray-50">
         <div className="container mx-auto px-6 max-w-7xl">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
@@ -148,7 +148,7 @@ export default async function Page({ params: paramsPromise }: Args) {
             <div className="space-y-14">
               {categoryGroups.map(({ category, partners }) => (
                 <div key={category.id}>
-                  <h3 className="text-xl font-bold text-teal-800 mb-6 pb-2 border-b border-teal-100">
+                  <h3 className="text-xl font-bold text-teal-800 mb-6 pb-2 border-b border-teal-100 text-center lg:text-left">
                     {str(category.title, locale)}
                   </h3>
                   <PartnerGrid partners={partners} visitLabel={t.visitWebsite} locale={locale} />
@@ -157,7 +157,7 @@ export default async function Page({ params: paramsPromise }: Args) {
               {uncategorized.length > 0 && (
                 <div>
                   {categoryGroups.length > 0 && (
-                    <h3 className="text-xl font-bold text-teal-800 mb-6 pb-2 border-b border-teal-100">
+                    <h3 className="text-xl font-bold text-teal-800 mb-6 pb-2 border-b border-teal-100 text-center lg:text-left">
                       {t.otherPartners}
                     </h3>
                   )}
@@ -171,7 +171,7 @@ export default async function Page({ params: paramsPromise }: Args) {
 
       {/* Partnership Benefits */}
       {benefits.length > 0 && (
-        <section className="py-16 bg-white">
+        <section className="py-10 lg:py-16 bg-white">
           <div className="container mx-auto px-6 max-w-7xl">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
@@ -213,7 +213,7 @@ export default async function Page({ params: paramsPromise }: Args) {
 
       {/* Testimonials */}
       {testimonials.length > 0 && (
-        <section className="py-16 bg-gray-50">
+        <section className="py-10 lg:py-16 bg-gray-50">
           <div className="container mx-auto px-6 max-w-7xl">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
@@ -224,7 +224,7 @@ export default async function Page({ params: paramsPromise }: Args) {
               {testimonials.map((testimonial) => (
                 <div
                   key={testimonial.id}
-                  className="bg-white rounded-lg p-8 shadow-sm border border-gray-100 flex flex-col"
+                  className="bg-white rounded-lg p-4  lg:p-8 shadow-sm border border-gray-100 flex flex-col"
                 >
                   <p className="text-gray-600 leading-relaxed mb-6 flex-grow italic">
                     {str(testimonial.quote, locale)}
@@ -250,11 +250,16 @@ function PartnerGrid({ partners, visitLabel, locale = 'hy' }: { partners: Partne
     <BaseWrapper>
       <Row gutter={[24, 24]} justify={'start'}>
         {partners.map((partner) => (
-          <Col xs={24} md={6} key={partner.id}>
-            <BaseWrapper className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 flex flex-col items-center text-center hover:shadow-md transition-shadow h-full">
-              <div className="h-60 w-full flex items-center justify-center mb-4 overflow-hidden">
+          <Col xs={24} sm={8} lg={6} key={partner.id}>
+            <BaseWrapper className="bg-white p-5 rounded-lg shadow-sm border border-gray-100 flex flex-col items-center text-center hover:shadow-md transition-shadow h-full">
+              <div className="h-auto min-h-40  sm:h-50 lg:h-60 w-full flex items-center justify-center mb-4 overflow-hidden">
                 {partner.logo && typeof partner.logo === 'object' ? (
-                  <Media resource={partner.logo} className="max-h-60 max-w-full object-contain" />
+                  <Media resource={partner.logo}
+                     pictureClassName='min-h-40 sm:h-50 lg:h-60 block' 
+                     imgClassName='max-h-full h-full object-contain min-h-35' 
+                     className="max-h-100 lg:max-h-60  max-w-full" 
+                     
+                     />
                 ) : (
                   <div className="text-gray-400 font-bold text-2xl">{str(partner.title, locale)}</div>
                 )}

@@ -31,7 +31,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data, locale }) => {
 
   return (
     <header className="w-full sticky top-0 z-50 bg-white shadow-md">
-      <BaseWrapper className={'container m-auto px-2 sm:px-6'}>
+      <BaseWrapper className={'container m-auto px-2 md:px-6'}>
         <div className="flex items-center justify-between py-2">
           {/* Logo Section */}
           <Link href={`/${locale || ''}`} className="z-50 relative flex-shrink-0 ml-2 sm:ml-0">
@@ -75,7 +75,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data, locale }) => {
 
       {/* Mobile Animated Dropdown Drawer */}
       <div
-        className={`md:hidden absolute top-full left-0 w-full bg-white shadow-xl transition-all duration-300 ease-in-out border-t border-gray-100 overflow-hidden z-40 ${isMobileMenuOpen ? 'max-h-[calc(100vh-72px)] opacity-100 pointer-events-auto' : 'max-h-0 opacity-0 pointer-events-none'}`}
+        className={`lg:hidden absolute top-full left-0 w-full bg-white shadow-xl transition-all duration-300 ease-in-out border-t border-gray-100 overflow-hidden z-40 ${isMobileMenuOpen ? 'max-h-[calc(100vh-72px)] opacity-100 pointer-events-auto' : 'max-h-0 opacity-0 pointer-events-none'}`}
       >
         <div className="container mx-auto px-6 py-6">
           <HeaderNav data={data} isMobile={true} onClose={() => setIsMobileMenuOpen(false)} />
@@ -85,7 +85,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data, locale }) => {
       {/* Mobile Backdrop overlay */}
       {isMobileMenuOpen && (
         <div
-          className="md:hidden absolute top-full left-0 w-full h-screen bg-black/50 z-30 transition-opacity"
+          className="lg:hidden absolute top-full left-0 w-full h-screen bg-black/50 z-30 transition-opacity"
           onClick={() => setIsMobileMenuOpen(false)}
         />
       )}

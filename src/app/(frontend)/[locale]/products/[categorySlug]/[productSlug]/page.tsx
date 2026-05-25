@@ -76,17 +76,29 @@ export default async function ProductDetailPage({ params: paramsPromise }: Args)
   const specifications = (product.specifications ?? []) as any[]
   const documents = (product.documents ?? []) as any[]
   const brand = (product.brand ?? []) as any[]
+ 
+  // Resolve product measurement unit locale name
   const unit = ((product as any).unit as any) ?? null
-  const amount: number | null = ((product as any).amount as number) ?? null
-  const packagingType = ((product as any).packagingType as any) ?? null
+  const unitLabel = unit ? str(unit.name, locale) : ''
+
+  //const packagingType = ((product as any).packagingType as any) ?? null
+  const productPackage = ((product as any).package as any) ?? null
+  const packageSize = productPackage ? productPackage.amount : null
+  
+  // Resolve package type locale name
+  const packagingType = productPackage ? productPackage.packagingType : null
+  const packagingLabel = packagingType ? str(packagingType.name, locale) : ''
+
+  // Resolve package size locale name
+  const packageUnit = productPackage ? productPackage.unit : null
+  const packageUnitLabel = packageUnit ? str(packageUnit.name, locale) : ''
 
   // Compose "25 kg, bag" — each part is optional
-  const unitLabel = unit ? str(unit.name, locale) : ''
-  const packagingLabel = packagingType ? str(packagingType.name, locale) : ''
   const packagingComposition = [
-    amount != null ? `${amount}${unitLabel ? ' ' + unitLabel : ''}` : unitLabel || null,
-    packagingLabel || null,
-  ].filter(Boolean).join(', ')
+    packageSize != null ? 
+      `${packageSize}${packageUnitLabel ? ' ' + packageUnitLabel : ''}` : packageUnitLabel || null,
+      packagingLabel || null,
+    ].filter(Boolean).join(', ')
 
   const hasPackaging = Boolean(packagingComposition)
 
