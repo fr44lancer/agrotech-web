@@ -234,32 +234,54 @@ export const Products: CollectionConfig = {
       name: 'unit',
       type: 'relationship',
       relationTo: 'units' as any,
+      label: "Main measurement unit",
       hasMany: false,
       admin: {
         position: 'sidebar',
         description: 'Measurement unit (e.g. kg, liter).',
       },
     },
+
     {
-      name: 'amount',
-      type: 'number',
-      label: 'Amount',
+      name: "package",
+      type: "group",
+      label: "Package",
       admin: {
         position: 'sidebar',
-        description: 'Quantity per package (e.g. 25 for "25 kg").',
-        step: 0.01,
+        description: 'Package type, measurement, size.',
       },
+      fields:[
+        {
+          name: 'packagingType',
+          type: 'relationship',
+          relationTo: 'packagingTypes' as any,
+          hasMany: false,
+          admin: {
+            description: 'Packaging form (e.g. bag, container, bottle).',
+          },
+        },
+        {
+          name: 'amount',
+          type: 'number',
+          label: 'Package size',
+          admin: {
+            description: 'Quantity per package (e.g. 25 for "25 kg").',
+            step: 0.01,
+          },
+        },
+        {
+          name: 'unit',
+          type: 'relationship',
+          relationTo: 'units' as any,
+          hasMany: false,
+           admin: {
+            description: 'Package measurement unit.',
+          },
+        },
+    
+      ]
     },
-    {
-      name: 'packagingType',
-      type: 'relationship',
-      relationTo: 'packagingTypes' as any,
-      hasMany: false,
-      admin: {
-        position: 'sidebar',
-        description: 'Packaging form (e.g. bag, container, bottle).',
-      },
-    },
+
     slugField(),
   ],
 }

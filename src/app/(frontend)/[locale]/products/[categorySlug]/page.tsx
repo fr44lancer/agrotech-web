@@ -162,12 +162,12 @@ export default async function CategoryProductsPage({
                     className="bg-white rounded-xl border border-gray-100 overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col group"
                   >
                     {/* Image */}
-                    <div className="relative h-52 bg-gray-100 overflow-hidden">
+                    <div className="relative block-full bg-gray-100 overflow-hidden">
                       {imageUrl ? (
                         <img
                           src={imageUrl}
                           alt={str(product.title, locale)}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
                         />
                       ) : (
                         <div className="absolute inset-0 bg-gradient-to-br from-green-300 to-teal-400 flex items-center justify-center group-hover:scale-105 transition-transform duration-500">
