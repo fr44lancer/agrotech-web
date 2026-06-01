@@ -836,10 +836,7 @@ export interface Product {
      * Packaging form (e.g. bag, container, bottle).
      */
     packagingType?: (string | null) | PackagingType;
-    /**
-     * Quantity per package (e.g. 25 for "25 kg").
-     */
-    amount?: number | null;
+    packageSize?: string | null;
     /**
      * Package measurement unit.
      */
@@ -2400,7 +2397,7 @@ export interface ProductsSelect<T extends boolean = true> {
     | T
     | {
         packagingType?: T;
-        amount?: T;
+        packageSize?: T;
         unit?: T;
       };
   generateSlug?: T;

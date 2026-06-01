@@ -83,7 +83,7 @@ export default async function ProductDetailPage({ params: paramsPromise }: Args)
 
   //const packagingType = ((product as any).packagingType as any) ?? null
   const productPackage = ((product as any).package as any) ?? null
-  const packageSize = productPackage ? productPackage.amount : null
+  const packageSize = productPackage ? productPackage.packageSize : null
   
   // Resolve package type locale name
   const packagingType = productPackage ? productPackage.packagingType : null
@@ -96,7 +96,7 @@ export default async function ProductDetailPage({ params: paramsPromise }: Args)
   // Compose "25 kg, bag" — each part is optional
   const packagingComposition = [
     packageSize != null ? 
-      `${packageSize}${packageUnitLabel ? ' ' + packageUnitLabel : ''}` : packageUnitLabel || null,
+      `${packageSize}${packageUnitLabel ? ', ' + packageUnitLabel : ''}` : packageUnitLabel || null,
       packagingLabel || null,
     ].filter(Boolean).join(', ')
 
