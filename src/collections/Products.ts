@@ -18,13 +18,27 @@ export const Products: CollectionConfig = {
     read: anyone,
     update: authenticated,
   },
+  hooks: {
+    beforeOperation: [
+     async ({ args, req }) => {
+        if (!req.user && 'where' in args) {
+          const publishedFilter = { published: { equals: true } }
+          args.where = args.where
+            ? { and: [args.where, publishedFilter] }
+            : publishedFilter
+        }
+        return args
+      },
+    ],
+  },
   admin: {
     group: 'Catalog',
     useAsTitle: 'title',
-    defaultColumns: ['title', 'status', 'featured', 'identifier','updatedAt'],
+    defaultColumns: ['title', 'status', 'featured', 'identifier','updatedAt','published'],
     description: 'Product catalog entries. Not a shop — no pricing.',
     listSearchableFields: ['title', 'slug','identifier','identifier_secondary'],
   },
+
   fields: [
     // ── Core ──────────────────────────────────────────────────────────────────
     {
@@ -203,6 +217,19 @@ export const Products: CollectionConfig = {
       },
     },
     {
+      name: 'published',
+      type: 'checkbox',
+      defaultValue: false,
+      label: 'Published',
+      admin: {
+        position: 'sidebar',
+        description: 'Pubished in site or not.',
+        components: {
+          Cell: '@/components/Cell/CheckboxSwitch#PublishedSwitchCell',
+        },
+      },
+    },
+    {
       name: 'featured',
       type: 'checkbox',
       defaultValue: false,
@@ -261,13 +288,10 @@ export const Products: CollectionConfig = {
           },
         },
         {
-          name: 'amount',
-          type: 'number',
+          name: 'packageSize',
+          type: 'text',
           label: 'Package size',
-          admin: {
-            description: 'Quantity per package (e.g. 25 for "25 kg").',
-            step: 0.01,
-          },
+          localized: true
         },
         {
           name: 'unit',

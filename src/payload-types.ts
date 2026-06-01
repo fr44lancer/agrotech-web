@@ -815,6 +815,10 @@ export interface Product {
   };
   status?: ('active' | 'coming-soon' | 'discontinued') | null;
   /**
+   * Pubished in site or not.
+   */
+  published?: boolean | null;
+  /**
    * Highlighted on the category listing.
    */
   featured?: boolean | null;
@@ -832,10 +836,7 @@ export interface Product {
      * Packaging form (e.g. bag, container, bottle).
      */
     packagingType?: (string | null) | PackagingType;
-    /**
-     * Quantity per package (e.g. 25 for "25 kg").
-     */
-    amount?: number | null;
+    packageSize?: string | null;
     /**
      * Package measurement unit.
      */
@@ -2387,6 +2388,7 @@ export interface ProductsSelect<T extends boolean = true> {
         description?: T;
       };
   status?: T;
+  published?: T;
   featured?: T;
   categories?: T;
   brand?: T;
@@ -2395,7 +2397,7 @@ export interface ProductsSelect<T extends boolean = true> {
     | T
     | {
         packagingType?: T;
-        amount?: T;
+        packageSize?: T;
         unit?: T;
       };
   generateSlug?: T;
