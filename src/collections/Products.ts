@@ -278,7 +278,7 @@ export const Products: CollectionConfig = {
         description: 'Package type, measurement, size.',
       },
       fields:[
-        {
+        /*{
           name: 'packagingType',
           type: 'relationship',
           relationTo: 'packagingTypes' as any,
@@ -295,6 +295,12 @@ export const Products: CollectionConfig = {
             description: 'Quantity per package (e.g. 25 for "25 kg").',
             step: 0.01,
           },
+        },*/
+        {
+          name: 'packageOption',
+          type: 'text',
+          label:  'Package size,type ...',
+          localized: true,
         },
         {
           name: 'unit',
