@@ -18,6 +18,19 @@ export const Products: CollectionConfig = {
     read: anyone,
     update: authenticated,
   },
+  hooks: {
+    beforeOperation: [
+     async ({ args, req }) => {
+        if (!req.user && 'where' in args) {
+          const publishedFilter = { published: { equals: true } }
+          args.where = args.where
+            ? { and: [args.where, publishedFilter] }
+            : publishedFilter
+        }
+        return args
+      },
+    ],
+  },
   admin: {
     group: 'Catalog',
     useAsTitle: 'title',
@@ -25,6 +38,7 @@ export const Products: CollectionConfig = {
     description: 'Product catalog entries. Not a shop — no pricing.',
     listSearchableFields: ['title', 'slug','identifier','identifier_secondary'],
   },
+
   fields: [
     // ── Core ──────────────────────────────────────────────────────────────────
     {
