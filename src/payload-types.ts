@@ -815,6 +815,10 @@ export interface Product {
   };
   status?: ('active' | 'coming-soon' | 'discontinued') | null;
   /**
+   * Pubished in site or not.
+   */
+  published?: boolean | null;
+  /**
    * Highlighted on the category listing.
    */
   featured?: boolean | null;
@@ -2387,6 +2391,7 @@ export interface ProductsSelect<T extends boolean = true> {
         description?: T;
       };
   status?: T;
+  published?: T;
   featured?: T;
   categories?: T;
   brand?: T;

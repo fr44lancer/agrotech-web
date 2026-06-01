@@ -21,7 +21,7 @@ export const Products: CollectionConfig = {
   admin: {
     group: 'Catalog',
     useAsTitle: 'title',
-    defaultColumns: ['title', 'status', 'featured', 'identifier','updatedAt'],
+    defaultColumns: ['title', 'status', 'featured', 'identifier','updatedAt','published'],
     description: 'Product catalog entries. Not a shop — no pricing.',
     listSearchableFields: ['title', 'slug','identifier','identifier_secondary'],
   },
@@ -200,6 +200,19 @@ export const Products: CollectionConfig = {
       ],
       admin: {
         position: 'sidebar',
+      },
+    },
+    {
+      name: 'published',
+      type: 'checkbox',
+      defaultValue: false,
+      label: 'Published',
+      admin: {
+        position: 'sidebar',
+        description: 'Pubished in site or not.',
+        components: {
+          Cell: '@/components/Cell/CheckboxSwitch#PublishedSwitchCell',
+        },
       },
     },
     {
