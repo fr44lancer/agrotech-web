@@ -26,6 +26,10 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
+        hostname: 'agrotech.am',
+      },
+      {
+        protocol: 'https',
         hostname: '*.agrotech.am',
       },
       {
